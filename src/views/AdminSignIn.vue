@@ -35,23 +35,13 @@
           />
         </svg>
       </div>
-      <span>建立你的帳號</span>
+      <span>後台登入</span>
     </div>
     <div class="form-container">
-      <form action="" id="sign-up-form" @submit.stop.prevent="handleSubmit">
+      <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
           <input type="text" v-model="account" />
-          <hr />
-        </div>
-        <div class="input-wrapper">
-          <span>名稱</span>
-          <input type="text" v-model="name" />
-          <hr />
-        </div>
-        <div class="input-wrapper">
-          <span>Email</span>
-          <input type="text" v-model="email" />
           <hr />
         </div>
         <div class="input-wrapper">
@@ -59,25 +49,19 @@
           <input type="text" v-model="password" />
           <hr />
         </div>
-        <div class="input-wrapper">
-          <span>密碼確認</span>
-          <input type="text" v-model="passwordCheck" />
-          <hr />
-        </div>
       </form>
-      <button type="submit" form="sign-up-form">註冊</button>
+      <button form="sign-in-form">登入</button>
     </div>
     <div class="footer">
-      <router-link class="cancel-sign-up" to="/signin">取消</router-link>
+      <router-link class="sign-in" to="/signin">前台登入</router-link>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
-  width: 1440px;
   height: 1200px;
-
+  width: 1440px;
   .header {
     margin-bottom: 40px;
     margin-top: 65px;
@@ -100,7 +84,7 @@
   .form-container {
     text-align: center;
 
-    #sign-up-form {
+    #sign-in-form {
       .input-wrapper {
         margin: 0% auto 30px auto;
         width: 540px;
@@ -162,9 +146,9 @@
   .footer {
     width: 540px;
     margin: 20px auto 0% auto;
-    text-align: center;
+    text-align: end;
 
-    .cancel-sign-up {
+    .sign-in {
       color: #0099ff;
       font-family: Noto Sans TC;
       font-style: normal;
@@ -181,26 +165,17 @@ export default {
   data() {
     return {
       account: "",
-      name: "",
-      email: "",
       password: "",
-      passwordCheck: "",
     };
   },
   methods: {
     handleSubmit() {
-      if (this.password === this.passwordCheck) {
-        const data = JSON.stringify({
-          account: this.account,
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        });
-        // TODO: 向後端新增使用者帳號
-        console.log("data", data);
-      } else {
-        window.alert('"密碼"與"密碼確認"欄位的資料不一致，請維持一致喔!');
-      }
+      const data = JSON.stringify({
+        account: this.account,
+        password: this.password,
+      });
+      // TODO: 向後端驗證使用者登入資訊是否合法
+      console.log("data", data);
     },
   },
 };
