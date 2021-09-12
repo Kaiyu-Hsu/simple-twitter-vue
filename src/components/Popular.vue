@@ -1,16 +1,26 @@
 <template>
   <div class="container">
     <h1>Popular</h1>
-    <div class="popular-users">
-      <img :src="user.image" alt="" />
+    <div v-for="user in users" :key="user.userId" class="popular-users">
+      <img :src="user.avatar" />
       <div class="name-account">
         <div class="name">{{ user.name }}</div>
         <div class="account">{{ user.account }}</div>
       </div>
-      <div v-if="user.isFollowing" @click="unfollowing" class="following-btn">
+      <div
+        v-if="user.isFollowed"
+        @click.stop.prevent="toggleFollowing(user.userId)"
+        class="following-btn"
+      >
         正在跟隨
       </div>
-      <div v-else @click="following" class="unfollowing-btn">跟隨</div>
+      <div
+        v-else
+        @click.stop.prevent="toggleFollowing(user.userId)"
+        class="unfollowing-btn"
+      >
+        跟隨
+      </div>
     </div>
   </div>
 </template>
@@ -19,7 +29,7 @@
 .container {
   position: fixed;
   top: 15px;
-  left: 65%;
+  left: 75%;
   background: #f5f8fa;
   width: 350px;
   border-radius: 14px;
@@ -56,8 +66,9 @@ img {
   color: #657786;
 }
 
-.following-btn, .unfollowing-btn {
-    cursor: pointer;
+.following-btn,
+.unfollowing-btn {
+  cursor: pointer;
 }
 
 .following-btn {
@@ -92,43 +103,38 @@ img {
   justify-content: center;
   align-items: center;
 }
-
 </style>
 
 <script>
-const dummyData = {
-  popularUser: {
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4XWlDQYUkdrV-k6m_ux-cAWXhP1vATWf6ZHkzOdci_HCbdFyZ8zsF2i_L7NVCMy21G4M&usqp=CAU",
-    name: "Kaiyu",
-    account: "@cindy7023",
-    isFollowing: false,
-  },
-};
+import tweetsJSON from "./../../public/tweets.json";
+
+const popularJSON = tweetsJSON.popular;
+
 export default {
   data() {
     return {
-      user: {
-        image: "",
-        name: "",
-        account: "",
-        isFollowing: true,
-      },
+      users: [],
     };
   },
   methods: {
-    fetchUser() {
-      this.user = dummyData.popularUser;
+    fetchUsers() {
+      this.users = popularJSON;
     },
-    unfollowing() {
-        this.user.isFollowing = false
-    },
-    following() {
-        this.user.isFollowing = true
+    toggleFollowing(userId) {
+      this.users = this.users.map((user) => {
+        if (user.userId === userId) {
+          return {
+            ...user,
+            isFollowed: !user.isFollowed,
+          };
+        }
+
+        return user;
+      });
     },
   },
   created() {
-    this.fetchUser();
+    this.fetchUsers();
   },
 };
 </script>
