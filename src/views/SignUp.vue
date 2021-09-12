@@ -38,34 +38,34 @@
       <span>建立你的帳號</span>
     </div>
     <div class="form-container">
-      <form action="" id="sign-up-form">
+      <form action="" id="sign-up-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" />
+          <input type="text" v-model="account" />
           <hr />
         </div>
         <div class="input-wrapper">
           <span>名稱</span>
-          <input type="text" />
+          <input type="text" v-model="name" />
           <hr />
         </div>
         <div class="input-wrapper">
           <span>Email</span>
-          <input type="text" />
+          <input type="text" v-model="email" />
           <hr />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="text" />
+          <input type="text" v-model="password" />
           <hr />
         </div>
         <div class="input-wrapper">
           <span>密碼確認</span>
-          <input type="text" />
+          <input type="text" v-model="passwordCheck" />
           <hr />
         </div>
       </form>
-      <button form="sign-up-form">註冊</button>
+      <button type="submit" form="sign-up-form">註冊</button>
     </div>
     <div class="footer">
       <router-link class="cancel-sign-up" to="">取消</router-link>
@@ -93,7 +93,7 @@
       font-weight: bold;
       font-size: 23px;
       line-height: 33px;
-      color: #1C1C1C;
+      color: #1c1c1c;
     }
   }
 
@@ -164,7 +164,7 @@
     margin: 20px auto 0% auto;
     text-align: center;
 
-    .cancel-sign-up {      
+    .cancel-sign-up {
       color: #0099ff;
       font-family: Noto Sans TC;
       font-style: normal;
@@ -175,3 +175,33 @@
   }
 }
 </style>
+
+<script>
+export default {
+  data() {
+    return {
+      account: "",
+      name: "",
+      email: "",
+      password: "",
+      passwordCheck: "",
+    };
+  },
+  methods: {
+    handleSubmit() {
+      if (this.password === this.passwordCheck) {
+        const data = JSON.stringify({
+          account: this.account,
+          name: this.name,
+          email: this.email,
+          password: this.password,
+        });
+        // TODO: 向後端新增使用者帳號
+        console.log("data", data);
+      } else {
+        window.alert('"密碼"與"密碼確認"欄位的資料不一致，請維持一致喔!');
+      }
+    },
+  },
+};
+</script>
