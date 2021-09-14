@@ -3,7 +3,9 @@
     <!-- Navbar.vue -->
 
     <!-- CreatePosts.vue -->
-
+    <CreatePosts 
+      :initial-user="userData"
+    />
     <!-- NewestPosts.vue -->
 
     <!-- Popular.vue -->
@@ -23,11 +25,13 @@
 <script>
 import Popular from "./../components/Popular";
 import tweetsJSON from "./../../public/tweets.json";
+import CreatePosts from "./../components/CreatePosts";
 
 export default {
   name: "Main",
   components: {
     Popular,
+    CreatePosts
   },
   data() {
     return {
