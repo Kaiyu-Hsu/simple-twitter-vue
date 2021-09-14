@@ -5,18 +5,17 @@ import Main from "../views/Main.vue";
 import SignIn from "../views/SignIn.vue";
 import SignUp from "../views/SignUp.vue";
 
-
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",    
-    redirect: "/signin"
+    path: "/",
+    redirect: "/signin",
   },
   {
     path: "/signin/admin",
     name: "signin-admin",
-    component: () => import('../views/AdminSignIn.vue'),
+    component: () => import("../views/AdminSignIn.vue"),
   },
   {
     path: "/signin",
@@ -26,12 +25,22 @@ const routes = [
   {
     path: "/signup",
     name: "signup",
-    component: SignUp
+    component: SignUp,
   },
   {
     path: "/main",
     name: "main",
     component: Main,
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("../views/User.vue"),
+  },
+  {
+    path: "/setting",
+    name: "setting",
+    component: () => import("../views/Setting.vue"),
   },
   {
     path: "*",
