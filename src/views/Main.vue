@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!-- Navbar.vue -->
-
+    <Navbar />
     <!-- CreatePosts.vue -->
 
     <!-- NewestPosts.vue -->
@@ -23,11 +23,13 @@
 <script>
 import Popular from "./../components/Popular";
 import tweetsJSON from "./../../public/tweets.json";
+import Navbar from "./../components/Navbar";
 
 export default {
   name: "Main",
   components: {
     Popular,
+    Navbar,
   },
   data() {
     return {
