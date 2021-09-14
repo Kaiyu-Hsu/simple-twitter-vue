@@ -1,0 +1,69 @@
+{
+  "followers": {
+    "id": 2,
+    "email": "user1@example.com",
+    "password": "$2a$10$TqywqOYyAiPFi5lWvGYJ4OJRgLJkn/Up7gSXSNeNSP4.c0TMvEB7W",
+    "name": "user1",
+    "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=23.186501555235584&lock=0.0465555806777429",
+    "introduction": null,
+    "account": null,
+    "cover": "https://loremflickr.com/320/240/restaurant,food/?random=16.228867452967876&lock=35.7148224013647",
+    "role": "user",
+    "createdAt": "2021-09-14T00:15:11.000Z",
+    "updatedAt": "2021-09-14T00:15:11.000Z",
+    "Followers": [
+      {
+        "id": 1,
+        "email": "root@example.com",
+        "password": "$2a$10$ovVWUxOcd9JzE20rLfztsOkH1mhJWi03GtuUxMb5PRbnj4Zv7jRrO",
+        "name": "root",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=53.97139005742142&lock=70.53837693675771",
+        "introduction": null,
+        "account": null,
+        "cover": "https://loremflickr.com/320/240/restaurant,food/?random=89.0941244859403&lock=39.93889348326751",
+        "role": "admin",
+        "createdAt": "2021-09-14T00:15:11.000Z",
+        "updatedAt": "2021-09-14T00:15:11.000Z",
+        "Followship": {
+          "followerId": 1,
+          "followingId": 2,
+          "createdAt": "2021-09-14T00:15:13.000Z",
+          "updatedAt": "2021-09-14T00:15:13.000Z"
+        }
+      },
+      {
+        "id": 3,
+        "email": "user2@example.com",
+        "password": "$2a$10$ER9B79UWw5iOk3xe7iF7mORorxoIrBsga6W3yPSjndlQDd5tTlsjW",
+        "name": "user2",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=36.22833706239417&lock=39.52788574978818",
+        "introduction": null,
+        "account": null,
+        "cover": "https://loremflickr.com/320/240/restaurant,food/?random=16.844857603617225&lock=86.12217392486403",
+        "role": "user",
+        "createdAt": "2021-09-14T00:15:11.000Z",
+        "updatedAt": "2021-09-14T00:15:11.000Z",
+        "Followship": {
+          "followerId": 3,
+          "followingId": 2,
+          "createdAt": "2021-09-14T00:15:13.000Z",
+          "updatedAt": "2021-09-14T00:15:13.000Z"
+        }
+      }
+    ]
+  },
+  "followingsId": [
+    {
+      "followerId": 2,
+      "followingId": 3,
+      "createdAt": "2021-09-14T00:15:13.000Z",
+      "updatedAt": "2021-09-14T00:15:13.000Z"
+    },
+    {
+      "followerId": 2,
+      "followingId": 5,
+      "createdAt": "2021-09-14T00:15:13.000Z",
+      "updatedAt": "2021-09-14T00:15:13.000Z"
+    }
+  ]
+}
