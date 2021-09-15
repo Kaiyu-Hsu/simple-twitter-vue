@@ -1,6 +1,6 @@
 {
   "followings": {
-    "id": 2,
+    "id": 2, // current user id
     "email": "user1@example.com",
     "password": "$2a$10$TqywqOYyAiPFi5lWvGYJ4OJRgLJkn/Up7gSXSNeNSP4.c0TMvEB7W",
     "name": "user1",
@@ -55,7 +55,7 @@
   "followersId": [
     {
       "followerId": 0,
-      "followingId": 2,
+      "followingId": 2, // 是否有 跟隨 current user
       "createdAt": "2021-09-14T00:15:13.000Z",
       "updatedAt": "2021-09-14T00:15:13.000Z"
     },
