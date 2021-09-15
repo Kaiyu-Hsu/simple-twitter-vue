@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="tweet-card">
+  <div class="container scrollbar">
+    <!-- <div class="tweet-card">
       <div class="thumbnail-container">
         <img
           src="https://static2.cbrimages.com/wordpress/wp-content/uploads/2019/10/3-Jotaro-Kujo.jpg"
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="tweet-card" v-for="tweet in tweets" :key="tweet.tweetId">
       <div class="thumbnail-container">
         <img :src="tweet.userAvatar" alt="" />
@@ -62,7 +62,7 @@
           <div class="name">{{ tweet.userName }}</div>
           <div class="account">{{ tweet.userAccount }}</div>
           <div class="dot"></div>
-          <div class="createdAt">{{ tweet.tweetCreate | fromNow}}</div>
+          <div class="createdAt">{{ tweet.tweetCreate | fromNow }}</div>
         </div>
         <p class="description">
           {{ tweet.tweetDescription }}
@@ -107,16 +107,22 @@
 <style lang="scss" scoped>
 .container {
   width: 600px;
+  max-height: 1021px;
   margin: 0% auto;
+  margin-top: -8px;
+  border: 1px solid #e6ecf0;
+  overflow-y: scroll;
 
   .tweet-card {
     display: flex;
     .thumbnail-container {
       position: relative;
+      z-index: -1;
       width: 50px;
       margin-left: 15px;
       img {
         position: absolute;
+        z-index: -1;
         top: 10px;
         border-radius: 50%;
         width: 50px;
@@ -152,6 +158,7 @@
           width: 5px;
           background-color: #657786;
           position: relative;
+          z-index: -1;
           top: 0.5rem;
           margin: 0% 0.5rem;
         }
@@ -194,6 +201,16 @@
         }
       }
     }
+  }
+}
+// 客製 container 的 scrollbar
+.scrollbar {
+  &::-webkit-scrollbar {
+    width: 1px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: none;
   }
 }
 </style>

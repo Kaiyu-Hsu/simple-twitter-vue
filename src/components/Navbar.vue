@@ -35,7 +35,7 @@
       </svg>
     </div>
     <div class="nav-group">
-      <router-link to="/">
+      <router-link to="/main">
         <div class="main">
           <div class="main-icon">
             <svg

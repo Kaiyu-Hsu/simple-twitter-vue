@@ -28,6 +28,7 @@
 <style scoped>
 .container {
   position: fixed;
+  z-index: -1;
   top: 15px;
   left: 75%;
   background: #f5f8fa;

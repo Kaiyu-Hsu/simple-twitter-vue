@@ -24,6 +24,7 @@
   width: 600px;
   margin: 0% auto;
   position: relative;
+  z-index: -1;
   top: -8px;
   border: 1px solid #e6ecf0;
   border-bottom: 10px solid #e6ecf0;
@@ -46,10 +47,12 @@
     border-top: 1px solid #e6ecf0;
     .thumbnail-container {
       position: relative;
+      z-index: -1;
       width: 50px;
       margin-left: 15px;
       img {
         position: absolute;
+        z-index: -1;
         top: 10px;
         border-radius: 50%;
         width: 50px;
