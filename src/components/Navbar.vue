@@ -137,7 +137,9 @@
           >
         </div>
       </router-link>
-      <div class="tweet">推文</div>
+      <div class="tweet" @click="showModal">推文</div>
+      <!-- use the modal component, pass in the prop -->
+      <addTweet v-if="isModalVisible" @click="showModal" @close="closeModal" />
     </div>
     <div class="log-out">
       <svg
@@ -214,6 +216,7 @@ span {
   background: #ff6600;
   border-radius: 100px;
   color: #ffffff;
+  cursor: pointer;
 }
 
 .log-out {
@@ -222,3 +225,26 @@ span {
   left: 10px;
 }
 </style>
+
+<script>
+import addTweet from "./../components/addTweet.vue";
+
+export default {
+  components: {
+    addTweet,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+    };
+  },
+  methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+  },
+};
+</script>
