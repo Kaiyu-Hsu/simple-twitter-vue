@@ -144,7 +144,7 @@ textarea {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/tweets.json";
+import tweetsJSON from "./../../public/api-tweets.json";
 
 const currentUser = tweetsJSON.userData;
 export default {
