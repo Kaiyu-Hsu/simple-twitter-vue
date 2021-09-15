@@ -3,11 +3,9 @@
     <!-- Navbar.vue -->
 
     <!-- CreatePosts.vue -->
-    <CreatePosts 
-      :initial-user="userData"
-    />
+    <CreatePosts :initial-user="userData" />
     <!-- NewestPosts.vue -->
-
+    <NewestPosts :initial-tweets="tweets" :initial-tweets-reply="tweetsReply" />
     <!-- Popular.vue -->
     <Popular />
 
@@ -24,18 +22,21 @@
 
 <script>
 import Popular from "./../components/Popular";
-import tweetsJSON from "./../../public/tweets.json";
+import tweetsJSON from "./../../public/api-tweets.json";
 import CreatePosts from "./../components/CreatePosts";
+import NewestPosts from "./../components/NewestPosts";
 
 export default {
   name: "Main",
   components: {
     Popular,
-    CreatePosts
+    CreatePosts,
+    NewestPosts,
   },
   data() {
     return {
       tweets: [],
+      tweetsReply: [],
       popular: [],
       userData: [],
     };
@@ -43,6 +44,7 @@ export default {
   methods: {
     fetchData() {
       this.tweets = [...tweetsJSON.tweets];
+      this.tweetsReply = [...tweetsJSON.tweetsReply];
       this.popular = [...tweetsJSON.popular];
       this.userData = { ...tweetsJSON.userData };
     },

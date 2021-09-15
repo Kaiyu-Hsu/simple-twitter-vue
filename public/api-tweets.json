@@ -1,11 +1,11 @@
 {
-  "tweets": [    
+  "tweets": [
     {
       "likeCount": 2,
-      "tweetId": 1, // 資料庫自動產生的ID
+      "tweetId": 1,
       "tweetDescription": "beatae distinctio ut",
-      "tweetCreate": "2021-09-14T00:15:12.000Z", 
-      "userAccount": null, 
+      "tweetCreate": "2021-09-14T00:15:12.000Z",
+      "userAccount": null,
       "userName": "user5",
       "userAvatar": "https://loremflickr.com/320/240/restaurant,food/?random=54.20155387756154&lock=77.25059524478995"
     },
@@ -416,7 +416,7 @@
     }
   ],
   "tweetsReply": [
-    { "replyCount": 3, "tweetId": 1 }, // tweetId 是告知前端，這個replyCount是屬於哪一則推文
+    { "replyCount": 3, "tweetId": 1 },
     { "replyCount": 3, "tweetId": 2 },
     { "replyCount": 3, "tweetId": 3 },
     { "replyCount": 3, "tweetId": 4 },
@@ -473,7 +473,7 @@
       "followCount": 5,
       "userId": 2,
       "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=23.186501555235584&lock=0.0465555806777429",
-      "account": null, //TODO 註冊帳號時不應為 null
+      "account": null,
       "name": "user1",
       "isFollowed": false
     },
@@ -495,10 +495,10 @@
     },
     {
       "followCount": 3,
-      "userId": null, //TODO userId不應為null
+      "userId": null,
       "avatar": null,
-      "account": null, //TODO 註冊帳號時不應為 null
-      "name": null, //TODO 註冊帳號時不應為 null
+      "account": null,
+      "name": null,
       "isFollowed": false
     },
     {
@@ -529,11 +529,11 @@
   "userData": {
     "id": 2,
     "email": "",
-    "password": "", //TODO 是否需要傳到前端? 或是傳到前端前，先把這個值設為空字串
+    "password": "",
     "name": "user1",
     "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=23.186501555235584&lock=0.0465555806777429",
     "introduction": null,
-    "account": null, //TODO 註冊帳號時不應為 null
+    "account": null,
     "cover": "https://loremflickr.com/320/240/restaurant,food/?random=16.228867452967876&lock=35.7148224013647",
     "role": "user",
     "createdAt": "2021-09-14T00:15:11.000Z",

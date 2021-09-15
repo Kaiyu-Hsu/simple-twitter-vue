@@ -62,7 +62,7 @@
       margin-top: 20px;
       margin-left: 10px;
       padding-left: 0px;
-      border: unset;
+      border: none;
       font-family: Noto Sans TC;
       font-style: normal;
       font-weight: 500;
@@ -78,6 +78,9 @@
         font-size: 18px;
         line-height: 26px;
         color: #9197a3;
+      }
+      &:active, &:focus {
+        outline: none;
       }
     }
     button {
@@ -140,13 +143,14 @@ export default {
         "鄧攸無子尋知命，陰陰夏木囀黃鸝，禁裡疏鐘官舍晚，夜深前殿按歌聲，悵臥新春白袷衣，巴山夜雨漲秋池，乘興南遊不戒嚴，強移棲息一枝安，千載琵琶作胡語，宗臣遺像肅清高，天階夜色涼如水，捲上珠簾總不如，歲歲金河復玉關，西樓望月幾回圓，春潮帶雨晚來急，三邊曙色動危旌，河山北枕秦關險，小廊迴",
       fakeEngText140:
         "Lorem ipsum dolor sit amet, qui ei offendit deterruisset. Ne eros veniam eum.Pro malis ornatus eu. Equidem assueverit te sea, cu sea nemore",
-      newPostContent: "",
+      newPostContent: "", 
     };
   },
   methods: {
     newTweet() {
       // TODO 需跟後端確認發送 POST 新增推文請求的資料結構為何
       console.log("送出新推文內容: " + this.newPostContent);
+      // 送出 tweetDescription 即可
     },
   },
 };
