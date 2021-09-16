@@ -1,6 +1,6 @@
 <template>
   <div class="container scrollbar">
-    <!-- <div class="tweet-card">
+    <div class="tweet-card">
       <div class="thumbnail-container">
         <img
           src="https://static2.cbrimages.com/wordpress/wp-content/uploads/2019/10/3-Jotaro-Kujo.jpg"
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <div class="tweet-card" v-for="tweet in tweets" :key="tweet.tweetId">
       <div class="thumbnail-container">
         <img :src="tweet.userAvatar" alt="" />
@@ -68,7 +68,10 @@
           {{ tweet.tweetDescription }}
         </p>
         <div class="icon-wrapper">
-          <div class="reply-icon-wrapper">
+          <div
+            class="reply-icon-wrapper"
+            @click.stop.prevent="showModal(tweet.tweetId)"
+          >
             <svg
               width="13"
               height="13"
@@ -83,24 +86,49 @@
             </svg>
             <span>{{ tweet.replyCount }}</span>
           </div>
-          <div class="like-icon-wrapper">
+          <div
+            class="like-icon-wrapper"
+            @click.stop.prevent="showLike(tweet.tweetId)"
+          >
+            <!-- 普通的愛心 -->
             <svg
               width="13"
               height="13"
               viewBox="0 0 13 13"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              v-show="!tweet.isLiked"
             >
               <path
                 d="M6.5 12.5239H6.49125C4.87687 12.4939 0.21875 8.28514 0.21875 4.29889C0.21875 2.38389 1.79687 0.702637 3.59562 0.702637C5.02687 0.702637 5.98937 1.69014 6.49937 2.40889C7.00812 1.69139 7.97062 0.702637 9.4025 0.702637C11.2025 0.702637 12.78 2.38389 12.78 4.29951C12.78 8.28451 8.12125 12.4933 6.50687 12.5226H6.5V12.5239ZM3.59625 1.64076C2.29625 1.64076 1.15687 2.88326 1.15687 4.30014C1.15687 7.88764 5.55312 11.5476 6.50062 11.5864C7.44937 11.5476 11.8444 7.88826 11.8444 4.30014C11.8444 2.88326 10.705 1.64076 9.405 1.64076C7.825 1.64076 6.9425 3.47576 6.935 3.49389C6.79125 3.84514 6.2125 3.84514 6.06812 3.49389C6.05937 3.47514 5.1775 1.64076 3.59687 1.64076H3.59625Z"
                 fill="#657786"
               />
             </svg>
-            <span>{{ tweet.likeCount }}</span>
+            <!-- TODO 喜歡的愛心，目前只是在前端處理，需要後端增加資料結構 -->
+            <svg
+              width="22"
+              height="20"
+              viewBox="0 0 22 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              v-show="tweet.isLiked"
+            >
+              <path
+                d="M11 19.6381H10.986C8.40295 19.5901 0.949951 12.8561 0.949951 6.47812C0.949951 3.41412 3.47495 0.724121 6.35295 0.724121C8.64295 0.724121 10.183 2.30412 10.999 3.45412C11.813 2.30612 13.353 0.724121 15.644 0.724121C18.524 0.724121 21.048 3.41412 21.048 6.47912C21.048 12.8551 13.594 19.5891 11.011 19.6361H11V19.6381Z"
+                fill="#E0245E"
+              />
+            </svg>
+            <span :class="{like: tweet.isLiked}">{{ tweet.likeCount }}</span>
           </div>
         </div>
       </div>
     </div>
+    <ReplyModal
+      v-if="isModalVisible"
+      :tweet-content="oneTweet"
+      :initial-user="initialUser"
+      @close-modal="closeModal"
+    />
   </div>
 </template>
 
@@ -198,6 +226,9 @@
             line-height: 13px;
             color: #657786;
           }
+          .like {
+            color: #E0245E;
+          }
         }
       }
     }
@@ -217,6 +248,7 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins.js";
+import ReplyModal from "./ReplyModal.vue";
 
 export default {
   mixins: [fromNowFilter],
@@ -229,10 +261,19 @@ export default {
       type: Array,
       required: true,
     },
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
+  components: {
+    ReplyModal,
   },
   data() {
     return {
       tweets: [],
+      isModalVisible: false,
+      oneTweet: {},
     };
   },
   created() {
@@ -243,10 +284,38 @@ export default {
       this.tweets = [...this.initialTweets];
       // 把 replyCount 加入到對應id的tweet裡面
       this.tweets.map((tweet) => {
+        tweet.isLiked = false;
         for (let i = 0; i < this.initialTweetsReply.length; i++) {
           if (tweet.tweetId === this.initialTweetsReply[i].tweetId) {
             tweet.replyCount = this.initialTweetsReply[i].replyCount;
           }
+        }
+      });
+    },
+    showModal(id) {
+      this.isModalVisible = true;
+      this.oneTweet = { ...this.tweets.find((tweet) => tweet.tweetId === id) };
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    showLike(id) {
+      // TODO 要把資料送到後端更新
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.tweetId === id && tweet.isLiked === false) {
+          return {
+            ...tweet,
+            isLiked: true,
+            likeCount: tweet.likeCount + 1
+          };
+        } else if (tweet.tweetId === id && tweet.isLiked === true) {
+          return {
+            ...tweet,
+            isLiked: false,
+            likeCount: tweet.likeCount - 1 
+          };
+        } else {
+          return tweet;
         }
       });
     },

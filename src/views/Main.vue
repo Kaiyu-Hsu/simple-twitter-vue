@@ -5,7 +5,11 @@
     <!-- CreatePosts.vue -->
     <CreatePosts :initial-user="userData" />
     <!-- NewestPosts.vue -->
-    <NewestPosts :initial-tweets="tweets" :initial-tweets-reply="tweetsReply" />
+    <NewestPosts 
+      :initial-tweets="tweets" 
+      :initial-tweets-reply="tweetsReply"
+      :initial-user="userData"
+    />
     <!-- Popular.vue -->
     <Popular />
 
