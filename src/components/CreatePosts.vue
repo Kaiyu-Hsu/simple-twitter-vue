@@ -10,6 +10,7 @@
       <textarea
         name="new-tweet"
         id=""
+        maxlength="140"
         placeholder="有什麼新鮮事?還是新鮮視洗眼液?"
         class="scrollbar"
         v-model="newPostContent"
