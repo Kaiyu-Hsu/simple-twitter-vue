@@ -103,9 +103,8 @@ textarea {
   height: 140px;
   font-size: 18px;
   border: 0; // 外框
-  outline: none; // 打字時的外框
-  //   沒有顯示 placeholder style
-  ::placeholder {
+  outline: none; // 打字時的外框  
+  &::placeholder {
     font-family: "Noto Sans TC", sans-serif;
     font-style: normal;
     font-weight: 500;
