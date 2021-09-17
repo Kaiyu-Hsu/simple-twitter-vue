@@ -1,6 +1,6 @@
 <template>
   <div class="container scrollbar">
-    <div class="tweet-card">
+    <!-- <div class="tweet-card">
       <div class="thumbnail-container">
         <img
           src="https://static2.cbrimages.com/wordpress/wp-content/uploads/2019/10/3-Jotaro-Kujo.jpg"
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="tweet-card" v-for="tweet in tweets" :key="tweet.id">
       <div class="thumbnail-container">
         <img :src="tweet.user.avatar" alt="" />
@@ -60,7 +60,7 @@
       <div class="right-content">
         <div class="title-wrapper">
           <div class="name">{{ tweet.user.name }}</div>
-          <div class="account">{{ tweet.user.account }}</div>
+          <div class="account">@{{ tweet.user.account }}</div>
           <div class="dot"></div>
           <div class="createdAt">{{ tweet.createdAt | fromNow }}</div>
         </div>
@@ -88,7 +88,7 @@
           </div>
           <div
             class="like-icon-wrapper"
-            @click.stop.prevent="showLike(tweet.id)"
+            @click.stop.prevent="changeLike(tweet.id)"
           >
             <!-- 普通的愛心 -->
             <svg
@@ -97,7 +97,7 @@
               viewBox="0 0 13 13"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              v-show="!ifLiked"
+              v-show="!ifLiked(tweet)"
             >
               <path
                 d="M6.5 12.5239H6.49125C4.87687 12.4939 0.21875 8.28514 0.21875 4.29889C0.21875 2.38389 1.79687 0.702637 3.59562 0.702637C5.02687 0.702637 5.98937 1.69014 6.49937 2.40889C7.00812 1.69139 7.97062 0.702637 9.4025 0.702637C11.2025 0.702637 12.78 2.38389 12.78 4.29951C12.78 8.28451 8.12125 12.4933 6.50687 12.5226H6.5V12.5239ZM3.59625 1.64076C2.29625 1.64076 1.15687 2.88326 1.15687 4.30014C1.15687 7.88764 5.55312 11.5476 6.50062 11.5864C7.44937 11.5476 11.8444 7.88826 11.8444 4.30014C11.8444 2.88326 10.705 1.64076 9.405 1.64076C7.825 1.64076 6.9425 3.47576 6.935 3.49389C6.79125 3.84514 6.2125 3.84514 6.06812 3.49389C6.05937 3.47514 5.1775 1.64076 3.59687 1.64076H3.59625Z"
@@ -111,14 +111,16 @@
               viewBox="0 0 22 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              v-show="ifLiked"
+              v-show="ifLiked(tweet)"
             >
               <path
                 d="M11 19.6381H10.986C8.40295 19.5901 0.949951 12.8561 0.949951 6.47812C0.949951 3.41412 3.47495 0.724121 6.35295 0.724121C8.64295 0.724121 10.183 2.30412 10.999 3.45412C11.813 2.30612 13.353 0.724121 15.644 0.724121C18.524 0.724121 21.048 3.41412 21.048 6.47912C21.048 12.8551 13.594 19.5891 11.011 19.6361H11V19.6381Z"
                 fill="#E0245E"
               />
             </svg>
-            <span :class="{ like: ifLiked }">{{ tweet.likes.length }}</span>
+            <span :class="{ like: ifLiked(tweet) }">{{
+              tweet.likes.length
+            }}</span>
           </div>
         </div>
       </div>
@@ -282,45 +284,35 @@ export default {
   methods: {
     fetchTweets() {
       this.tweets = [...this.initialTweets];
-      // 把 replyCount 加入到對應id的tweet裡面
-      // this.tweets.map((tweet) => {
-      //   tweet.isLiked = false;
-      //   for (let i = 0; i < this.initialTweetsReply.length; i++) {
-      //     if (tweet.tweetId === this.initialTweetsReply[i].tweetId) {
-      //       tweet.replyCount = this.initialTweetsReply[i].replyCount;
-      //     }
-      //   }
-      // });
     },
     showModal(id) {
       this.isModalVisible = true;
-      this.oneTweet = { ...this.tweets.find((tweet) => tweet.tweetId === id) };
+      this.oneTweet = { ...this.tweets.find((tweet) => tweet.id === id) };
     },
     closeModal() {
       this.isModalVisible = false;
     },
     ifLiked(tweet) {
-      return tweet.likes.some((obj) => obj.UserId === tweet.UserId);
+      return tweet.likes.some((obj) => obj.UserId === this.initialUser.id);
     },
-    showLike(id) {
+    changeLike(id) {
       // TODO 要把資料送到後端更新
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.tweetId === id && tweet.isLiked === false) {
-          return {
-            ...tweet,
-            isLiked: true,
-            likeCount: tweet.likeCount + 1,
-          };
-        } else if (tweet.tweetId === id && tweet.isLiked === true) {
-          return {
-            ...tweet,
-            isLiked: false,
-            likeCount: tweet.likeCount - 1,
-          };
-        } else {
-          return tweet;
-        }
-      });
+      // 找到對應的那一則推文
+      const findTweet = this.tweets.find((tweet) => tweet.id === id);
+
+      if (
+        findTweet.likes.some(
+          (likeRecord) => likeRecord.UserId === this.initialUser.id
+        )
+      ) {
+        // 愛心亮起的狀態，使用者可以再次點擊愛心以取消"喜歡"
+        findTweet.likes = findTweet.likes.filter(
+          (likeRecord) => likeRecord.UserId !== this.initialUser.id
+        );
+        return;
+      }
+      // 使用者未"喜歡"該則推文時，點擊愛心就會變成"喜歡"
+      findTweet.likes.push({ UserId: this.initialUser.id, TweetId: id });
     },
   },
   computed: {},
