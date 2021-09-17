@@ -41,21 +41,25 @@
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="account" />
+          <input type="text" v-model="account" required />
           <hr />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="text" v-model="password" />
+          <input type="password" v-model="password" required />
           <hr />
         </div>
       </form>
-      <button type="submit" form="sign-in-form">登入</button>
+      <button type="submit" form="sign-in-form" :disabled="isProcessing">
+        登入
+      </button>
     </div>
     <div class="footer">
       <router-link class="sign-up" to="/signup">註冊 Alphitter</router-link>
       <div class="dot"></div>
-      <router-link class="admin-sign-in" to="/signin/admin">後台登入</router-link>
+      <router-link class="admin-sign-in" to="/signin/admin"
+        >後台登入</router-link
+      >
     </div>
   </div>
 </template>
@@ -142,6 +146,7 @@
       font-size: 18px;
       color: #ffffff;
       line-height: 26px;
+      cursor: pointer;
     }
   }
 
@@ -181,21 +186,70 @@
 </style>
 
 <script>
+import authorizationAPI from "./../api/authorization";
+import { Toast } from "./../utils/helpers";
+
 export default {
   data() {
     return {
       account: "",
       password: "",
+      isProcessing: false,
     };
   },
   methods: {
-    handleSubmit() {
-      const data = JSON.stringify({
-        account: this.account,
-        password: this.password,
-      });
-      // TODO: 向後端驗證使用者登入資訊是否合法
-      console.log("data", data);
+    // handleSubmit() {
+    //   const data = JSON.stringify({
+    //     account: this.account,
+    //     password: this.password,
+    //   });
+    // TODO: 向後端驗證使用者登入資訊是否合法
+    //   console.log("data", data);
+    // },
+
+    // TODO 接api  async / await寫法
+    async handleSubmit() {
+      try {
+        if (!this.account || !this.password) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填入 account 和 password",
+          });
+          return;
+        }
+
+        this.isProcessing = true;
+
+        const response = await authorizationAPI.signIn({
+          account: this.account,
+          password: this.password,
+        });
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        // 將 token 存放在 localStorage 內
+        localStorage.setItem("token", data.token);
+
+        // 成功登入後轉址到首頁
+        this.$router.push("/");
+      } catch (error) {
+        // 將密碼欄位清空
+        this.password = "";
+
+        // 顯示錯誤提示
+        Toast.fire({
+          icon: "warning",
+          title: "請確認您輸入了正確的帳號密碼",
+        });
+
+        // 因為登入失敗，所以要把按鈕狀態還原
+        this.isProcessing = false;
+        console.log("error", error);
+      }
     },
   },
 };
