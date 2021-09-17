@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Navbar />
+    <Navbar :initial-user="userData" />
     <div class="setting">
       <header>帳戶設定</header>
       <div class="form-container">
@@ -114,6 +114,7 @@
 
 <script>
 import Navbar from "./../components/Navbar";
+import data from "../../public/api-users-id-v2.json";
 
 export default {
   name: "Setting",
@@ -122,6 +123,7 @@ export default {
   },
   data() {
     return {
+      userData: {},
       // TODO 向後端要資料，這筆隨便寫的
       account: "@132",
       name: "BRTHBRDT",
@@ -131,6 +133,11 @@ export default {
     };
   },
   methods: {
+    fetchUser() {
+      this.userData = {
+        ...data.userData,
+      };
+    },
     handleSubmit() {
       if (this.password === this.passwordCheck) {
         const data = JSON.stringify({
@@ -145,6 +152,10 @@ export default {
         window.alert('"密碼"與"密碼確認"欄位的資料不一致，請維持一致喔!');
       }
     },
+  },
+  created() {
+    console.log(`created at Setting.vue`);
+    this.fetchUser();
   },
 };
 </script>

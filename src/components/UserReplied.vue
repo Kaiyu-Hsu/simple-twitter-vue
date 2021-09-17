@@ -1,6 +1,6 @@
 <template>
   <div class="a-tweet-container">
-    <div class="a-tweet" v-for="replied in replieds" :key="replied.TweetId">
+    <div class="a-tweet" v-for="replied in replies" :key="replied.TweetId">
       <img :src="user.avatar" class="avatar" />
       <div class="content">
         <div class="name-account">
@@ -137,27 +137,33 @@
 <script>
 import data from "./../../public/api-users-id-replied-tweets-v2.json";
 // TODO api-users-id-replied-tweets-v2.json 沒有包含userData 由另一個資料載入
-import userData from "./../../public/api-users-id-tweets-v2.json";
+// 運用 props 從 User.vue 傳進 initialUser
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 
 export default {
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       user: {},
-      replieds: [],
+      replies: [],
     };
   },
   mixins: [fromNowFilter],
   methods: {
     fetchData() {
-      this.user = userData.userData;
-      this.replieds = data.repliedTweets;
+      this.user = { ...this.initialUser };
+      this.replies = [...data.repliedTweets];
     },
   },
   created() {
     this.fetchData();
     console.log(this.user);
-    console.log(this.replieds);
+    console.log(this.replies);
   },
 };
 </script>

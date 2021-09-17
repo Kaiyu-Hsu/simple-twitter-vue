@@ -127,11 +127,17 @@
 <script>
 import data from "./../../public/api-users-id-likes-v2.json";
 // TODO api-users-id-replied-tweets-v2.json 沒有包含userData 由另一個資料載入
-import userData from "./../../public/api-users-id-tweets-v2.json";
+// 運用 props 從 User.vue 傳進 initialUser
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 
 export default {
   name: "UserLikes",
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       likes: [],
@@ -141,8 +147,8 @@ export default {
   mixins: [fromNowFilter],
   methods: {
     fetchData() {
-      this.user = userData.userData;
-      this.likes = data.likedTweets;
+      this.user = {... this.initialUser};
+      this.likes = [... data.likedTweets];
     },
   },
   created() {
