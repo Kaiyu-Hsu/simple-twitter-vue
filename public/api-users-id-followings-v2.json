@@ -1,0 +1,95 @@
+{
+  "followings": {
+    "id": 2,
+    "name": "user1",
+    "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=67.07471647841952&lock=88.56050528001317",
+    "account": "Paria",
+    "role": "user",
+    "Followings": [
+      {
+        "id": 4,
+        "name": "user3",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=31.999883483079028&lock=77.01479495763712",
+        "account": "nostr",
+        "role": "user",
+        "Followship": {
+          "followerId": 2,
+          "followingId": 4,
+          "createdAt": "2021-09-15T19:23:43.000Z",
+          "updatedAt": "2021-09-15T19:23:43.000Z"
+        }
+      },
+      {
+        "id": 1,
+        "name": "root",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=49.78815138387927&lock=96.72765955013105",
+        "account": "alias",
+        "role": "admin",
+        "Followship": {
+          "followerId": 2,
+          "followingId": 1,
+          "createdAt": "2021-09-15T19:23:43.000Z",
+          "updatedAt": "2021-09-15T19:23:43.000Z"
+        }
+      },
+      {
+        "id": 3,
+        "name": "user2",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=27.09168705225171&lock=40.44798232699303",
+        "account": "Verit",
+        "role": "user",
+        "Followship": {
+          "followerId": 2,
+          "followingId": 3,
+          "createdAt": "2021-09-15T19:23:43.000Z",
+          "updatedAt": "2021-09-15T19:23:43.000Z"
+        }
+      },
+      {
+        "id": 5,
+        "name": "user4",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=58.442192861229955&lock=70.93704108213366",
+        "account": "Susci",
+        "role": "user",
+        "Followship": {
+          "followerId": 2,
+          "followingId": 5,
+          "createdAt": "2021-09-15T19:23:43.000Z",
+          "updatedAt": "2021-09-15T19:23:43.000Z"
+        }
+      }
+    ]
+  },
+  "followersId": [
+    {
+      "followerId": 0,
+      "followingId": 2,
+      "createdAt": "2021-09-15T19:23:43.000Z",
+      "updatedAt": "2021-09-15T19:23:43.000Z"
+    },
+    {
+      "followerId": 1,
+      "followingId": 2,
+      "createdAt": "2021-09-15T19:23:43.000Z",
+      "updatedAt": "2021-09-15T19:23:43.000Z"
+    },
+    {
+      "followerId": 5,
+      "followingId": 2,
+      "createdAt": "2021-09-15T19:23:43.000Z",
+      "updatedAt": "2021-09-15T19:23:43.000Z"
+    },
+    {
+      "followerId": 5,
+      "followingId": 2,
+      "createdAt": "2021-09-15T19:23:43.000Z",
+      "updatedAt": "2021-09-15T19:23:43.000Z"
+    },
+    {
+      "followerId": 0,
+      "followingId": 2,
+      "createdAt": "2021-09-15T19:23:43.000Z",
+      "updatedAt": "2021-09-15T19:23:43.000Z"
+    }
+  ]
+}
