@@ -29,7 +29,7 @@
 </style>
 
 <script>
-import Popular from "./../components/popular";
+import Popular from "./../components/Popular";
 import Navbar from "./../components/Navbar";
 import ShowUser from "./../components/ShowUser";
 import UserTabs from "./../components/UserTabs";
