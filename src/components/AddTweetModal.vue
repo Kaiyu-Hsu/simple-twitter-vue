@@ -26,7 +26,7 @@
             cols="50"
             maxlength="140"
             placeholder="有什麼新鮮事?"
-            v-model="tweet"
+            v-model="newTweet"
           ></textarea>
         </div>
 
@@ -143,23 +143,23 @@ textarea {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/api-tweets.json";
+import tweetsJSON from "./../../public/api-tweets-v2.json";
 
 const currentUser = tweetsJSON.userData;
 export default {
   data() {
     return {
-      user: {},
-      tweet: "",
+      currentUser: {},
+      newTweet: "",
     };
   },
   methods: {
     fetchUser() {
-      this.user = currentUser;
+      this.currentUser = currentUser;
     },
     close() {
       this.$emit("close");
-      console.log(this.tweet);
+      console.log(this.newTweet);
     },
     btnClose() {
       this.$emit("close");

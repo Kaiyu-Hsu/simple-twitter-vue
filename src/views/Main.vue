@@ -27,7 +27,7 @@
 <script>
 import Popular from "./../components/Popular";
 import Navbar from "./../components/Navbar";
-import tweetsJSON from "./../../public/api-tweets.json";
+import tweetsJSON from "./../../public/api-tweets-v2.json";
 import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
 

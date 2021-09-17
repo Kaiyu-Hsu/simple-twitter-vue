@@ -107,7 +107,7 @@ img {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/api-tweets.json";
+import tweetsJSON from "./../../public/api-tweets-v2.json";
 
 const popularJSON = tweetsJSON.popular;
 

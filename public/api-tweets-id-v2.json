@@ -1,0 +1,65 @@
+{
+  "tweetData": {
+    "id": 3,
+    "UserId": 3,
+    "description": "Vel nesciunt quo accusantium quasi tempora. Ad molestiae nam. Autem velit corrupti molestiae ut voluptatem qui quas occaecati mollitia. Sit facere libero earum deserunt dolor voluptas cupiditate velit fuga. Harum tempore qui molestias aut unde vitae. Perspiciatis laudantium sapiente.\n \rDolorum eos est nihil. Qui minus tempore est dolor et expedita. Natus autem quaerat consequatur voluptatibus delectus voluptatem. Nobis esse necessitatibus labore consequatur ut mollitia commodi voluptas. Delectus asperiores neque rerum et ut. Enim neque autem.\n \rAdipisci aut alias earum occaecati. Doloribus minus fuga voluptatum. Ut modi quis.",
+    "createdAt": "2021-09-17T05:01:47.000Z",
+    "updatedAt": "2021-09-17T05:01:47.000Z",
+    "replies": [
+      {
+        "id": 3,
+        "UserId": 2,
+        "TweetId": 3,
+        "comment": "Maiores occaecati et et porro. Nesciunt nemo ratione officiis est omnis amet accusantium voluptas. Et animi consequuntur est dolorem aut sint repellendus error.",
+        "createdAt": "2021-09-17T05:01:47.000Z",
+        "updatedAt": "2021-09-17T05:01:47.000Z",
+        "user": {
+          "id": 2,
+          "name": "user1",
+          "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=1.9490410405301306&lock=56.5241365059262",
+          "account": "Non c",
+          "role": "user"
+        }
+      },
+      {
+        "id": 53,
+        "UserId": 3,
+        "TweetId": 3,
+        "comment": "Rerum quia aut deleniti cumque aut neque eos fugit. Distinctio dignissimos laboriosam neque facilis minima. Consequatur temporibus fuga molestiae eum quia sit sunt.\n \rEst ut repellat doloremque deserunt esse. Nihil qui blanditiis consequatur non. Molestiae quia quod quasi. Doloremque facere expedita odio quis deleniti suscipit. Necessitatibus sed dolorum porro tenetur sapiente in odit.\n \rDoloremque modi nostrum et nihil amet. Vel exercitationem aliquam fugiat voluptate. Voluptates porro eligendi perferendis maiores. Enim quidem et ut ipsum distinctio. Aut amet quaerat nesciunt libero cumque omnis neque sit. Temporibus debitis cupiditate accusamus adipisci maxime et deserunt cupiditate corporis.",
+        "createdAt": "2021-09-17T05:01:47.000Z",
+        "updatedAt": "2021-09-17T05:01:47.000Z",
+        "user": {
+          "id": 3,
+          "name": "user2",
+          "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=9.027568556610643&lock=17.71028678435933",
+          "account": "Vitae",
+          "role": "user"
+        }
+      },
+      {
+        "id": 103,
+        "UserId": 5,
+        "TweetId": 3,
+        "comment": "magni",
+        "createdAt": "2021-09-17T05:01:47.000Z",
+        "updatedAt": "2021-09-17T05:01:47.000Z",
+        "user": {
+          "id": 5,
+          "name": "user4",
+          "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=41.020029548513826&lock=4.759094033651934",
+          "account": "rerum",
+          "role": "user"
+        }
+      }
+    ],
+    "likes": [
+      {
+        "id": 78,
+        "UserId": 0,
+        "TweetId": 3,
+        "createdAt": "2021-09-17T05:01:47.000Z",
+        "updatedAt": "2021-09-17T05:01:47.000Z"
+      }
+    ]
+  }
+}
