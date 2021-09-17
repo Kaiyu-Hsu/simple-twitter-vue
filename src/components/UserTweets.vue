@@ -121,7 +121,7 @@
 
 <script>
 import data from "./../../public/api-users-id-tweets-v2.json";
-import { fromNowFilter } from "./../../utils/mixins"; // 時間簡化套件
+import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 
 export default {
   data() {
