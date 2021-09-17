@@ -154,7 +154,7 @@
       </router-link>
       <div class="tweet" @click="showModal">推文</div>
       <!-- use the modal component, pass in the prop -->
-      <addTweet v-if="isModalVisible" @close="closeModal" />
+      <addTweet v-if="isModalVisible" @close="closeModal" :initial-user="initialUser" />
     </div>
     <div class="log-out">
       <svg
@@ -180,6 +180,7 @@
 <style scoped>
 .navbar {
   position: fixed;
+  z-index: 2;
   left: 113px;
   top: 4px;
   width: 235px;
@@ -247,6 +248,12 @@ import addTweet from "./AddTweetModal.vue";
 export default {
   components: {
     addTweet,
+  },
+  props: {
+    initialUser: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {

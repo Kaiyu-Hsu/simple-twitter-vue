@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!-- Navbar.vue -->
-    <Navbar />
+    <Navbar :initial-user="userData" />
     <!-- CreatePosts.vue -->
     <CreatePosts :initial-user="userData" />
     <!-- NewestPosts.vue -->
@@ -44,7 +44,7 @@ export default {
       tweets: [],
       tweetsReply: [],
       popular: [],
-      userData: [],
+      userData: {},
     };
   },
   methods: {

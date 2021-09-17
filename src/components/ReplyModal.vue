@@ -22,24 +22,24 @@
         <div class="modal-body">
           <div class="tweet-card">
             <div class="thumbnail-container">
-              <img :src="tweetContent.userAvatar" alt="" />
+              <img :src="tweetContent.user.avatar" alt="" />
               <div class="line"></div>
             </div>
             <div class="right-content">
               <div class="title-wrapper">
-                <div class="name">{{ tweetContent.userName }}</div>
-                <div class="account">{{ tweetContent.userAccount }}</div>
+                <div class="name">{{ tweetContent.user.name }}</div>
+                <div class="account">{{ tweetContent.user.account }}</div>
                 <div class="dot"></div>
                 <div class="createdAt">
-                  {{ tweetContent.tweetCreate | fromNow }}
+                  {{ tweetContent.createdAt | fromNow }}
                 </div>
               </div>
               <p class="description">
-                {{ tweetContent.tweetDescription }}
+                {{ tweetContent.description }}
               </p>
               <div class="reply-container">
                 <span>回覆給</span>
-                <span class="reply-target">{{ tweetContent.userAccount }}</span>
+                <span class="reply-target">@{{ tweetContent.user.account }}</span>
               </div>
             </div>
           </div>
