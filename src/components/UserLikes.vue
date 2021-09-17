@@ -128,7 +128,7 @@
 import data from "./../../public/api-users-id-likes-v2.json";
 // TODO api-users-id-replied-tweets-v2.json 沒有包含userData 由另一個資料載入
 import userData from "./../../public/api-users-id-tweets-v2.json";
-import { fromNowFilter } from "./../../utils/mixins"; // 時間簡化套件
+import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 
 export default {
   name: "UserLikes",
