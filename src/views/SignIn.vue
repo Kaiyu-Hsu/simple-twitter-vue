@@ -235,7 +235,7 @@ export default {
         localStorage.setItem("token", data.token);
 
         // 成功登入後轉址到首頁
-        this.$router.push("/");
+        this.$router.push("/main");
       } catch (error) {
         // 將密碼欄位清空
         this.password = "";
