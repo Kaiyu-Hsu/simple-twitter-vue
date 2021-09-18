@@ -156,7 +156,7 @@
       <!-- use the modal component, pass in the prop -->
       <addTweet v-if="isModalVisible" @click="showModal" @close="closeModal" />
     </div>
-    <div class="log-out">
+    <div class="log-out" @click="lagOut">
       <svg
         width="20"
         height="18"
@@ -190,7 +190,6 @@
   color: #1c1c1c;
 }
 
-/* 修改 router-link style */
 a {
   text-decoration: none;
 }
@@ -238,11 +237,14 @@ span {
   position: absolute;
   top: 95%;
   left: 10px;
+  cursor: pointer;
 }
 </style>
 
 <script>
 import addTweet from "./../components/addTweet.vue";
+import axios from "axios";
+import { Toast } from "./../utils/helpers";
 
 export default {
   components: {
@@ -259,6 +261,24 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    // layOut() {
+    //   console.log("layOut");
+    // },
+
+    async lagOut() {
+      try {
+        const response = await axios.get("/api/logout");
+
+        console.log("lagOut");
+        console.log(response);
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法登出，請稍後在試",
+        });
+      }
     },
   },
 };
