@@ -29,7 +29,7 @@
             <!-- TODO 回覆數量 -->
             <div class="replies-num">13</div>
           </div>
-          <div class="likes">
+          <div class="likes" @click.stop.prevent="unlikeTweet(like.TweetId)">
             <div class="likes-icon">
               <svg
                 width="24"
@@ -140,7 +140,7 @@ export default {
   },
   data() {
     return {
-      likes: [],
+      likes: [],      
       user: {},
     };
   },
@@ -148,8 +148,11 @@ export default {
   methods: {
     fetchData() {
       this.user = {... this.initialUser};
-      this.likes = [... data.likedTweets];
+      this.likes = [... data.likedTweets];      
     },
+    unlikeTweet(id) { // 取消"喜歡"某一則推文
+      this.likes = this.likes.filter(like => like.TweetId !== id)
+    }
   },
   created() {
     this.fetchData();

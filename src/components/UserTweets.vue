@@ -13,7 +13,7 @@
           {{ tweet.description }}
         </div>
         <div class="replies-likes">
-          <div class="replies">
+          <div class="replies" @click.stop.prevent="openReplyModal(tweet.id)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -69,7 +69,7 @@
       </div>
     </div>
     <ReplyModal
-      v-if="isModalVisible"
+      v-if="isReplyModalVisible"
       :tweet-content="oneTweet"
       :initial-user="initialUser"
       @close-modal="closeModal"
@@ -149,6 +149,7 @@
 <script>
 import data from "./../../public/api-users-id-tweets-v2.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
+import ReplyModal from "./../components/ReplyModal.vue";
 
 export default {
   props: {
@@ -157,13 +158,17 @@ export default {
       required: true,
     },
   },
+  components: {
+    ReplyModal
+  },
   data() {
     return {
       user: {},
       tweets: [],
       replies: "",
       likes: "",
-      oneTweet: {}
+      oneTweet: {},
+      isReplyModalVisible: false,
     };
   },
   mixins: [fromNowFilter],
@@ -179,7 +184,7 @@ export default {
       // TODO 要把資料送到後端更新
       // 找到對應的那一則推文
       const findTweet = this.tweets.find((tweet) => tweet.id === id);
-      
+
       // 判斷 user 的 id 是否有出現在 likes 之中
       if (
         findTweet.likes.some(
@@ -194,6 +199,13 @@ export default {
       }
       // 使用者未"喜歡"該則推文時，點擊愛心就會變成"喜歡"
       findTweet.likes.push({ UserId: this.initialUser.id, TweetId: id });
+    },
+    openReplyModal(id) {
+      this.isReplyModalVisible = true;
+      this.oneTweet = { ...this.tweets.find((tweet) => tweet.id === id)};
+    },
+    closeReplyModal() {
+      this.isReplyModalVisible = false;
     },
   },
   created() {

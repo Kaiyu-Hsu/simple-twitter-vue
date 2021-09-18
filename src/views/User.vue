@@ -11,25 +11,24 @@
     </div>
     <!-- edit modal -->
     <UserEditModal v-if="isModalVisible" @close="closeModal" />
-    <Popular />
-    <ReplyModal
-      @open-reply-modal="openReplyModal"
-      @close-reply-modal="closeReplyModal"
-      :tweet-content="oneTweet"
-      :initial-user="userData"
-    />
+    <Popular />    
   </div>
 </template>
 
 <style lang="scss" scoped>
-.profile {
-  border-left: 1px solid #e5e5e5;
-  border-right: 1px solid #e5e5e5;
-  position: absolute;
-  left: 27%;
-  bottom: 0px;
-  width: 42%;
-  height: 100%;
+.home {
+  // width: 1440px;
+  // height: 1200px;
+
+  .profile {
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    position: absolute;
+    left: 27%;
+    bottom: 0px;
+    width: 42%;
+    height: 100%;
+  }
 }
 </style>
 
@@ -39,7 +38,6 @@ import Navbar from "./../components/Navbar";
 import ShowUser from "./../components/ShowUser";
 import UserTabs from "./../components/UserTabs";
 import UserEditModal from "./../components/UserEditModal.vue";
-import ReplyModal from "./../components/ReplyModal.vue"
 import data from "../../public/api-users-id-v2.json";
 
 export default {
@@ -50,7 +48,6 @@ export default {
     ShowUser,
     UserTabs,
     UserEditModal,
-    ReplyModal
   },
   data() {
     return {
@@ -58,7 +55,6 @@ export default {
       userTweets: [],
       popular: [],
       isModalVisible: false,
-      isReplyModalVisible: false,
     };
   },
   methods: {
@@ -75,12 +71,6 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
-    },
-    openReplyModal() {
-      this.isReplyModalVisible = true;
-    },
-    closeReplyModal() {
-      this.isReplyModalVisible = false;
     },
   },
   created() {

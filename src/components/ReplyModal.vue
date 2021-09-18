@@ -101,8 +101,7 @@
   justify-content: space-between;
 }
 
-.modal-footer {
-  //   border-top: 1px solid red;
+.modal-footer {  
   flex-direction: column;
   justify-content: flex-end;
 }
