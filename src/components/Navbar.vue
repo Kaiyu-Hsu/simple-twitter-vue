@@ -262,16 +262,23 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    // layOut() {
-    //   console.log("layOut");
-    // },
-
     async lagOut() {
       try {
         const response = await axios.get("/api/logout");
 
         console.log("lagOut");
         console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        // TODO 是否要把token清除?
+
+        // 成功登出後到 SignIn
+        this.$router.push("/");
       } catch (error) {
         console.log("error", error);
         Toast.fire({
