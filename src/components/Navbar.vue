@@ -156,7 +156,7 @@
       <!-- use the modal component, pass in the prop -->
       <addTweet v-if="isModalVisible" @click="showModal" @close="closeModal" />
     </div>
-    <div class="log-out" @click="lagOut">
+    <div class="log-out" @click="logOut">
       <svg
         width="20"
         height="18"
@@ -262,11 +262,11 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    async lagOut() {
+    async logOut() {
       try {
         const response = await axios.get("/api/logout");
 
-        console.log("lagOut");
+        console.log("logOut");
         console.log(response);
 
         // 取得 API 請求後的資料
@@ -276,7 +276,7 @@ export default {
           throw new Error(data.message);
         }
         // TODO 是否要把token清除?
-
+        localStorage.removeItem("token")
         // 成功登出後到 SignIn
         this.$router.push("/");
       } catch (error) {
