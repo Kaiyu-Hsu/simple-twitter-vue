@@ -275,8 +275,8 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        // TODO 是否要把token清除?
-        localStorage.removeItem("token")
+
+        localStorage.removeItem("token");
         // 成功登出後到 SignIn
         this.$router.push("/");
       } catch (error) {
