@@ -1,7 +1,8 @@
 <template>
   <div class="main">
-    <!-- AdminNavbar.vue -->
     <AdminNavbar />
+
+    <router-view />
     <!-- AdminList.vue -->
     <!-- AdminUsers.vue -->
   </div>
