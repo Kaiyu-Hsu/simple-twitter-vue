@@ -35,7 +35,6 @@
       </svg>
     </div>
     <div class="nav-group">
-      <!-- TODO 改成連到 AdminList -->
       <div class="tweets-list" @click="adminList">
         <div class="tweets-icon">
           <svg
@@ -66,7 +65,6 @@
           推文清單
         </span>
       </div>
-      <!-- TODO 改成連到 AdminUsers -->
       <div class="users-list" @click="adminUsers">
         <div class="users-icon">
           <svg
@@ -120,7 +118,7 @@
 
 <style lang="scss" scoped>
 .admin-nav {
-  width: 235px;
+  width: 20%;
   height: 100%;
   position: fixed;
   left: 10%;
@@ -140,6 +138,7 @@
   .icon {
     width: 50px;
     height: 50px;
+    margin-top: 4px;
   }
 
   .tweets-list,
@@ -158,7 +157,7 @@
     margin-top: 40px;
     .log-out {
       position: absolute;
-      top: 96%;
+      top: 90%;
     }
   }
 }
