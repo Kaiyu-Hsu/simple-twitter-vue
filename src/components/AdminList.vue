@@ -86,6 +86,8 @@
 <script>
 import data from "./../../public/api-admin.json";
 import { fromNowFilter } from "./../utils/mixins";
+import axios from "axios";
+import { Toast } from "./../utils/helpers";
 
 export default {
   name: "AdminList",
@@ -102,10 +104,37 @@ export default {
     },
     deleteTweet() {
       console.log("delete");
+      // TODO 刪除資料
+    },
+    // API
+    async fetchApiData() {
+      try {
+        const response = await axios.get("/api/admin");
+
+        console.log("admin");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入資料
+        // this.tweets = data.allTweets;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
   },
   created() {
     this.fetchJSON();
+    // this.fetchApiData();
   },
 };
 </script>
