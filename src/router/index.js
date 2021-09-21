@@ -61,6 +61,11 @@ const routes = [
     component: () => import("../views/Setting.vue"),
   },
   {
+    path: "/admin",
+    name: "admin",
+    component: () => import("../views/AdminMain.vue"),
+  },
+  {
     path: "*",
     name: "not-found",
     component: NotFound,
