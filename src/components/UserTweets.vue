@@ -120,27 +120,81 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-tweets-v2.json";
+import tweets from "./../../public/api-users-id-tweets-v3.json";
+import data from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
+import axios from "axios";
+import { Toast } from "./../utils/helpers";
 
 export default {
+  name: "UserTweets",
   data() {
     return {
       user: {},
       tweets: [],
-      replies: "",
-      likes: "",
     };
   },
   mixins: [fromNowFilter],
   methods: {
-    fetchUserData() {
-      this.user = data.userData;
-      this.tweets = data.userTweets;
+    //載入種子資料
+    fetchJSON() {
+      this.user = data;
+      this.tweets = tweets;
+    },
+    // API
+    async fetchApiData(id) {
+      try {
+        const response = await axios.get(`/api/users/${id}`);
+
+        console.log("users");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入使用者資料
+        // this.user = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async fetchApiTweets(id) {
+      try {
+        const response = await axios.get(`/api/${id}/tweets`);
+
+        console.log("user's tweets");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入tweets
+        // this.tweetsNum = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
   },
   created() {
-    this.fetchUserData();
+    this.fetchJSON();
+    this.fetchApiData();
+    this.fetchApiTweets();
   },
 };
 </script>
