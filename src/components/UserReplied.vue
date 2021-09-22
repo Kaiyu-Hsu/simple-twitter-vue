@@ -80,9 +80,11 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-replied-tweets-v2.json";
-import userData from "./../../public/api-users-id-tweets-v2.json";
+import data from "./../../public/api-users-id-replied-tweets-v3.json";
+import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
+import axios from "axios";
+import { Toast } from "./../utils/helpers";
 
 export default {
   data() {
@@ -93,15 +95,65 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    fetchData() {
-      this.user = userData.userData;
-      this.replieds = data.repliedTweets;
+    //載入種子資料
+    fetchJSON() {
+      this.user = userData;
+      this.replieds = data;
+    },
+    // API
+    async fetchApiData(id) {
+      try {
+        const response = await axios.get(`/api/users/${id}`);
+
+        console.log("users");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入使用者資料
+        // this.user = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async fetchApiReplieds(id) {
+      try {
+        const response = await axios.get(`/api/${id}/replied_tweets`);
+
+        console.log("user's replieds");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入回覆資料
+        // this.replieds = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
   },
   created() {
-    this.fetchData();
-    console.log(this.user);
-    console.log(this.replieds);
+    this.fetchJSON();
+    this.fetchApiData();
+    this.fetchApiReplieds();
   },
 };
 </script>
