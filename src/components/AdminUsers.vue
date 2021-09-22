@@ -181,7 +181,7 @@ export default {
         // 取得 API 請求後的資料
         const { data } = response;
 
-        if (data.status !== "success") {
+        if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
