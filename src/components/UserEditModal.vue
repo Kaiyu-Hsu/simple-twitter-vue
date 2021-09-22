@@ -20,13 +20,25 @@
           <div class="title">編輯個人資料</div>
           <div class="save-btn" @click="save">儲存</div>
         </div>
+        <!-- 傳給後端需要用form形式 -->
+        <!-- <form
+          action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
+          method="POST"
+          enctype="multipart/form-data"
+        > -->
         <div class="pic">
           <!-- background cover -->
           <div class="cover-container">
+            <!-- <input
+                type="file"
+                class="form-control-file"
+                id="image"
+                name="image"
+              /> -->
             <img class="cover" :src="user.cover" />
             <div class="cover-icon">
               <!-- TODO 更改背景圖片 -->
-              <div class="camera">
+              <div class="camera" @click="changeImg">
                 <svg
                   width="20"
                   height="20"
@@ -45,7 +57,7 @@
                 </svg>
               </div>
               <!-- TODO 取消更改 -->
-              <div class="delete">
+              <div class="delete" @click="cancelChangeImg">
                 <svg
                   width="24"
                   height="24"
@@ -61,11 +73,11 @@
               </div>
             </div>
           </div>
+          <!-- avatar -->
           <div class="avatar-container">
-            <!-- avatar -->
             <img class="avatar" :src="user.avatar" />
             <!-- TODO 更改頭像 -->
-            <div class="camera">
+            <div class="camera" @click="changeImg">
               <svg
                 width="20"
                 height="20"
@@ -85,6 +97,7 @@
             </div>
           </div>
         </div>
+        <!-- </form> -->
 
         <div class="form-container">
           <!-- name & info -->
@@ -319,6 +332,12 @@ export default {
       this.user.name = this.oringinalName;
       this.user.introduction = this.oringinalIntro;
       this.$emit("close");
+    },
+    changeImg() {
+      console.log("更改圖片");
+    },
+    cancelChangeImg() {
+      console.log("取消更改圖片");
     },
   },
   created() {
