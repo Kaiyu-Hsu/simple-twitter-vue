@@ -11,9 +11,7 @@
       :initial-user="userData"
     />
     <!-- Popular.vue -->
-    <Popular />
-
-    <!-- ReplyModal.vue -->
+    <Popular />    
   </div>
 </template>
 
@@ -30,6 +28,7 @@ import Navbar from "./../components/Navbar";
 import tweetsJSON from "./../../public/api-tweets-v2.json";
 import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
+import {fetchData} from "./../api/tweets"
 
 export default {
   name: "Main",
@@ -54,9 +53,27 @@ export default {
       this.popular = [...tweetsJSON.popular];
       this.userData = { ...tweetsJSON.userData };
     },
+    async fetchAPIData() {
+      try {
+        const response = await fetchData.getTweets()
+        
+        if (response.statusText !== "OK") {
+          throw new Error(response.data.message)
+        }
+        // TODO localstorage
+        // localStorage.setItem("currentUserId", response.data)
+
+        console.log('我拿到資料囉嘿嘿 ')
+        console.dir(response)
+        console.log(`---`)
+      } catch(error) {
+        console.log("error", error);
+      }
+    }
   },
   created() {
-    this.fetchData();
+    // this.fetchData();
+    this.fetchAPIData()
   },
 };
 </script>

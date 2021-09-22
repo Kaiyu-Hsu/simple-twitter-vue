@@ -1,10 +1,11 @@
-import axios from "axios";
+// import { apiHelper } from '../utils/helpers';
+import axios from 'axios'
 
 export default {
-  signIn({ account, password }) {
+  signIn({ email, password }) {
     // 這裡 return 的會是一個 Promise
-    return axios.post("/signin", {
-      account,
+    return axios.post("http://localhost:3000/api/signin", {
+      email,
       password,
     });
   },

@@ -1,1 +1,94 @@
-{"id":2,"email":"user1@example.com","name":"user1","avatar":"https://loremflickr.com/320/240/restaurant,food/?random=8.858769683928713&lock=89.77442629509149","introduction":"corporis modi aut","account":"Eum e","cover":"https://loremflickr.com/320/240/restaurant,food/?random=63.087181141525136&lock=16.893773499375484","Followings":[{"id":2,"Followship":{"followerId":2,"followingId":2,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}},{"id":4,"Followship":{"followerId":2,"followingId":4,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}},{"id":5,"Followship":{"followerId":2,"followingId":5,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}},{"id":6,"Followship":{"followerId":2,"followingId":6,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}},{"id":1,"Followship":{"followerId":2,"followingId":1,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}}],"Followers":[{"id":2,"Followship":{"followerId":2,"followingId":2,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}},{"id":1,"Followship":{"followerId":1,"followingId":2,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}},{"id":3,"Followship":{"followerId":3,"followingId":2,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}},{"id":4,"Followship":{"followerId":4,"followingId":2,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}}]}
+{
+  "id": 2,
+  "email": "user1@example.com",
+  "name": "user1",
+  "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=8.858769683928713&lock=89.77442629509149",
+  "introduction": "corporis modi aut",
+  "account": "Eum e",
+  "cover": "https://loremflickr.com/320/240/restaurant,food/?random=63.087181141525136&lock=16.893773499375484",
+  "Followings": [
+    {
+      "id": 2,
+      "Followship": {
+        "followerId": 2,
+        "followingId": 2,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    },
+    {
+      "id": 4,
+      "Followship": {
+        "followerId": 2,
+        "followingId": 4,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    },
+    {
+      "id": 5,
+      "Followship": {
+        "followerId": 2,
+        "followingId": 5,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    },
+    {
+      "id": 6,
+      "Followship": {
+        "followerId": 2,
+        "followingId": 6,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    },
+    {
+      "id": 1,
+      "Followship": {
+        "followerId": 2,
+        "followingId": 1,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    }
+  ],
+  "Followers": [
+    {
+      "id": 2,
+      "Followship": {
+        "followerId": 2,
+        "followingId": 2,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    },
+    {
+      "id": 1,
+      "Followship": {
+        "followerId": 1,
+        "followingId": 2,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    },
+    {
+      "id": 3,
+      "Followship": {
+        "followerId": 3,
+        "followingId": 2,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    },
+    {
+      "id": 4,
+      "Followship": {
+        "followerId": 4,
+        "followingId": 2,
+        "createdAt": "2021-09-17T11:04:07.000Z",
+        "updatedAt": "2021-09-17T11:04:07.000Z"
+      }
+    }
+  ]
+}

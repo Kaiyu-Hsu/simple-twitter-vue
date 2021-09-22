@@ -41,7 +41,7 @@
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="account" required />
+          <input type="text" placeholder="xxx@example.com" v-model="email" required />
           <hr />
         </div>
         <div class="input-wrapper">
@@ -192,7 +192,7 @@ import { Toast } from "./../utils/helpers";
 export default {
   data() {
     return {
-      account: "",
+      email: "",
       password: "",
       isProcessing: false,
     };
@@ -210,7 +210,7 @@ export default {
     // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
-        if (!this.account || !this.password) {
+        if (!this.email || !this.password) {
           Toast.fire({
             icon: "warning",
             title: "請填入 account 和 password",
@@ -221,21 +221,22 @@ export default {
         this.isProcessing = true;
 
         const response = await authorizationAPI.signIn({
-          account: this.account,
+          email: this.email,
           password: this.password,
         });
+        console.dir(response)
 
         // 取得 API 請求後的資料
         const { data } = response;
-
-        if (data.status !== "success") {
+        
+        if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
         // 將 token 存放在 localStorage 內
-        localStorage.setItem("token", data.token);
+        // localStorage.setItem("token", data.token);
 
         // 成功登入後轉址到首頁
-        this.$router.push("/");
+        this.$router.push("/main");
       } catch (error) {
         // 將密碼欄位清空
         this.password = "";
