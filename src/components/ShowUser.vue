@@ -45,11 +45,11 @@
       <!-- 跟隨中 & 跟隨者 -->
       <div class="followings-followers">
         <div class="followings">
-          <div class="num">{{ followings }}個</div>
+          <div class="num">{{ user.Followings.length }}個</div>
           跟隨中
         </div>
         <div class="followers">
-          <div class="num">{{ followers }}位</div>
+          <div class="num">{{ user.Followers.length }}位</div>
           跟隨者
         </div>
       </div>
@@ -171,36 +171,81 @@ header {
 </style>
 
 <script>
-import data from "./../../public/api-users-id-v2.json";
-import followers from "./../../public/api-users-id-followers-v2.json";
-import followings from "./../../public/api-users-id-followings-v2.json";
-
-const currentUser = data.userData;
-const followersNum = followers.followers.Followers.length; // 剝洋蔥逆
-const followingsNum = followings.followings.Followings.length;
+import data from "./../../public/api-users-id-userInfo-new.json";
+import tweets from "./../../public/api-users-id-tweets-v3.json";
+import axios from "axios";
+import { Toast } from "./../utils/helpers";
 
 export default {
   data() {
     return {
       user: {},
       tweetsNum: "",
-      followers: "",
-      followings: "",
     };
   },
   methods: {
-    fetchData() {
-      this.user = currentUser;
-      this.tweetsNum = data.userTweets.length;
-      this.followers = followersNum;
-      this.followings = followingsNum;
+    //載入種子資料
+    fetchJSON() {
+      this.user = data;
+      this.tweetsNum = tweets.length;
     },
     editProfile() {
       this.$emit("open-edit-modal");
     },
+    // API
+    async fetchApiData(id) {
+      try {
+        const response = await axios.get(`/api/users/${id}`);
+
+        console.log("users");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入使用者資料
+        // this.user = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async fetchApiTweets(id) {
+      try {
+        const response = await axios.get(`/api/${id}/tweets`);
+
+        console.log("user's tweets");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入tweets總數
+        // this.tweetsNum = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
   },
   created() {
-    this.fetchData();
+    this.fetchJSON();
+    this.fetchApiData();
+    this.fetchApiTweets();
   },
 };
 </script>
