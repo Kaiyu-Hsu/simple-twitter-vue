@@ -18,27 +18,31 @@
             </svg>
           </button>
           <div class="title">編輯個人資料</div>
-          <div class="save-btn" @click="save">儲存</div>
+          <botton type="submit" class="save-btn" @click="save">儲存</botton>
+          <!-- <botton type="submit" class="save-btn">儲存</botton> -->
         </div>
-        <!-- 傳給後端需要用form形式 -->
+        <!-- TODO 傳給後端需要用form形式 -->
         <!-- <form
           action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
           method="POST"
           enctype="multipart/form-data"
+          @submit.stop.prevent="handleSubmit"
         > -->
+        <!-- <form id="edit-form" @submit.stop.prevent="handleSubmit"> -->
         <div class="pic">
           <!-- background cover -->
           <div class="cover-container">
-            <!-- <input
-                type="file"
-                class="form-control-file"
-                id="image"
-                name="image"
-              /> -->
+            <input
+              type="file"
+              id="cover"
+              name="cover"
+              @change="changeCover"
+              style="display: none"
+              ref="coverInput"
+            />
             <img class="cover" :src="user.cover" />
             <div class="cover-icon">
-              <!-- TODO 更改背景圖片 -->
-              <div class="camera" @click="changeImg">
+              <botton class="camera" @click="$refs.coverInput.click()">
                 <svg
                   width="20"
                   height="20"
@@ -55,8 +59,7 @@
                     fill="white"
                   />
                 </svg>
-              </div>
-              <!-- TODO 取消更改 -->
+              </botton>
               <div class="delete" @click="cancelChangeImg">
                 <svg
                   width="24"
@@ -74,10 +77,17 @@
             </div>
           </div>
           <!-- avatar -->
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            @change="changeAvatar"
+            style="display: none"
+            ref="avatarInput"
+          />
           <div class="avatar-container">
             <img class="avatar" :src="user.avatar" />
-            <!-- TODO 更改頭像 -->
-            <div class="camera" @click="changeImg">
+            <div class="camera" @click="$refs.avatarInput.click()">
               <svg
                 width="20"
                 height="20"
@@ -97,7 +107,6 @@
             </div>
           </div>
         </div>
-        <!-- </form> -->
 
         <div class="form-container">
           <!-- name & info -->
@@ -116,11 +125,11 @@
                 maxlength="160"
                 v-model="user.introduction"
               ></textarea>
-              <!-- <hr /> -->
               <div class="words-num">{{ user.introduction.length }}/160</div>
             </div>
           </form>
         </div>
+        <!-- </form> -->
       </div>
     </div>
   </transition>
@@ -303,20 +312,33 @@
 
 <script>
 import data from "./../../public/api-users-id-v2.json";
+// import axios from "axios";
+// import { Toast } from "./../utils/helpers";
+
 export default {
   data() {
     return {
       user: {},
       oringinalName: "",
       oringinalIntro: "",
+      oringinalCover: "",
+      oringinalAvatar: "",
+      // formData: new FormData(),
     };
   },
   methods: {
-    fetchData() {
+    //載入種子資料
+    fetchJSON() {
       this.user = data.userData;
       this.oringinalName = data.userData.name;
       this.oringinalIntro = data.userData.introduction;
+      this.oringinalCover = data.userData.cover;
+      this.oringinalAvatar = data.userData.avatar;
     },
+    // TODO API 先取得原有user的資料
+    // fetchApiUser(userId) {
+    //   return axios.get(`/api/${userId}/profile`);
+    // },
     save() {
       if (
         this.user.name.trim().length === 0 ||
@@ -331,17 +353,50 @@ export default {
     btnClose() {
       this.user.name = this.oringinalName;
       this.user.introduction = this.oringinalIntro;
+      this.user.cover = this.oringinalCover;
+      this.user.avatar = this.oringinalAvatar;
       this.$emit("close");
     },
-    changeImg() {
-      console.log("更改圖片");
+    changeCover(e) {
+      //this.formData.append("file", e.target.files[0]); //放進上傳的檔案
+      console.log("更改圖片", e.target.files);
+      const { files } = e.target;
+      if (files.length === 0) {
+        // 使用者沒有選擇上傳的檔案
+        this.user.cover = this.oringinalCover;
+      } else {
+        // 否則產生預覽圖
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.cover = imageURL;
+      }
+    },
+    changeAvatar(e) {
+      console.log("更改頭像", e.target.files);
+      const { files } = e.target;
+      if (files.length === 0) {
+        // 使用者沒有選擇上傳的檔案
+        this.user.avatar = this.oringinalAvatar;
+      } else {
+        // 否則產生預覽圖
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.avatar = imageURL;
+      }
     },
     cancelChangeImg() {
-      console.log("取消更改圖片");
+      this.user.cover = this.oringinalCover;
+      console.log("取消更改圖片", this.oringinalCover);
+    },
+    // 沒作用
+    handleSubmit(e) {
+      const form = e.target; // <form></form>
+      const formData = new FormData(form);
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ": " + value);
+      }
     },
   },
   created() {
-    this.fetchData();
+    this.fetchJSON();
   },
   watch: {
     user: [
