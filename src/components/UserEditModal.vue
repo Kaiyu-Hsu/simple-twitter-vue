@@ -18,7 +18,7 @@
             </svg>
           </button>
           <div class="title">編輯個人資料</div>
-          <botton type="submit" class="save-btn" @click="save">儲存</botton>
+          <button type="submit" class="save-btn" @click="save">儲存</button>
           <!-- <botton type="submit" class="save-btn">儲存</botton> -->
         </div>
         <!-- TODO 傳給後端需要用form形式 -->
