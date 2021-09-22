@@ -181,7 +181,7 @@ export default {
         }
 
         // TODO 載入tweets
-        // this.tweetsNum = data ?
+        // this.tweets = data ?
       } catch (error) {
         console.log("error", error);
         Toast.fire({
