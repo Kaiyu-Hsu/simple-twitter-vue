@@ -10,12 +10,10 @@
 
 <style lang="scss" scoped>
 .main {
-  // border-left: 1px solid #e5e5e5;
-  // border-right: 1px solid #e5e5e5;
-  width: 80%;
+  width: 70%;
   height: 100%;
   position: absolute;
-  left: 27%;
+  left: 30%;
   bottom: 0px;
 }
 </style>

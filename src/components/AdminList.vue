@@ -134,7 +134,7 @@ export default {
   },
   created() {
     this.fetchJSON();
-    // this.fetchApiData();
+    this.fetchApiData();
   },
 };
 </script>
