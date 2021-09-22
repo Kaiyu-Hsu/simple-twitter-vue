@@ -26,11 +26,11 @@
                 />
               </svg>
             </div>
-            <!-- TODO 回覆數量 -->
-            <div class="replies-num">13</div>
+            <div class="replies-num">{{ like.tweet.likes.length }}</div>
           </div>
+          <!-- TODO 按讚應綁id，個別切換 -->
           <div class="likes" v-if="isLike">
-            <div class="likes-icon" @click="dislike">
+            <div class="likes-icon" @click="dislike(like.TweetId)">
               <svg
                 width="24"
                 height="24"
@@ -44,11 +44,10 @@
                 />
               </svg>
             </div>
-            <!-- TODO 按讚數量 -->
-            <div class="likes-num">52</div>
+            <div class="likes-num">{{ like.tweet.replies.length }}</div>
           </div>
           <div class="dislikes" v-else>
-            <div class="likes-icon" @click="likeThis">
+            <div class="likes-icon" @click="likeThis(like.TweetId)">
               <svg
                 width="15"
                 height="15"
@@ -62,8 +61,10 @@
                 />
               </svg>
             </div>
-            <!-- TODO 按讚數量 -->
-            <div class="dislikes-num" style="#657786">52</div>
+
+            <div class="dislikes-num" style="#657786">
+              {{ like.tweet.replies.length - 1 }}
+            </div>
           </div>
         </div>
       </div>
@@ -144,9 +145,11 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-likes-v2.json";
-import userData from "./../../public/api-users-id-tweets-v2.json";
+import data from "./../../public/api-users-id-likes-v3.json";
+import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
+import axios from "axios";
+import { Toast } from "./../utils/helpers";
 
 export default {
   name: "UserLikes",
@@ -159,9 +162,10 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    fetchData() {
-      this.user = userData.userData;
-      this.likes = data.likedTweets;
+    //載入種子資料
+    fetchJSON() {
+      this.user = userData;
+      this.likes = data;
     },
     dislike() {
       console.log("dislike");
@@ -171,11 +175,60 @@ export default {
       console.log("like");
       this.isLike = true;
     },
+    // API
+    async fetchApiData(id) {
+      try {
+        const response = await axios.get(`/api/users/${id}`);
+
+        console.log("users");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入使用者資料
+        // this.user = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async fetchApiLikes(id) {
+      try {
+        const response = await axios.get(`/api/${id}/likes`);
+
+        console.log("user's likes");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入likes資料
+        // this.likes = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
   },
   created() {
-    this.fetchData();
-    console.log(this.user);
-    console.log(this.likes);
+    this.fetchJSON();
+    this.fetchApiData();
+    this.fetchApiLikes();
   },
 };
 </script>
