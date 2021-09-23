@@ -97,7 +97,7 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-replied-tweets-v2.json";
+// import data from "./../../public/api-users-id-replied-tweets-v2.json";
 // TODO api-users-id-replied-tweets-v2.json 沒有包含userData 由另一個資料載入
 // 運用 props 從 User.vue 傳進 initialUser
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
@@ -119,7 +119,7 @@ export default {
   methods: {
     fetchData() {
       this.user = { ...this.initialUser };
-      this.replies = [...data.repliedTweets];
+      // this.replies = [...data.repliedTweets];
     },
   },
   created() {

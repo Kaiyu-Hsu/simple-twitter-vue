@@ -147,7 +147,7 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-tweets-v2.json";
+// import data from "./../../public/api-users-id-tweets-v2.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import ReplyModal from "./../components/ReplyModal.vue";
 
@@ -174,8 +174,8 @@ export default {
   mixins: [fromNowFilter],
   methods: {
     fetchUserData() {
-      this.user = data.userData;
-      this.tweets = data.userTweets;
+      // this.user = data.userData;
+      // this.tweets = data.userTweets;
     },
     ifLiked(tweet) {
       return tweet.likes.some((obj) => obj.UserId === this.initialUser.id);

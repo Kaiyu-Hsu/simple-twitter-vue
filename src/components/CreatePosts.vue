@@ -117,6 +117,8 @@
 </style>
 
 <script>
+import {fetchData} from "./../api/tweets"
+
 export default {
   props: {
     initialUser: {
@@ -144,10 +146,12 @@ export default {
     };
   },
   methods: {
-    newTweet() {
+    async newTweet() {
       // TODO 需跟後端確認發送 POST 新增推文請求的資料結構為何
       console.log("送出新推文內容: " + this.newPostContent);
-      // 送出 推文內容 以及 使用者id
+      
+      const response = await fetchData.postTweets(this.initialUser.id, this.newPostContent)
+      console.log("🚀 ~ file: CreatePosts.vue ~ line 154 ~ newTweet ~ response", response)
     },
   },
 };

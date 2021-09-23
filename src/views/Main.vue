@@ -5,13 +5,13 @@
     <!-- CreatePosts.vue -->
     <CreatePosts :initial-user="userData" />
     <!-- NewestPosts.vue -->
-    <NewestPosts 
-      :initial-tweets="tweets" 
+    <NewestPosts
+      :initial-tweets="tweets"
       :initial-tweets-reply="tweetsReply"
       :initial-user="userData"
     />
     <!-- Popular.vue -->
-    <Popular />    
+    <Popular />
   </div>
 </template>
 
@@ -25,10 +25,10 @@
 <script>
 import Popular from "./../components/Popular";
 import Navbar from "./../components/Navbar";
-import tweetsJSON from "./../../public/api-tweets-v2.json";
 import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
-import {fetchData} from "./../api/tweets"
+import { fetchData } from "./../api/tweets";
+import user from "./../api/user";
 
 export default {
   name: "Main",
@@ -44,36 +44,84 @@ export default {
       tweetsReply: [],
       popular: [],
       userData: {},
+      apiTweets: [],
+      apiTweetsReply: [],
+      apiPopular: [],
     };
   },
   methods: {
-    fetchData() {
-      this.tweets = [...tweetsJSON.tweets];
-      this.tweetsReply = [...tweetsJSON.tweetsReply];
-      this.popular = [...tweetsJSON.popular];
-      this.userData = { ...tweetsJSON.userData };
-    },
     async fetchAPIData() {
       try {
-        const response = await fetchData.getTweets()
-        
-        if (response.statusText !== "OK") {
-          throw new Error(response.data.message)
-        }
-        // TODO localstorage
-        // localStorage.setItem("currentUserId", response.data)
+        const response = await fetchData.getTweets();
 
-        console.log('我拿到資料囉嘿嘿 ')
-        console.dir(response)
-        console.log(`---`)
-      } catch(error) {
+        console.log("我拿到資料囉嘿嘿 ");
+        console.dir(response);
+        console.log(`---`);
+        this.tweets = [...response.data];
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+      } catch (error) {
         console.log("error", error);
       }
-    }
+    },
+    async fetchSelf() {
+      // const userId = JSON.parse(localStorage.getItem('user')).id
+
+      try {
+        const response = await user.getUserInfo(1);
+
+        console.log("Fetch Self");
+        console.dir(response);
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async fetchOther() {
+      try {
+        const response = await user.getOther();
+        console.log("Fetch Other");
+        console.dir(response);
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async editUser() {
+      try {
+        const response = await user.getEditUser();
+        console.log("Edit User");
+        console.log(response);
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async getFollowers() {
+      try {
+        const response = await user.getFollowers(1);
+        console.log("Get followers");
+        console.log(response);
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async getReplied() {
+      try {
+        const response = await user.getReplied(2);
+        console.log("Get replied tweets");
+        console.log(response);
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
   },
   created() {
     // this.fetchData();
     this.fetchAPIData()
+    // this.getFollowers()
+    // this.getReplied()
+    this.fetchSelf()
+    // this.fetchOther()
+    // this.editUser()
   },
 };
 </script>

@@ -289,7 +289,7 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-v2.json";
+// import data from "./../../public/api-users-id-v2.json";
 export default {
   data() {
     return {
@@ -300,9 +300,9 @@ export default {
   },
   methods: {
     fetchData() {
-      this.user = data.userData;
-      this.oringinalName = data.userData.name;
-      this.oringinalIntro = data.userData.introduction;
+      // this.user = data.userData;
+      // this.oringinalName = data.userData.name;
+      // this.oringinalIntro = data.userData.introduction;
     },
     save() {
       if (

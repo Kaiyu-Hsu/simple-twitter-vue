@@ -37,16 +37,27 @@
       </div>
       <span>登入 Alphitter</span>
     </div>
-    <div class="form-container">
-      <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
+    <div class="form-container">            
+      <form
+        action=""
+        method=""
+        id="sign-in-form"
+        @submit.prevent.stop="handleSubmit"
+      >
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" placeholder="xxx@example.com" v-model="email" required />
+          <input
+            type="text"
+            name="email"
+            placeholder="xxx@example.com"
+            v-model="email"
+            required
+          />
           <hr />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" v-model="password" required />
+          <input type="password" name="password" v-model="password" required />
           <hr />
         </div>
       </form>
@@ -197,16 +208,7 @@ export default {
       isProcessing: false,
     };
   },
-  methods: {
-    // handleSubmit() {
-    //   const data = JSON.stringify({
-    //     account: this.account,
-    //     password: this.password,
-    //   });
-    // TODO: 向後端驗證使用者登入資訊是否合法
-    //   console.log("data", data);
-    // },
-
+  methods: {    
     // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
@@ -224,16 +226,19 @@ export default {
           email: this.email,
           password: this.password,
         });
-        console.dir(response)
+        console.log("🚀 ~ file: SignIn.vue ~ line 229 ~ handleSubmit ~ response", response)        
 
         // 取得 API 請求後的資料
         const { data } = response;
+
+        // 存 token
+        localStorage.setItem('token', JSON.stringify(data.token.token))
+        // 存 user 
+        localStorage.setItem('user', JSON.stringify(data.user))
         
-        if (response.statusText !== "OK") {
+        if (response.data.message !== "ok") {
           throw new Error(data.message);
-        }
-        // 將 token 存放在 localStorage 內
-        // localStorage.setItem("token", data.token);
+        }        
 
         // 成功登入後轉址到首頁
         this.$router.push("/main");

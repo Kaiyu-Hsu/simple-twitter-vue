@@ -125,8 +125,7 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-likes-v2.json";
-// TODO api-users-id-replied-tweets-v2.json 沒有包含userData 由另一個資料載入
+// import data from "./../../public/api-users-id-likes-v2.json";
 // 運用 props 從 User.vue 傳進 initialUser
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 
@@ -148,7 +147,7 @@ export default {
   methods: {
     fetchData() {
       this.user = {... this.initialUser};
-      this.likes = [... data.likedTweets];      
+      // this.likes = [... data.likedTweets];      
     },
     unlikeTweet(id) { // 取消"喜歡"某一則推文
       this.likes = this.likes.filter(like => like.TweetId !== id)

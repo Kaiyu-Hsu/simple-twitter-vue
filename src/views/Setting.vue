@@ -114,7 +114,7 @@
 
 <script>
 import Navbar from "./../components/Navbar";
-import data from "../../public/api-users-id-v2.json";
+// import data from "../../public/api-users-id-v2.json";
 
 export default {
   name: "Setting",
@@ -135,19 +135,19 @@ export default {
   methods: {
     fetchUser() {
       this.userData = {
-        ...data.userData,
+        // ...data.userData,
       };
     },
     handleSubmit() {
       if (this.password === this.passwordCheck) {
-        const data = JSON.stringify({
-          account: this.account,
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        });
+        // const data = JSON.stringify({
+        //   account: this.account,
+        //   name: this.name,
+        //   email: this.email,
+        //   password: this.password,
+        // });
         // TODO: 向後端修改使用者帳號
-        console.log("data", data);
+        // console.log("data", data);
       } else {
         window.alert('"密碼"與"密碼確認"欄位的資料不一致，請維持一致喔!');
       }

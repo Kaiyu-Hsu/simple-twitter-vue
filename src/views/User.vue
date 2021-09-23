@@ -38,7 +38,6 @@ import Navbar from "./../components/Navbar";
 import ShowUser from "./../components/ShowUser";
 import UserTabs from "./../components/UserTabs";
 import UserEditModal from "./../components/UserEditModal.vue";
-import data from "../../public/api-users-id-v2.json";
 
 export default {
   name: "User",
@@ -60,11 +59,11 @@ export default {
   methods: {
     fetchData() {
       this.userData = {
-        ...data,
-        ...data.userData,
+        // ...data,
+        // ...data.userData,
       };
-      this.userTweets = [...data.userTweets];
-      this.popular = [...data.popular];
+      // this.userTweets = [...data.userTweets];
+      // this.popular = [...data.popular];
     },
     openModal() {
       this.isModalVisible = true;

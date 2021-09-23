@@ -6,7 +6,7 @@
       :user-data="userData"
     />
     <ReplyList :tweet-data="tweetData"/>
-    <Popular />    
+    <Popular />
   </div>
 </template>
 
@@ -22,8 +22,8 @@ import OneTweet from "../components/OneTweet.vue";
 import ReplyList from "../components/ReplyList.vue";
 import Navbar from "../components/Navbar.vue";
 import Popular from "../components/Popular.vue";
-import tweetData from "./../../public/v3/api-tweets-id-v3.json";
-import userData from "./../../public/v3/api-users-id-userInfo-new.json"
+// import tweetData from "./../../public/v3/api-tweets-id-v3.json";
+// import userData from "./../../public/v3/api-users-id-userInfo-new.json"
 import {fetchData} from "./../api/tweet"
 
 export default {
@@ -40,14 +40,13 @@ export default {
     };
   },
   methods: {
-    fetchData() {
-      this.userData = {...userData}
-      this.tweetData = { ...tweetData };
-    },
-    // TODO fetchAPI() {}
-    async fetchTweet() {
+    // fetchData() {
+    //   this.userData = {...userData}
+    //   this.tweetData = { ...tweetData };
+    // },    
+    async fetchTweet(id) {
       try {
-        const response = await fetchData.getTweet()
+        const response = await fetchData.getTweet(id)
         
         if (response.statusText !== "OK") {
           throw new Error(response.data.message)
@@ -55,27 +54,32 @@ export default {
         console.log('我拿到資料囉嘿嘿 ')
         console.dir(response)
         console.log(`---`)
+
+        this.tweetData = { ...response.data };
+        
       } catch(error) {
         console.log("error", error);
       }      
     },
-    async fetchCurrentUser() {
+    async fetchCurrentUser(id) {
       try {
-        const response = await fetchData.getCurrentUser()
+        const response = await fetchData.getCurrentUser(id)
         
-        if (response.statusText !== "OK") {
-          throw new Error(response.data.message)
+        if (response.data.message !== "ok") {
+          throw new Error(response.data.message);
         }
+
         console.log('我拿到資料囉嘿嘿 ')
         console.dir(response)
         console.log(`---`)
+        this.userData = {... response.data}
+        
       } catch(error) {
         console.log("error", error);
-      }      
+      }
     }
   },
-  created() {
-    // this.fetchData()
+  created() {    
     this.fetchTweet()
     this.fetchCurrentUser()
   }

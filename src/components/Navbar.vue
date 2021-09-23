@@ -154,9 +154,13 @@
       </router-link>
       <div class="tweet" @click="showModal">推文</div>
       <!-- use the modal component, pass in the prop -->
-      <addTweet v-if="isModalVisible" @close="closeModal" :initial-user="initialUser" />
+      <addTweet
+        v-if="isModalVisible"
+        @close="closeModal"
+        :initial-user="initialUser"
+      />
     </div>
-    <div class="log-out">
+    <div class="log-out" @click="logOut">
       <svg
         width="20"
         height="18"
@@ -244,6 +248,7 @@ span {
 
 <script>
 import addTweet from "./AddTweetModal.vue";
+import logOut from "./../api/user";
 
 export default {
   components: {
@@ -252,8 +257,8 @@ export default {
   props: {
     initialUser: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -267,7 +272,16 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
+    async logOut() {
+      try {
+        const response = await logOut.logOut();
+        console.log("response");
+        console.dir(response);
+      } catch (error) {
+        console.log("error", error);
+      }
+      this.$router.push("/signin");
+    },
   },
 };
 </script>
-

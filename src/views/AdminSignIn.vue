@@ -41,7 +41,7 @@
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="account" />
+          <input type="text" v-model="email" />
           <hr />
         </div>
         <div class="input-wrapper">
@@ -50,7 +50,9 @@
           <hr />
         </div>
       </form>
-      <button form="sign-in-form">登入</button>
+      <button type="submit" form="sign-in-form" :disabled="isProcessing">
+        登入
+      </button>
     </div>
     <div class="footer">
       <router-link class="sign-in" to="/signin">前台登入</router-link>
@@ -161,21 +163,66 @@
 </style>
 
 <script>
+import { Toast } from "./../utils/helpers";
+import authorizationAPI from "./../api/authorization";
+
 export default {
   data() {
     return {
-      account: "",
+      email: "",
       password: "",
+      isProcessing: false
     };
   },
-  methods: {
-    handleSubmit() {
-      const data = JSON.stringify({
-        account: this.account,
-        password: this.password,
-      });
-      // TODO: 向後端驗證使用者登入資訊是否合法
-      console.log("data", data);
+  methods: {    
+    async handleSubmit() {
+      try {
+        if (!this.email || !this.password) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填入 email 和 password",
+          });
+          return;
+        }
+
+        this.isProcessing = true;
+
+        const response = await authorizationAPI.signIn({
+          email: this.email,
+          password: this.password,
+        });
+
+        console.log("🚀 ~ file: AdminSignIn.vue ~ line 193 ~ handleSubmit ~ response", response)
+        
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        // 存 token
+        localStorage.setItem('token', data.token.token)
+        // 存 user role
+        localStorage.setItem('role', data.user.role)
+        
+        if (response.data.message !== "ok") {
+          throw new Error(data.message);
+        }
+
+        // 成功登入後轉址到首頁
+        this.$router.push("/main");
+      } catch (error) {
+        // 將密碼欄位清空
+        this.password = "";
+
+        // 顯示錯誤提示
+        Toast.fire({
+          icon: "warning",
+          title: "請確認您輸入了正確的帳號密碼",
+        });
+
+        // 因為登入失敗，所以要把按鈕狀態還原
+        this.isProcessing = false;
+        console.log("error", error);
+      }
     },
   },
 };

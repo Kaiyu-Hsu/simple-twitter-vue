@@ -106,9 +106,9 @@ img {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/api-tweets-v2.json";
+// import tweetsJSON from "./../../public/api-tweets-v2.json";
 
-const popularJSON = tweetsJSON.popular;
+// const popularJSON = tweetsJSON.popular;
 
 export default {
   data() {
@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     fetchUsers() {
-      this.users = popularJSON;
+      // this.users = popularJSON;
     },
     toggleFollowing(userId) {
       this.users = this.users.map((user) => {
@@ -134,7 +134,7 @@ export default {
     },
   },
   created() {
-    this.fetchUsers();
+    // this.fetchUsers();
   },
 };
 </script>

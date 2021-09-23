@@ -171,13 +171,13 @@ header {
 </style>
 
 <script>
-import data from "./../../public/api-users-id-v2.json";
-import followers from "./../../public/api-users-id-followers-v2.json";
-import followings from "./../../public/api-users-id-followings-v2.json";
+// import data from "./../../public/api-users-id-v2.json";
+// import followers from "./../../public/api-users-id-followers-v2.json";
+// import followings from "./../../public/api-users-id-followings-v2.json";
 
-const currentUser = data.userData;
-const followersNum = followers.followers.Followers.length; // 剝洋蔥逆
-const followingsNum = followings.followings.Followings.length;
+// const currentUser = data.userData;
+// const followersNum = followers.followers.Followers.length; // 剝洋蔥逆
+// const followingsNum = followings.followings.Followings.length;
 
 export default {
   data() {
@@ -190,10 +190,10 @@ export default {
   },
   methods: {
     fetchData() {
-      this.user = currentUser;
-      this.tweetsNum = data.userTweets.length;
-      this.followers = followersNum;
-      this.followings = followingsNum;
+      // this.user = currentUser;
+      // this.tweetsNum = data.userTweets.length;
+      // this.followers = followersNum;
+      // this.followings = followingsNum;
     },
     editProfile() {
       this.$emit("open-edit-modal");
