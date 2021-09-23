@@ -1,7 +1,14 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
-      <div class="modal">
+      <!-- TODO 傳給後端需要用form形式 -->
+      <!-- <form
+          action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
+          method="POST"
+          enctype="multipart/form-data"
+          @submit.stop.prevent="handleSubmit"
+        > -->
+      <form class="modal" action="" @submit.stop.prevent="handleSubmit">
         <div class="modal-header">
           <button type="button" class="btn-close" @click="btnClose">
             <svg
@@ -19,16 +26,7 @@
           </button>
           <div class="title">編輯個人資料</div>
           <button type="submit" class="save-btn" @click="save">儲存</button>
-          <!-- <botton type="submit" class="save-btn">儲存</botton> -->
         </div>
-        <!-- TODO 傳給後端需要用form形式 -->
-        <!-- <form
-          action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
-          method="POST"
-          enctype="multipart/form-data"
-          @submit.stop.prevent="handleSubmit"
-        > -->
-        <!-- <form id="edit-form" @submit.stop.prevent="handleSubmit"> -->
         <div class="pic">
           <!-- background cover -->
           <div class="cover-container">
@@ -42,7 +40,7 @@
             />
             <img class="cover" :src="user.cover" />
             <div class="cover-icon">
-              <botton class="camera" @click="$refs.coverInput.click()">
+              <div class="camera" @click="$refs.coverInput.click()">
                 <svg
                   width="20"
                   height="20"
@@ -59,7 +57,7 @@
                     fill="white"
                   />
                 </svg>
-              </botton>
+              </div>
               <div class="delete" @click="cancelChangeImg">
                 <svg
                   width="24"
@@ -110,10 +108,15 @@
 
         <div class="form-container">
           <!-- name & info -->
-          <form action="" id="edit-form">
+          <div id="edit-form">
             <div class="input-wrapper">
               <span>名稱</span>
-              <input type="text" v-model="user.name" maxlength="50" />
+              <input
+                type="text"
+                name="name"
+                v-model="user.name"
+                maxlength="50"
+              />
               <hr />
               <div class="words-num">{{ user.name.length }}/50</div>
             </div>
@@ -123,14 +126,14 @@
                 rows="4"
                 cols="50"
                 maxlength="160"
+                name="introduction"
                 v-model="user.introduction"
               ></textarea>
               <div class="words-num">{{ user.introduction.length }}/160</div>
             </div>
-          </form>
+          </div>
         </div>
-        <!-- </form> -->
-      </div>
+      </form>
     </div>
   </transition>
 </template>
@@ -180,6 +183,7 @@
         align-items: center;
         background: #ff6600;
         border-radius: 100px;
+        border: none;
         color: #ffffff;
         font-weight: 500;
         cursor: pointer;
@@ -312,8 +316,8 @@
 
 <script>
 import data from "./../../public/api-users-id-v2.json";
-// import axios from "axios";
-// import { Toast } from "./../utils/helpers";
+import axios from "axios";
+import { Toast } from "./../utils/helpers";
 
 export default {
   data() {
@@ -335,10 +339,31 @@ export default {
       this.oringinalCover = data.userData.cover;
       this.oringinalAvatar = data.userData.avatar;
     },
-    // TODO API 先取得原有user的資料
-    // fetchApiUser(userId) {
-    //   return axios.get(`/api/${userId}/profile`);
-    // },
+    // API 先取得原有user的資料
+    async fetchApiData(id) {
+      try {
+        const response = await axios.get(`/api/users/${id}/profile`);
+
+        console.log("user's profile");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // TODO 載入使用者資料
+        // this.user = data ?
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
     save() {
       if (
         this.user.name.trim().length === 0 ||
@@ -347,7 +372,7 @@ export default {
         alert("尚有空白請填寫完畢!");
       } else {
         this.$emit("close");
-        console.log(this.user.name, this.user.introduction);
+        // console.log(this.user.name, this.user.introduction);
       }
     },
     btnClose() {
@@ -386,9 +411,9 @@ export default {
       this.user.cover = this.oringinalCover;
       console.log("取消更改圖片", this.oringinalCover);
     },
-    // 沒作用
+    // 把form印出來
     handleSubmit(e) {
-      const form = e.target; // <form></form>
+      const form = e.target;
       const formData = new FormData(form);
       for (let [name, value] of formData.entries()) {
         console.log(name + ": " + value);
