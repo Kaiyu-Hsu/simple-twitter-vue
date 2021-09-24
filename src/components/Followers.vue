@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="followers">
     <h1>跟隨誰</h1>
     <!-- TODO 資料渲染有問題 -->
     <div v-for="user in users" :key="user.followingId" class="popular-users">
@@ -32,7 +32,7 @@
 </template>
 
 <style scoped>
-.container {
+.followers {
   position: fixed;
   top: 15px;
   left: 75%;
