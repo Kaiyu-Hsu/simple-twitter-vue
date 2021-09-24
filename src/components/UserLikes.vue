@@ -1,7 +1,7 @@
 <template>
   <div class="a-tweet-container">
     <div class="a-tweet" v-for="like in likes" :key="like.TweetId">
-      <img :src="like.tweet.user.avatar" class="avatar" />
+      <img :src="like.tweet.user.avatar" class="avatar" alt="?" />
       <div class="content">
         <div class="name-account">
           <div class="name">{{ like.tweet.user.name }}</div>
@@ -28,9 +28,9 @@
             </div>
             <div class="replies-num">{{ like.tweet.likes.length }}</div>
           </div>
-          <!-- TODO 按讚應綁id，個別切換 -->
-          <div class="likes" v-if="isLike">
-            <div class="likes-icon" @click="dislike(like.TweetId)">
+
+          <div class="likes" v-if="like.isLike">
+            <div class="likes-icon" @click.stop.prevent="disLike(like.TweetId)">
               <svg
                 width="24"
                 height="24"
@@ -47,7 +47,10 @@
             <div class="likes-num">{{ like.tweet.replies.length }}</div>
           </div>
           <div class="dislikes" v-else>
-            <div class="likes-icon" @click="likeThis(like.TweetId)">
+            <div
+              class="likes-icon"
+              @click.stop.prevent="likeThis(like.TweetId)"
+            >
               <svg
                 width="15"
                 height="15"
@@ -61,7 +64,6 @@
                 />
               </svg>
             </div>
-
             <div class="dislikes-num" style="#657786">
               {{ like.tweet.replies.length - 1 }}
             </div>
@@ -148,8 +150,8 @@
 import data from "./../../public/api-users-id-likes-v3.json";
 import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
-import axios from "axios";
 import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
   name: "UserLikes",
@@ -157,7 +159,7 @@ export default {
     return {
       likes: [],
       user: {},
-      isLike: true,
+      // isLike: true,
     };
   },
   mixins: [fromNowFilter],
@@ -167,18 +169,37 @@ export default {
       this.user = userData;
       this.likes = data;
     },
-    dislike() {
-      console.log("dislike");
-      this.isLike = false;
+    // TODO post('/api/tweets/:id/unlike')
+    disLike(userId) {
+      console.log("disLike", userId);
+      this.likes = this.likes.map((like) => {
+        if (like.TweetId === userId) {
+          return {
+            ...like,
+            isLike: false,
+          };
+        }
+        return like;
+      });
     },
-    likeThis() {
-      console.log("like");
-      this.isLike = true;
+    // TODO post('/api/tweets/:id/like')
+    likeThis(userId) {
+      console.log("like", userId);
+      this.likes = this.likes.map((like) => {
+        if (like.TweetId === userId) {
+          return {
+            ...like,
+            isLike: true,
+          };
+        }
+        return like;
+      });
     },
     // API
-    async fetchApiData(id) {
+    async fetchApiData() {
       try {
-        const response = await axios.get(`/api/users/${id}`);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getUser(getUserId());
 
         console.log("users");
         console.log(response);
@@ -190,8 +211,7 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入使用者資料
-        // this.user = data ?
+        this.user = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -200,9 +220,11 @@ export default {
         });
       }
     },
-    async fetchApiLikes(id) {
+    async fetchApiLikes() {
       try {
-        const response = await axios.get(`/api/${id}/likes`);
+        // const getUserId = () => localStorage.getItem("user");
+        // TODO 改回 getUserId()
+        const response = await userAPI.getLikes(255);
 
         console.log("user's likes");
         console.log(response);
@@ -214,8 +236,10 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入likes資料
-        // this.likes = data ?
+        this.likes = data;
+        this.likes = this.likes.map((item) => {
+          return { ...item, isLike: true };
+        });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -226,9 +250,18 @@ export default {
     },
   },
   created() {
-    this.fetchJSON();
+    // this.fetchJSON();
     this.fetchApiData();
     this.fetchApiLikes();
   },
+  // watch: {
+  //   likes: {
+  //     handler: function () {
+  //       console.log("listen");
+  //     },
+  //     deep: true,
+  //     immediate: true,
+  //   },
+  // },
 };
 </script>

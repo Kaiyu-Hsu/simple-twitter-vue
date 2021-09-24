@@ -83,10 +83,11 @@
 import data from "./../../public/api-users-id-replied-tweets-v3.json";
 import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
-import axios from "axios";
 import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
+  name: "UserReplied",
   data() {
     return {
       user: {},
@@ -101,9 +102,10 @@ export default {
       this.replieds = data;
     },
     // API
-    async fetchApiData(id) {
+    async fetchApiData() {
       try {
-        const response = await axios.get(`/api/users/${id}`);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getUser(getUserId());
 
         console.log("users");
         console.log(response);
@@ -115,8 +117,7 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入使用者資料
-        // this.user = data ?
+        this.user = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -125,9 +126,10 @@ export default {
         });
       }
     },
-    async fetchApiReplieds(id) {
+    async fetchApiReplieds() {
       try {
-        const response = await axios.get(`/api/${id}/replied_tweets`);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getReplieds(getUserId());
 
         console.log("user's replieds");
         console.log(response);
@@ -139,8 +141,7 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入回覆資料
-        // this.replieds = data ?
+        this.replieds = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -151,7 +152,7 @@ export default {
     },
   },
   created() {
-    this.fetchJSON();
+    // this.fetchJSON();
     this.fetchApiData();
     this.fetchApiReplieds();
   },

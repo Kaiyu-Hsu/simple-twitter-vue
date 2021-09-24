@@ -1,7 +1,6 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
-      <!-- TODO 傳給後端需要用form形式 -->
       <!-- <form
           action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
           method="POST"
@@ -316,8 +315,8 @@
 
 <script>
 import data from "./../../public/api-users-id-v2.json";
-import axios from "axios";
 import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
   data() {
@@ -327,7 +326,6 @@ export default {
       oringinalIntro: "",
       oringinalCover: "",
       oringinalAvatar: "",
-      // formData: new FormData(),
     };
   },
   methods: {
@@ -340,22 +338,24 @@ export default {
       this.oringinalAvatar = data.userData.avatar;
     },
     // API 先取得原有user的資料
-    async fetchApiData(id) {
+    async fetchApiData() {
       try {
-        const response = await axios.get(`/api/users/${id}/profile`);
-
-        console.log("user's profile");
-        console.log(response);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getInfo(getUserId());
 
         // 取得 API 請求後的資料
         const { data } = response;
+        console.log(response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        // TODO 載入使用者資料
-        // this.user = data ?
+        this.user = data;
+        this.oringinalName = data.name;
+        this.oringinalIntro = data.introduction;
+        this.oringinalCover = data.cover;
+        this.oringinalAvatar = data.avatar;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -383,7 +383,6 @@ export default {
       this.$emit("close");
     },
     changeCover(e) {
-      //this.formData.append("file", e.target.files[0]); //放進上傳的檔案
       console.log("更改圖片", e.target.files);
       const { files } = e.target;
       if (files.length === 0) {
@@ -411,17 +410,40 @@ export default {
       this.user.cover = this.oringinalCover;
       console.log("取消更改圖片", this.oringinalCover);
     },
-    // 把form印出來
-    handleSubmit(e) {
-      const form = e.target;
-      const formData = new FormData(form);
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ": " + value);
+    // TODO PUT到後端 ，照片上傳 500
+    async handleSubmit(e) {
+      try {
+        const form = e.target;
+        const formData = new FormData(form);
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
+        console.log(form);
+        console.log(formData);
+
+        const response = await userAPI.updataForm(this.user.id, { formData });
+
+        console.log("update profile");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法更新資料",
+        });
       }
     },
   },
   created() {
-    this.fetchJSON();
+    // this.fetchJSON();
+    this.fetchApiData();
   },
   watch: {
     user: [

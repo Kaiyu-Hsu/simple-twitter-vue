@@ -1,5 +1,5 @@
 <template>
-  <div class="show-user">
+  <div class="show-user" v-if="!isLoading">
     <header>
       <div class="icon-back">
         <svg
@@ -45,11 +45,11 @@
       <!-- 跟隨中 & 跟隨者 -->
       <div class="followings-followers">
         <div class="followings">
-          <div class="num">{{ user.Followings.length }}個</div>
+          <div class="num">{{ followingsNum }}個</div>
           跟隨中
         </div>
         <div class="followers">
-          <div class="num">{{ user.Followers.length }}位</div>
+          <div class="num">{{ followersNum }}位</div>
           跟隨者
         </div>
       </div>
@@ -173,14 +173,17 @@ header {
 <script>
 import data from "./../../public/api-users-id-userInfo-new.json";
 import tweets from "./../../public/api-users-id-tweets-v3.json";
-import axios from "axios";
 import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
   data() {
     return {
+      isLoading: true,
       user: {},
       tweetsNum: "",
+      followingsNum: "",
+      followersNum: "",
     };
   },
   methods: {
@@ -192,13 +195,11 @@ export default {
     editProfile() {
       this.$emit("open-edit-modal");
     },
-    // API
-    async fetchApiData(id) {
+    // user file
+    async fetchApiData() {
       try {
-        const response = await axios.get(`/api/users/${id}`);
-
-        console.log("users");
-        console.log(response);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getUser(getUserId());
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -207,8 +208,31 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入使用者資料
-        // this.user = data ?
+        this.user = data;
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    // tweets num
+    async fetchApiTweets() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getTweets(getUserId());
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.tweetsNum = data.length;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -217,12 +241,11 @@ export default {
         });
       }
     },
-    async fetchApiTweets(id) {
+    // followingsNum
+    async fetchFollowings() {
       try {
-        const response = await axios.get(`/api/${id}/tweets`);
-
-        console.log("user's tweets");
-        console.log(response);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getFollowings(getUserId());
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -231,8 +254,29 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入tweets總數
-        // this.tweetsNum = data ?
+        this.followingsNum = data.length;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    // followersNum
+    async fetchFollowers() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getFollowers(getUserId());
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.followersNum = data.length;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -243,9 +287,14 @@ export default {
     },
   },
   created() {
-    this.fetchJSON();
+    // this.fetchJSON();
     this.fetchApiData();
     this.fetchApiTweets();
+    this.fetchFollowings();
+    this.fetchFollowers();
+  },
+  updated() {
+    this.fetchApiData();
   },
 };
 </script>

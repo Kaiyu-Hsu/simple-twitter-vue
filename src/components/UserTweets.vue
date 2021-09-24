@@ -123,8 +123,8 @@
 import tweets from "./../../public/api-users-id-tweets-v3.json";
 import data from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
-import axios from "axios";
 import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
   name: "UserTweets",
@@ -142,12 +142,10 @@ export default {
       this.tweets = tweets;
     },
     // API
-    async fetchApiData(id) {
+    async fetchApiData() {
       try {
-        const response = await axios.get(`/api/users/${id}`);
-
-        console.log("users");
-        console.log(response);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getUser(getUserId());
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -156,8 +154,7 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入使用者資料
-        // this.user = data ?
+        this.user = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -166,12 +163,10 @@ export default {
         });
       }
     },
-    async fetchApiTweets(id) {
+    async fetchApiTweets() {
       try {
-        const response = await axios.get(`/api/${id}/tweets`);
-
-        console.log("user's tweets");
-        console.log(response);
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getTweets(getUserId());
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -180,8 +175,7 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入tweets
-        // this.tweets = data ?
+        this.tweets = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -192,7 +186,7 @@ export default {
     },
   },
   created() {
-    this.fetchJSON();
+    // this.fetchJSON();
     this.fetchApiData();
     this.fetchApiTweets();
   },
