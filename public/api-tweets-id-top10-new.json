@@ -18,7 +18,15 @@
         "account": "Eum e"
       }
     },
-    { "followingId": 0, "count": 2, "following": null },
+    {
+      "followingId": 0,
+      "count": 2,
+      "following": {
+        "name": "usersthgbsr th",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=3.671418316359776&lock=72.76022308409178",
+        "account": "vgsebhgbe"
+      }
+    },
     {
       "followingId": 4,
       "count": 2,
