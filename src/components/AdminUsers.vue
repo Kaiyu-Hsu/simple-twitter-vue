@@ -154,7 +154,6 @@
 </style>
 
 <script>
-import data from "./../../public/api-admin-users";
 import axios from "axios";
 import { Toast } from "./../utils/helpers";
 
@@ -165,11 +164,7 @@ export default {
       users: [],
     };
   },
-  methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.users = data.allUsers;
-    },
+  methods: {    
     // API
     async fetchApiData() {
       try {
@@ -196,8 +191,7 @@ export default {
       }
     },
   },
-  created() {
-    this.fetchJSON();
+  created() {    
     this.fetchApiData();
   },
 };
