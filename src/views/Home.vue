@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Popular from "./../components/Popular"
+import Popular from "./../components/Popular";
 
 export default {
   name: "Home",
