@@ -31,7 +31,25 @@ const routes = [
     path: "/main",
     name: "main",
     component: Main,
-  },  
+  },
+  // 通知
+  {
+    path: "/notification",
+    name: "notification",
+    component: () => import("./../views/Notification.vue"),
+  },
+  // 公開聊天室
+  {
+    path: "/publicChatRoom",
+    name: "publicChatRoom",
+    component: () => import("./../views/PublicChatRoom.vue"),
+  },
+  // 私人聊天室
+  {
+    path: "/privateMessage",
+    name: "privateMessage",
+    component: () => import("./../views/PrivateMessage.vue"),
+  },
   {
     path: "/profile",
     name: "profile",
