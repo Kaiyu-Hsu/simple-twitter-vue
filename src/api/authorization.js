@@ -1,10 +1,18 @@
 import axios from "axios";
 
 export default {
-  signIn({ account, password }) {
-    // 這裡 return 的會是一個 Promise
-    return axios.post("/signin", {
-      account,
+  signIn({ email, password }) {
+    // ruby route
+    // return axios.post(
+    //   "https://ac-simple-twitter-api.herokuapp.com/api/signin",
+    //   {
+    //     email,
+    //     password,
+    //   }
+
+    // rex route
+    return axios.post("https://actwitter.herokuapp.com/api/signin", {
+      email,
       password,
     });
   },
