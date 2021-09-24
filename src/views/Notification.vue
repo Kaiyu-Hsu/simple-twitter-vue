@@ -2,6 +2,7 @@
   <div class="container">
     <Navbar />
     <h1>notification!!</h1>
+    <Followers />
   </div>
 </template>
 
@@ -16,11 +17,13 @@
 </style>
 
 <script>
-import Navbar from "./../components/Navbar";
+import Navbar from "./../components/Navbar.vue";
+import Followers from "./../components/Followers.vue";
 export default {
   name: "Notification",
   components: {
     Navbar,
+    Followers,
   },
 };
 </script>
