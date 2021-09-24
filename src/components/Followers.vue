@@ -2,15 +2,17 @@
   <div class="container">
     <h1>跟隨誰</h1>
     <!-- TODO 資料渲染有問題 -->
-    <!-- <div v-for="user in users" :key="user.followingId" class="popular-users"> -->
-    <div class="popular-users">
+    <div v-for="user in users" :key="user.followingId" class="popular-users">
       <!-- <img :src="user.following.avatar" alt="avatar" /> -->
-      <img src="" alt="avatar" />
+      <img
+        src="https://loremflickr.com/320/240/restaurant,food/?random=9.52029547879647&lock=1.8356969306294824"
+        alt="avatar"
+      />
       <div class="name-account">
         <!-- {{ user.following.name }} -->
-        <div class="name">??</div>
+        <div class="name">user5</div>
         <!--  {{ user.following.account }} -->
-        <div class="account">@</div>
+        <div class="account">@ Vel r</div>
       </div>
       <!-- <div
         v-if="user.isFollowed"
@@ -24,8 +26,8 @@
         class="unfollowing-btn"
       > -->
       <div class="unfollowing-btn">跟隨</div>
-      <footer>顯示更多</footer>
     </div>
+    <footer @click="showMore">顯示更多</footer>
   </div>
 </template>
 
@@ -111,6 +113,7 @@ img {
 
 <script>
 import followers from "./../../public/api-tweets-id-top10-new.json";
+
 export default {
   data() {
     return {
@@ -125,6 +128,7 @@ export default {
           isFollowed: true,
         };
       });
+      console.log(this.users[0].following.avatar); // TODO 證明 following 裡可以顯示的
     },
     toggleFollowing(userId) {
       this.users = this.users.map((user) => {
@@ -137,6 +141,9 @@ export default {
 
         return user;
       });
+    },
+    showMore() {
+      console.log("showMore");
     },
   },
   created() {
