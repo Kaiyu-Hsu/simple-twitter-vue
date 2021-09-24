@@ -1,11 +1,15 @@
-// import axios from "axios";
+import axios from "axios";
 import Swal from "sweetalert2";
 
-// const baseURL = ''
+//ruby route
+// const baseURL = "https://ac-simple-twitter-api.herokuapp.com";
 
-// export const apiHelper = axios.create({
-// baseURL
-// });
+//rex route
+const baseURL = "https://actwitter.herokuapp.com";
+
+export const apiHelper = axios.create({
+  baseURL,
+});
 
 export const Toast = Swal.mixin({
   toast: true,

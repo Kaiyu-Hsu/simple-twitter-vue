@@ -1,22 +1,25 @@
 <template>
   <div class="container">
     <h1>Popular</h1>
-    <div v-for="user in users" :key="user.userId" class="popular-users">
-      <img :src="user.avatar" />
+    <div v-for="user in users" :key="user.followingId" class="popular-users">
+      <!-- <img :src="user.avatar" /> -->
+      <img src="" alt="avatar" />
       <div class="name-account">
-        <div class="name">{{ user.name }}</div>
-        <div class="account">{{ user.account }}</div>
+        <!-- {{ user.following.name }} -->
+        <div class="name">?</div>
+        <!-- {{ user.following.account }} -->
+        <div class="account">@ ?</div>
       </div>
       <div
         v-if="user.isFollowed"
-        @click.stop.prevent="toggleFollowing(user.userId)"
+        @click.stop.prevent="toggleFollowing(user.followingId)"
         class="following-btn"
       >
         正在跟隨
       </div>
       <div
         v-else
-        @click.stop.prevent="toggleFollowing(user.userId)"
+        @click.stop.prevent="toggleFollowing(user.followingId)"
         class="unfollowing-btn"
       >
         跟隨
@@ -107,8 +110,11 @@ img {
 
 <script>
 import tweetsJSON from "./../../public/tweets.json";
+import axios from "axios";
+// import { apiHelper } from "./../utils/helpers";
+import { Toast } from "./../utils/helpers";
 
-const popularJSON = tweetsJSON.popular;
+const getToken = () => localStorage.getItem("token");
 
 export default {
   data() {
@@ -118,11 +124,51 @@ export default {
   },
   methods: {
     fetchUsers() {
-      this.users = popularJSON;
+      this.users = tweetsJSON.popular;
+    },
+    //TODO following 有些是null，所以顯示不出來
+    async fetchPopular() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        // ruby route
+        // const response = await apiHelper.get(
+        //   `/api/tweets/${getUserId()}/top10`,
+        //   {
+        //     headers: { Authorization: `Bearer ${getToken()}` },
+        //   }
+        // );
+        // rex route
+        const response = await axios.get(
+          `https://actwitter.herokuapp.com/api/tweets/${getUserId()}/top10`,
+          {
+            headers: { Authorization: `Bearer ${getToken()}` },
+          }
+        );
+
+        console.log("top10");
+        console.log(response);
+
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.users = data.topTwitters;
+        this.users = this.users.map((user) => {
+          return { ...user, isFollowed: true };
+        });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
     toggleFollowing(userId) {
       this.users = this.users.map((user) => {
-        if (user.userId === userId) {
+        if (user.followingId === userId) {
           return {
             ...user,
             isFollowed: !user.isFollowed,
@@ -134,7 +180,8 @@ export default {
     },
   },
   created() {
-    this.fetchUsers();
+    // this.fetchUsers();
+    this.fetchPopular();
   },
 };
 </script>

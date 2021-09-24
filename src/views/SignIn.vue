@@ -41,7 +41,7 @@
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="account" required />
+          <input type="text" v-model="email" required />
           <hr />
         </div>
         <div class="input-wrapper">
@@ -192,7 +192,7 @@ import { Toast } from "./../utils/helpers";
 export default {
   data() {
     return {
-      account: "",
+      email: "",
       password: "",
       isProcessing: false,
     };
@@ -210,10 +210,10 @@ export default {
     // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
-        if (!this.account || !this.password) {
+        if (!this.email || !this.password) {
           Toast.fire({
             icon: "warning",
-            title: "請填入 account 和 password",
+            title: "請填入 email 和 password",
           });
           return;
         }
@@ -221,18 +221,20 @@ export default {
         this.isProcessing = true;
 
         const response = await authorizationAPI.signIn({
-          account: this.account,
+          email: this.email,
           password: this.password,
         });
 
         // 取得 API 請求後的資料
         const { data } = response;
+        console.log(response);
 
-        if (data.status !== "success") {
+        if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-        // 將 token 存放在 localStorage 內
-        localStorage.setItem("token", data.token);
+        // 將 token userId 存放在 localStorage 內
+        localStorage.setItem("token", data.token.token);
+        localStorage.setItem("user", data.user.id);
 
         // 成功登入後轉址到首頁
         this.$router.push("/main");
