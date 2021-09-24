@@ -46,15 +46,8 @@
       >
         <div class="input-wrapper">
           <span>帳號</span>
-          <input
-            type="text"
-            name="email"
-            placeholder="xxx@example.com"
-            v-model="email"
-            @focus="focusInput"
-            required
-          />
-          <hr :class="{ 'now-focus': nowFocus === 'email' }" />
+          <input type="text" v-model="email" required />
+          <hr />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
@@ -229,7 +222,7 @@ export default {
         if (!this.email || !this.password) {
           Toast.fire({
             icon: "warning",
-            title: "請填入 account 和 password",
+            title: "請填入 email 和 password",
           });
           return;
         }
@@ -247,15 +240,14 @@ export default {
 
         // 取得 API 請求後的資料
         const { data } = response;
+        console.log(response);
 
-        // 存 token
-        localStorage.setItem("token", JSON.stringify(data.token.token));
-        // 存 user
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        if (response.data.message !== "ok") {
+        if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
+        // 將 token userId 存放在 localStorage 內
+        localStorage.setItem("token", data.token.token);
+        localStorage.setItem("user", data.user.id);
 
         // 成功登入後轉址到首頁
         this.$router.push("/main");

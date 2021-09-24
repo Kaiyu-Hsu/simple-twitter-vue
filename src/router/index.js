@@ -66,6 +66,24 @@ const routes = [
     component: () => import("../views/Setting.vue"),
   },
   {
+    path: "/admin",
+    name: "admin",
+    component: () => import("../views/AdminMain.vue"),
+    redirect: "/admin/tweets-list",
+    children: [
+      {
+        path: "tweets-list",
+        name: "tweets-list",
+        component: () => import("./../components/AdminList.vue"),
+      },
+      {
+        path: "users-list",
+        name: "users-list",
+        component: () => import("../components/AdminUsers.vue"),
+      },
+    ],
+  },
+  {
     path: "*",
     name: "not-found",
     component: NotFound,

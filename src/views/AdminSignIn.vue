@@ -46,16 +46,16 @@
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" name="password" v-model="password" @focus="focusInput" />
-          <hr :class="{ 'now-focus': nowFocus === 'password' }" />
+          <input type="password" v-model="password" />
+          <hr />
         </div>
       </form>
-      <button type="submit" form="sign-in-form" :disabled="isProcessing">
-        登入
-      </button>
+      <button form="sign-in-form" :disabled="isProcessing">登入</button>
     </div>
     <div class="footer">
-      <router-link class="sign-in" to="/signin">前台登入</router-link>
+      <router-link class="sign-in" to="/signin" :disabled="isProcessing"
+        >前台登入</router-link
+      >
     </div>
   </div>
 </template>
@@ -146,6 +146,7 @@
       font-size: 18px;
       color: #ffffff;
       line-height: 26px;
+      cursor: pointer;
     }
   }
 
@@ -167,8 +168,8 @@
 </style>
 
 <script>
-import { Toast } from "./../utils/helpers";
 import authorizationAPI from "./../api/authorization";
+import { Toast } from "./../utils/helpers";
 
 export default {
   data() {
@@ -176,19 +177,24 @@ export default {
       email: "",
       password: "",
       isProcessing: false,
-      nowFocus: "",
     };
   },
-  methods: {    
-    focusInput(e) {
-      this.nowFocus = e.target.name;
-    },
+  methods: {
+    // handleSubmit() {
+    //   const data = JSON.stringify({
+    //     account: this.account,
+    //     password: this.password,
+    //   });
+    //   // TODO: 向後端驗證使用者登入資訊是否合法
+    //   console.log("data", data);
+    // },
+    // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
-        if (!this.email || !this.password) {
+        if (!this.account || !this.password) {
           Toast.fire({
             icon: "warning",
-            title: "請填入 email 和 password",
+            title: "請填入 account 和 password",
           });
           return;
         }
@@ -196,24 +202,17 @@ export default {
         this.isProcessing = true;
 
         const response = await authorizationAPI.signIn({
-          email: this.email,
+          account: this.account,
           password: this.password,
         });
-
-        console.log("🚀 ~ file: AdminSignIn.vue ~ line 193 ~ handleSubmit ~ response", response)
-        
-
         // 取得 API 請求後的資料
         const { data } = response;
 
-        // 存 token
-        localStorage.setItem('token', JSON.stringify(data.token.token))
-        // 存 user role
-        localStorage.setItem('role', JSON.stringify(data.user.role))
-        
-        if (response.data.message !== "ok") {
+        if (data.status !== "success") {
           throw new Error(data.message);
         }
+        // 將 token 存放在 localStorage 內
+        localStorage.setItem("token", data.token);
 
         // 成功登入後轉址到首頁
         this.$router.push("/main");

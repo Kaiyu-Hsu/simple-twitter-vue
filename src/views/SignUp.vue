@@ -56,28 +56,18 @@
         </div>
         <div class="input-wrapper">
           <span>Email</span>
-          <input type="text" name="email" v-model="email" @focus="focusInput" />
-          <hr :class="{'now-focus': nowFocus === 'email'}" />
+          <input type="email" v-model="email" />
+          <hr />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input
-            type="password"
-            name="password"
-            v-model="password"
-            @focus="focusInput"
-          />
-          <hr :class="{'now-focus': nowFocus === 'password'}" />
+          <input type="password" v-model="password" />
+          <hr />
         </div>
         <div class="input-wrapper">
           <span>密碼確認</span>
-          <input
-            type="password"
-            name="checkPassword"
-            v-model="checkPassword"
-            @focus="focusInput"
-          />
-          <hr :class="{'now-focus': nowFocus === 'checkPassword'}" />
+          <input type="password" v-model="passwordCheck" />
+          <hr />
         </div>
       </form>
       <button type="submit" form="sign-up-form" :disabled="isProcessing">
@@ -177,6 +167,7 @@
       font-size: 18px;
       color: #ffffff;
       line-height: 26px;
+      cursor: pointer;
     }
   }
 
@@ -198,8 +189,8 @@
 </style>
 
 <script>
+import axios from "axios";
 import { Toast } from "./../utils/helpers";
-import authorizationAPI from "./../api/authorization";
 
 export default {
   data() {
@@ -214,33 +205,73 @@ export default {
     };
   },
   methods: {
-    focusInput(e) {      
-      this.nowFocus = e.target.name;
-    },    
-    async handleSubmit() {
-      try {
-        if (this.password !== this.checkPassword) {
-          Toast.fire({
-            icon: "warning",
-            title: "密碼 和 密碼確認 請輸入相同組合",
-          });
-          return;
-        }
-        this.isProcessing = true;
-
-        const response = await authorizationAPI.signUp({
+    handleSubmit() {
+      if (
+        !this.account ||
+        !this.password ||
+        !this.name ||
+        !this.email ||
+        !this.passwordCheck
+      ) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫完整",
+        });
+        return;
+      }
+      if (this.password === this.passwordCheck) {
+        const data = JSON.stringify({
           account: this.account,
           name: this.name,
           email: this.email,
           password: this.password,
           checkPassword: this.checkPassword,
         });
-        if (response.data.status === "error") {
-          throw new Error(response.data.message);
+        // TODO: 向後端新增使用者帳號
+        console.log("data", data);
+      } else {
+        Toast.fire({
+          icon: "warning",
+          title: "密碼與密碼確認欄位的資料不一致，請確認!",
+        });
+      }
+    },
+    async sighUp(e) {
+      try {
+        const form = e.target; // <form></form>
+        const formData = new FormData(form);
+        if (
+          !this.account ||
+          !this.password ||
+          !this.name ||
+          !this.email ||
+          !this.passwordCheck
+        ) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填寫完整",
+          });
+          return;
         }
-        this.$router.push("/signin");
+        // TODO 要把資料傳向後端，不知道是否正確?
+        const response = await axios.post("/signup", formData);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        // 成功註冊後轉址到登入頁
+        this.$router.push("/");
       } catch (error) {
-        this.isProcessing = false;
+        // 將密碼確認欄位清空
+        this.passwordCheck = "";
+        Toast.fire({
+          icon: "warning",
+          title: "註冊失敗",
+        });
         console.log("error", error);
       }
     },

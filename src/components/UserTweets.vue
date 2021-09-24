@@ -147,69 +147,75 @@
 </style>
 
 <script>
-// import data from "./../../public/api-users-id-tweets-v2.json";
+import tweets from "./../../public/api-users-id-tweets-v3.json";
+import data from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
-import ReplyModal from "./../components/ReplyModal.vue";
+import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
-  props: {
-    initialUser: {
-      type: Object,
-      required: true,
-    },
-  },
-  components: {
-    ReplyModal
-  },
+  name: "UserTweets",
   data() {
     return {
       user: {},
       tweets: [],
-      replies: "",
-      likes: "",
-      oneTweet: {},
-      isReplyModalVisible: false,
     };
   },
   mixins: [fromNowFilter],
   methods: {
-    fetchUserData() {
-      // this.user = data.userData;
-      // this.tweets = data.userTweets;
+    //載入種子資料
+    fetchJSON() {
+      this.user = data;
+      this.tweets = tweets;
     },
-    ifLiked(tweet) {
-      return tweet.likes.some((obj) => obj.UserId === this.initialUser.id);
-    },
-    changeLike(id) {
-      // TODO 要把資料送到後端更新
-      // 找到對應的那一則推文
-      const findTweet = this.tweets.find((tweet) => tweet.id === id);
+    // API
+    async fetchApiData() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getUser(getUserId());
 
-      // 判斷 user 的 id 是否有出現在 likes 之中
-      if (
-        findTweet.likes.some(
-          (likeRecord) => likeRecord.UserId === this.initialUser.id
-        )
-      ) {
-        // 愛心亮起的狀態，使用者可以再次點擊愛心以取消"喜歡"
-        findTweet.likes = findTweet.likes.filter(
-          (likeRecord) => likeRecord.UserId !== this.initialUser.id
-        );
-        return;
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.user = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
       }
-      // 使用者未"喜歡"該則推文時，點擊愛心就會變成"喜歡"
-      findTweet.likes.push({ UserId: this.initialUser.id, TweetId: id });
     },
-    openReplyModal(id) {
-      this.isReplyModalVisible = true;
-      this.oneTweet = { ...this.tweets.find((tweet) => tweet.id === id)};
-    },
-    closeReplyModal() {
-      this.isReplyModalVisible = false;
+    async fetchApiTweets() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getTweets(getUserId());
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.tweets = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
   },
   created() {
-    this.fetchUserData();
+    // this.fetchJSON();
+    this.fetchApiData();
+    this.fetchApiTweets();
   },
 };
 </script>

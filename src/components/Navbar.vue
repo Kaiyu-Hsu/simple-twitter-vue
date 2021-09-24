@@ -195,7 +195,6 @@
   color: #1c1c1c;
 }
 
-/* 修改 router-link style */
 a {
   text-decoration: none;
 }
@@ -243,6 +242,7 @@ span {
   position: absolute;
   top: 95%;
   left: 10px;
+  cursor: pointer;
 }
 </style>
 
@@ -274,7 +274,7 @@ export default {
     },
     logOut() {
       authorizationAPI.logOut();
-      this.$router.push("/signin");
+      this.$router.push("/signin");    
     },
   },
 };

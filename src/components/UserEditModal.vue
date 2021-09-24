@@ -1,7 +1,13 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
-      <div class="modal">
+      <!-- <form
+          action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
+          method="POST"
+          enctype="multipart/form-data"
+          @submit.stop.prevent="handleSubmit"
+        > -->
+      <form class="modal" action="" @submit.stop.prevent="handleSubmit">
         <div class="modal-header">
           <button type="button" class="btn-close" @click="btnClose">
             <svg
@@ -18,15 +24,22 @@
             </svg>
           </button>
           <div class="title">編輯個人資料</div>
-          <div class="save-btn" @click="save">儲存</div>
+          <button type="submit" class="save-btn" @click="save">儲存</button>
         </div>
         <div class="pic">
           <!-- background cover -->
           <div class="cover-container">
+            <input
+              type="file"
+              id="cover"
+              name="cover"
+              @change="changeCover"
+              style="display: none"
+              ref="coverInput"
+            />
             <img class="cover" :src="user.cover" />
             <div class="cover-icon">
-              <!-- TODO 更改背景圖片 -->
-              <div class="camera">
+              <div class="camera" @click="$refs.coverInput.click()">
                 <svg
                   width="20"
                   height="20"
@@ -44,8 +57,7 @@
                   />
                 </svg>
               </div>
-              <!-- TODO 取消更改 -->
-              <div class="delete">
+              <div class="delete" @click="cancelChangeImg">
                 <svg
                   width="24"
                   height="24"
@@ -61,11 +73,18 @@
               </div>
             </div>
           </div>
+          <!-- avatar -->
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            @change="changeAvatar"
+            style="display: none"
+            ref="avatarInput"
+          />
           <div class="avatar-container">
-            <!-- avatar -->
             <img class="avatar" :src="user.avatar" />
-            <!-- TODO 更改頭像 -->
-            <div class="camera">
+            <div class="camera" @click="$refs.avatarInput.click()">
               <svg
                 width="20"
                 height="20"
@@ -88,10 +107,15 @@
 
         <div class="form-container">
           <!-- name & info -->
-          <form action="" id="edit-form">
+          <div id="edit-form">
             <div class="input-wrapper">
               <span>名稱</span>
-              <input type="text" v-model="user.name" maxlength="50" />
+              <input
+                type="text"
+                name="name"
+                v-model="user.name"
+                maxlength="50"
+              />
               <hr />
               <div class="words-num">{{ user.name.length }}/50</div>
             </div>
@@ -101,14 +125,14 @@
                 rows="4"
                 cols="50"
                 maxlength="160"
+                name="introduction"
                 v-model="user.introduction"
               ></textarea>
-              <!-- <hr /> -->
               <div class="words-num">{{ user.introduction.length }}/160</div>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </transition>
 </template>
@@ -158,6 +182,7 @@
         align-items: center;
         background: #ff6600;
         border-radius: 100px;
+        border: none;
         color: #ffffff;
         font-weight: 500;
         cursor: pointer;
@@ -289,20 +314,46 @@
 </style>
 
 <script>
-// import data from "./../../public/api-users-id-v2.json";
+import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
+
 export default {
   data() {
     return {
       user: {},
       oringinalName: "",
       oringinalIntro: "",
+      oringinalCover: "",
+      oringinalAvatar: "",
     };
   },
-  methods: {
-    fetchData() {
-      // this.user = data.userData;
-      // this.oringinalName = data.userData.name;
-      // this.oringinalIntro = data.userData.introduction;
+  methods: {    
+    // API 先取得原有user的資料
+    async fetchApiData() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getInfo(getUserId());
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+        console.log(response);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.user = data;
+        this.oringinalName = data.name;
+        this.oringinalIntro = data.introduction;
+        this.oringinalCover = data.cover;
+        this.oringinalAvatar = data.avatar;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
     save() {
       if (
@@ -312,17 +363,78 @@ export default {
         alert("尚有空白請填寫完畢!");
       } else {
         this.$emit("close");
-        console.log(this.user.name, this.user.introduction);
+        // console.log(this.user.name, this.user.introduction);
       }
     },
     btnClose() {
       this.user.name = this.oringinalName;
       this.user.introduction = this.oringinalIntro;
+      this.user.cover = this.oringinalCover;
+      this.user.avatar = this.oringinalAvatar;
       this.$emit("close");
+    },
+    changeCover(e) {
+      console.log("更改圖片", e.target.files);
+      const { files } = e.target;
+      if (files.length === 0) {
+        // 使用者沒有選擇上傳的檔案
+        this.user.cover = this.oringinalCover;
+      } else {
+        // 否則產生預覽圖
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.cover = imageURL;
+      }
+    },
+    changeAvatar(e) {
+      console.log("更改頭像", e.target.files);
+      const { files } = e.target;
+      if (files.length === 0) {
+        // 使用者沒有選擇上傳的檔案
+        this.user.avatar = this.oringinalAvatar;
+      } else {
+        // 否則產生預覽圖
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.avatar = imageURL;
+      }
+    },
+    cancelChangeImg() {
+      this.user.cover = this.oringinalCover;
+      console.log("取消更改圖片", this.oringinalCover);
+    },
+    // TODO PUT到後端 ，照片上傳 500
+    async handleSubmit(e) {
+      try {
+        const form = e.target;
+        const formData = new FormData(form);
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
+        console.log(form);
+        console.log(formData);
+
+        const response = await userAPI.updataForm(this.user.id, { formData });
+
+        console.log("update profile");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法更新資料",
+        });
+      }
     },
   },
   created() {
-    this.fetchData();
+    // this.fetchJSON();
+    this.fetchApiData();
   },
   watch: {
     user: [

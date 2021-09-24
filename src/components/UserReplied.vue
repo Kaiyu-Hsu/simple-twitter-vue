@@ -35,7 +35,7 @@
   position: relative;
   top: 50px;
   max-width: 600px;
-  min-height: 136px;
+  min-height: 121px;
   margin-top: 10px;
   padding: 0px 15px;
   display: flex;
@@ -76,39 +76,19 @@
       font-weight: 500;
       margin: 3px 0px 15px 0px;
     }
-
-    .replies-likes {
-      display: flex;
-      font-weight: 500;
-      font-size: 13px;
-      color: #657786;
-      .replies,
-      .likes {
-        display: flex;
-        margin-right: 52px;
-        .replies-icon,
-        .likes-icon {
-          margin-right: 12px;
-        }
-      }
-    }
   }
 }
 </style>
 
 <script>
-// import data from "./../../public/api-users-id-replied-tweets-v2.json";
-// TODO api-users-id-replied-tweets-v2.json 沒有包含userData 由另一個資料載入
-// 運用 props 從 User.vue 傳進 initialUser
+import data from "./../../public/api-users-id-replied-tweets-v3.json";
+import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
+import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
-  props: {
-    initialUser: {
-      type: Object,
-      required: true,
-    },
-  },
+  name: "UserReplied",
   data() {
     return {
       user: {},
@@ -117,15 +97,65 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    fetchData() {
-      this.user = { ...this.initialUser };
-      // this.replies = [...data.repliedTweets];
+    //載入種子資料
+    fetchJSON() {
+      this.user = userData;
+      this.replieds = data;
+    },
+    // API
+    async fetchApiData() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getUser(getUserId());
+
+        console.log("users");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.user = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async fetchApiReplieds() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getReplieds(getUserId());
+
+        console.log("user's replieds");
+        console.log(response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.replieds = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
   },
   created() {
-    this.fetchData();
-    console.log(this.user);
-    console.log(this.replies);
+    // this.fetchJSON();
+    this.fetchApiData();
+    this.fetchApiReplieds();
   },
 };
 </script>
