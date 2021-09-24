@@ -1,45 +1,53 @@
 import { apiHelper } from "../utils/helpers";
 
-// const reqInterceptor = () => {
-//   // axios 攔截器觀察 requset 內容
-//   apiHelper.interceptors.request.use((req) => {
-//     console.log(`${req.method} ${req.url}`);
-//     // Important: request interceptors **must** return the request.
-//     return req;
-//   });
-// };
-
-export default {  
+export default {
   getUserInfo(id) {
-    
-    return apiHelper.get(`api/users/${id}/userinfo`);
-  },
-  getEditUser(id) {
-    const token = localStorage.getItem('token')
-        
-    return apiHelper.get(`api/users/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
+    const token = JSON.parse(localStorage.getItem("token"));
+
+    return apiHelper.get(`api/users/${id}/userinfo`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
   },
-  putEditUser(id) {        
-    return apiHelper.put(`api/users/${id}`, )
+  getEditUser(id) {
+    const token = JSON.parse(localStorage.getItem("token"));
+
+    return apiHelper.get(`api/users/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   },
-  logOut() {
-    
-    return apiHelper.get("api/logout");
+  putEditUser(id, body) {
+    const token = JSON.parse(localStorage.getItem("token"));
+
+    return apiHelper.put(`api/users/${id}`, body, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   },
   getFollowers(id) {
-    const token = localStorage.getItem("token");
-    
+    const token = JSON.parse(localStorage.getItem("token"));
+
     return apiHelper.get(`api/users/${id}/followers`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+  getFollowings(id) {
+    const token = JSON.parse(localStorage.getItem("token"));
+
+    return apiHelper.get(`api/users/${id}/followings`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
   getReplied(id) {
-    const token = localStorage.getItem("token");
-        
+    const token = JSON.parse(localStorage.getItem("token"));
+
     return apiHelper.get(`api/users/${id}/replied_tweets`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-  }
+  },
+  getPopular(id) {
+    const token = JSON.parse(localStorage.getItem("token"));
+
+    return apiHelper.get(`api/tweets/${id}/top10`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };

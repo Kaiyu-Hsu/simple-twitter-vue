@@ -248,7 +248,7 @@ span {
 
 <script>
 import addTweet from "./AddTweetModal.vue";
-import logOut from "./../api/user";
+import authorizationAPI from "./../api/authorization";
 
 export default {
   components: {
@@ -272,14 +272,8 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    async logOut() {
-      try {
-        const response = await logOut.logOut();
-        console.log("response");
-        console.dir(response);
-      } catch (error) {
-        console.log("error", error);
-      }
+    logOut() {
+      authorizationAPI.logOut();
       this.$router.push("/signin");
     },
   },

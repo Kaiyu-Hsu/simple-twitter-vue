@@ -9,11 +9,14 @@ import { apiHelper } from "../utils/helpers";
 //   });
 // };
 
-export const fetchData = {
+export const tweet = {
   getTweet(id) {
-    
+    const token = JSON.parse(localStorage.getItem("token"))
+
     // 這裡 return 的會是一個 Promise
-    return apiHelper.get(`api/tweets/${id}`);
+    return apiHelper.get(`api/tweets/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   },
   getCurrentUser(id) {
     

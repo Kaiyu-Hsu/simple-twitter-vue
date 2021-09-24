@@ -27,8 +27,9 @@ import Popular from "./../components/Popular";
 import Navbar from "./../components/Navbar";
 import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
-import { fetchData } from "./../api/tweets";
+import { tweets } from "./../api/tweets";
 import user from "./../api/user";
+import admin from "./../api/admin"
 
 export default {
   name: "Main",
@@ -44,84 +45,147 @@ export default {
       tweetsReply: [],
       popular: [],
       userData: {},
-      apiTweets: [],
-      apiTweetsReply: [],
-      apiPopular: [],
+      tweetsReplies: []
     };
   },
   methods: {
-    async fetchAPIData() {
+    async getTweets() {
       try {
-        const response = await fetchData.getTweets();
+        const response = await tweets.getTweets();
 
-        console.log("我拿到資料囉嘿嘿 ");
-        console.dir(response);
-        console.log(`---`);
-        this.tweets = [...response.data];
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-      } catch (error) {
-        console.log("error", error);
-      }
-    },
-    async fetchSelf() {
-      // const userId = JSON.parse(localStorage.getItem('user')).id
-
-      try {
-        const response = await user.getUserInfo(1);
-
-        console.log("Fetch Self");
+        console.log("Fetch Tweets Data");
         console.dir(response);
+        this.tweets = [...response.data];
+        // this.apiTweets = [...response.data];
       } catch (error) {
         console.log("error", error);
       }
     },
-    async fetchOther() {
+    async fetchUser(id) {
       try {
-        const response = await user.getOther();
-        console.log("Fetch Other");
+        const response = await user.getUserInfo(id);
+
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        console.log("Fetch User");
         console.dir(response);
+        this.userData = { ...response.data };
       } catch (error) {
         console.log("error", error);
       }
     },
-    async editUser() {
+    async getEditUser() {
       try {
         const response = await user.getEditUser();
+
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+
         console.log("Edit User");
         console.log(response);
       } catch (error) {
         console.log("error", error);
       }
     },
-    async getFollowers() {
+    async getFollowers(id) {
       try {
-        const response = await user.getFollowers(1);
+        const response = await user.getFollowers(id);
+
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
         console.log("Get followers");
         console.log(response);
       } catch (error) {
         console.log("error", error);
       }
     },
-    async getReplied() {
+    async getFollowings(id) {
       try {
-        const response = await user.getReplied(2);
-        console.log("Get replied tweets");
+        const response = await user.getFollowings(id);
+
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        console.log("Get followings");
         console.log(response);
       } catch (error) {
         console.log("error", error);
       }
     },
+    async getTweetsReply(id) {
+      try {
+        const response = await tweets.getReply(id);
+
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        console.log("Get tweets reply");
+        console.log(response);
+        this.tweetsReplies = [...response.data];
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async getReplied(id) {
+      try {
+        const response = await user.getReplied(id);
+
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        console.log("Get replied tweets");
+        console.log(response);
+        this.tweetsReply = [...response.data];
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async getPopular(id) {            
+      try {
+        const response = await user.getPopular(id);
+        
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        console.log("Get popular tweets");
+        console.log(response);
+        this.popular = [...response.data]
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    async adminTweets() {
+      try {
+        const response = await admin.getAllTweets();
+        
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+        console.log("Get All tweets");
+        console.log(response);
+        // this.popular = [...response.data]
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
   },
   created() {
-    // this.fetchData();
-    this.fetchAPIData()
-    // this.getFollowers()
-    // this.getReplied()
-    this.fetchSelf()
-    // this.fetchOther()
-    // this.editUser()
+    this.getTweets();
+    // this.getPopular(JSON.parse(localStorage.getItem('user')).id)
+    // this.getPopular(275) 
+    // this.getFollowers(295);
+    // this.getFollowings(295);
+    // this.getReplied(265);
+    // this.fetchUser(25);
+    // this.getEditUser()
+    // this.getTweetsReply(1705)
+    // this.adminTweets()
   },
 };
 </script>

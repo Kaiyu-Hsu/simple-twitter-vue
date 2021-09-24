@@ -4,7 +4,7 @@
     <div class="setting">
       <header>帳戶設定</header>
       <div class="form-container">
-        <form action="" id="setting-form">
+        <form action="" id="setting-form" @submit.stop.prevent="putEditUser">
           <div class="input-wrapper">
             <span>帳號</span>
             <input type="text" v-model="account" />
@@ -27,11 +27,11 @@
           </div>
           <div class="input-wrapper">
             <span>密碼確認</span>
-            <input type="text" v-model="passwordCheck" />
+            <input type="text" v-model="checkPassword" />
             <hr />
           </div>
         </form>
-        <button type="submit" form="setting-form" @click="handleSubmit">
+        <button type="submit" form="setting-form" >
           儲存
         </button>
       </div>
@@ -47,9 +47,20 @@
   height: 100%;
   bottom: 0px;
   border-left: 1px solid #e6ecf0;
+  margin-left: 65px;
+  padding-left: 16px;
 
+  header {
+    padding: 13px 0px 14px 20px;
+    font-family: Noto Sans TC;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 19px;
+    line-height: 28px;
+  }
   .form-container {
     text-align: center;
+    padding-left: 16px;
 
     #setting-form {
       .input-wrapper {
@@ -114,7 +125,8 @@
 
 <script>
 import Navbar from "./../components/Navbar";
-// import data from "../../public/api-users-id-v2.json";
+import { Toast } from "./../utils/helpers";
+import user from "./../api/user";
 
 export default {
   name: "Setting",
@@ -125,37 +137,77 @@ export default {
     return {
       userData: {},
       // TODO 向後端要資料，這筆隨便寫的
-      account: "@132",
-      name: "BRTHBRDT",
-      email: "srgvre@gmail.com",
-      password: "gersybesybe",
-      passwordCheck: "gersybesybe",
+      account: "",
+      name: "",
+      email: "",
+      password: "",
+      checkPassword: "",
     };
   },
   methods: {
-    fetchUser() {
-      this.userData = {
-        // ...data.userData,
-      };
-    },
-    handleSubmit() {
-      if (this.password === this.passwordCheck) {
-        // const data = JSON.stringify({
-        //   account: this.account,
-        //   name: this.name,
-        //   email: this.email,
-        //   password: this.password,
-        // });
-        // TODO: 向後端修改使用者帳號
-        // console.log("data", data);
-      } else {
-        window.alert('"密碼"與"密碼確認"欄位的資料不一致，請維持一致喔!');
+    async getEditUser() {
+      try {
+        const response = await user.getEditUser(
+          JSON.parse(localStorage.getItem("user")).id
+        );
+
+        if (response.statusText !== "OK") {
+          Toast.fire({
+            icon: "warning",
+            title: "伺服器忙碌中，請重新整理頁面",
+          });
+          throw new Error(response.statusText);
+        }
+
+        console.log("Edit User");
+        console.log(response);
+        this.userData = { ...response.data };
+        this.account = this.userData.account;
+        this.name = this.userData.name;
+        this.email = this.userData.email;
+      } catch (error) {
+        console.log("error", error);
       }
     },
+    async putEditUser() {
+      const data = {
+        account: this.account,
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        checkPassword: this.checkPassword
+      }
+
+      if(this.password !== this.checkPassword) {
+        Toast.fire({
+            icon: "warning",
+            title: "密碼 與 密碼確認 請輸入相同組合",
+          });
+      }
+      try {
+        const response = await user.putEditUser(
+          JSON.parse(localStorage.getItem("user")).id, 
+          data
+        );
+
+        if (response.statusText !== "OK") {          
+          throw new Error(response.statusText);
+        }
+
+        console.log("Edit User");
+        console.log(response);
+        this.userData = { ...response.data };
+        this.account = this.userData.account;
+        this.name = this.userData.name;
+        this.email = this.userData.email;
+      } catch (error) {
+        console.log("error", error);
+      }
+    },    
   },
   created() {
     console.log(`created at Setting.vue`);
-    this.fetchUser();
+    this.getEditUser();
   },
 };
 </script>

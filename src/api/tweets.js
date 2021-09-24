@@ -1,34 +1,40 @@
-import { apiHelper } from "../utils/helpers";
+import { apiHelper } from "../utils/helpers";  
 
-const reqInterceptor = () => {
-  // axios 攔截器觀察 requset 內容
-  apiHelper.interceptors.request.use((req) => {    
-    console.log(`${req.method} ${req.url}`);
-    // Important: request interceptors **must** return the request.
-    return req;
-  });
-}
-
-export const fetchData = {
+export const tweets = {
   getTweets() {
-    const token = localStorage.getItem("token");        
-
-    reqInterceptor();
+    const token = JSON.parse(localStorage.getItem("token"))
+    
     // 這裡 return 的會是一個 Promise
     return apiHelper.get("api/tweets", {
-      headers: { Authorization: `Bearer ${token}`}
+      headers: { Authorization: `Bearer ${token}` },
     });
   },
-  postTweets(id, description) {
-    const token = localStorage.getItem("token");
+  getReply(id) {
+    const token = JSON.parse(localStorage.getItem("token"));
 
-    reqInterceptor()
-    return apiHelper.post("api/tweets", {
-      "user": {id},
-      "body": {description}
-    },
-    {
-      headers: { Authorization: `Bearer ${token}`},
+    // 這裡 return 的會是一個 Promise
+    return apiHelper.get(`api/tweets/${id}/replies`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
+  },
+  postTweets(id, description, paramsId) {
+    const token = JSON.parse(localStorage.getItem("token"))
+    // TODO
+    return apiHelper.post(
+      "api/tweets",
+      {
+        user: { id }, // user.id
+        body: { description }, // body.comment
+        params: {paramsId}// params.id
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+  },
+  postReply(id) {
+    apiHelper.post(`api/tweets/${id}/replies`,{
+
+    })
   }
 };

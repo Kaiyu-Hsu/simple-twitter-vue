@@ -37,7 +37,7 @@
       </div>
       <span>登入 Alphitter</span>
     </div>
-    <div class="form-container">            
+    <div class="form-container">
       <form
         action=""
         method=""
@@ -51,14 +51,21 @@
             name="email"
             placeholder="xxx@example.com"
             v-model="email"
+            @focus="focusInput"
             required
           />
-          <hr />
+          <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" name="password" v-model="password" required />
-          <hr />
+          <input
+            type="password"
+            name="password"
+            v-model="password"
+            @focus="focusInput"
+            required
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
       </form>
       <button type="submit" form="sign-in-form" :disabled="isProcessing">
@@ -140,6 +147,10 @@
           border-bottom: unset;
           border-radius: 0px 0px 4px 4px;
         }
+        // input focus 底下那條線的style
+        .now-focus {
+          background-color: #50b5ff;
+        }
       }
     }
     button {
@@ -206,10 +217,13 @@ export default {
       email: "",
       password: "",
       isProcessing: false,
+      nowFocus: "",
     };
   },
-  methods: {    
-    // TODO 接api  async / await寫法
+  methods: {
+    focusInput(e) {
+      this.nowFocus = e.target.name;
+    },
     async handleSubmit() {
       try {
         if (!this.email || !this.password) {
@@ -226,19 +240,22 @@ export default {
           email: this.email,
           password: this.password,
         });
-        console.log("🚀 ~ file: SignIn.vue ~ line 229 ~ handleSubmit ~ response", response)        
+        console.log(
+          "🚀 ~ file: SignIn.vue ~ line 229 ~ handleSubmit ~ response",
+          response
+        );
 
         // 取得 API 請求後的資料
         const { data } = response;
 
         // 存 token
-        localStorage.setItem('token', JSON.stringify(data.token.token))
-        // 存 user 
-        localStorage.setItem('user', JSON.stringify(data.user))
-        
+        localStorage.setItem("token", JSON.stringify(data.token.token));
+        // 存 user
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         if (response.data.message !== "ok") {
           throw new Error(data.message);
-        }        
+        }
 
         // 成功登入後轉址到首頁
         this.$router.push("/main");

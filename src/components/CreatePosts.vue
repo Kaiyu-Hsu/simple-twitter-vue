@@ -117,27 +117,13 @@
 </style>
 
 <script>
-import {fetchData} from "./../api/tweets"
+import {tweets} from "./../api/tweets"
 
 export default {
   props: {
     initialUser: {
       type: Object,
-      default: () => ({
-        id: 0,
-        email: "",
-        password: "",
-        name: "",
-        avatar:
-          "https://loremflickr.com/320/240/restaurant,food/?random=42.05818182229572&lock=36.5704379703123",
-        introduction: "",
-        account: "",
-        cover:
-          "https://loremflickr.com/320/240/restaurant,food/?random=72.26740788696395&lock=60.262852853754254",
-        role: "user",
-        createdAt: "2021-09-12T00:40:28.000Z",
-        updatedAt: "2021-09-12T00:40:28.000Z",
-      }),
+      required: true
     },
   },
   data() {
@@ -150,7 +136,7 @@ export default {
       // TODO 需跟後端確認發送 POST 新增推文請求的資料結構為何
       console.log("送出新推文內容: " + this.newPostContent);
       
-      const response = await fetchData.postTweets(this.initialUser.id, this.newPostContent)
+      const response = await tweets.postTweets(this.initialUser.id, this.newPostContent)
       console.log("🚀 ~ file: CreatePosts.vue ~ line 154 ~ newTweet ~ response", response)
     },
   },

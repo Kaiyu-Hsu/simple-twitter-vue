@@ -41,31 +41,48 @@
       <form action="" id="sign-up-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="account" />
-          <hr />
+          <input
+            type="text"
+            name="account"
+            v-model="account"
+            @focus="focusInput"
+          />
+          <hr :class="{'now-focus': nowFocus === 'account'}" />
         </div>
         <div class="input-wrapper">
           <span>名稱</span>
-          <input type="text" v-model="name" />
-          <hr />
+          <input type="text" name="name" v-model="name" @focus="focusInput" />
+          <hr :class="{'now-focus': nowFocus === 'name'}" />
         </div>
         <div class="input-wrapper">
           <span>Email</span>
-          <input type="text" v-model="email" />
-          <hr />
+          <input type="text" name="email" v-model="email" @focus="focusInput" />
+          <hr :class="{'now-focus': nowFocus === 'email'}" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="text" v-model="password" />
-          <hr />
+          <input
+            type="password"
+            name="password"
+            v-model="password"
+            @focus="focusInput"
+          />
+          <hr :class="{'now-focus': nowFocus === 'password'}" />
         </div>
         <div class="input-wrapper">
           <span>密碼確認</span>
-          <input type="text" v-model="passwordCheck" />
-          <hr />
+          <input
+            type="password"
+            name="checkPassword"
+            v-model="checkPassword"
+            @focus="focusInput"
+          />
+          <hr :class="{'now-focus': nowFocus === 'checkPassword'}" />
         </div>
       </form>
-      <button type="submit" form="sign-up-form">註冊</button>
+      <button type="submit" form="sign-up-form" :disabled="isProcessing">
+        註冊
+      </button>
     </div>
     <div class="footer">
       <router-link class="cancel-sign-up" to="/signin">取消</router-link>
@@ -139,6 +156,10 @@
           border-bottom: unset;
           border-radius: 0px 0px 4px 4px;
         }
+        // input focus 底下那條線的style
+        .now-focus {
+          background-color: #50b5ff;
+        }
       }
     }
     button {
@@ -177,6 +198,9 @@
 </style>
 
 <script>
+import { Toast } from "./../utils/helpers";
+import authorizationAPI from "./../api/authorization";
+
 export default {
   data() {
     return {
@@ -184,22 +208,40 @@ export default {
       name: "",
       email: "",
       password: "",
-      passwordCheck: "",
+      checkPassword: "",
+      isProcessing: false,
+      nowFocus: "",
     };
   },
   methods: {
-    handleSubmit() {
-      if (this.password === this.passwordCheck) {
-        const data = JSON.stringify({
+    focusInput(e) {      
+      this.nowFocus = e.target.name;
+    },    
+    async handleSubmit() {
+      try {
+        if (this.password !== this.checkPassword) {
+          Toast.fire({
+            icon: "warning",
+            title: "密碼 和 密碼確認 請輸入相同組合",
+          });
+          return;
+        }
+        this.isProcessing = true;
+
+        const response = await authorizationAPI.signUp({
           account: this.account,
           name: this.name,
           email: this.email,
           password: this.password,
+          checkPassword: this.checkPassword,
         });
-        // TODO: 向後端新增使用者帳號
-        console.log("data", data);
-      } else {
-        window.alert('"密碼"與"密碼確認"欄位的資料不一致，請維持一致喔!');
+        if (response.data.status === "error") {
+          throw new Error(response.data.message);
+        }
+        this.$router.push("/signin");
+      } catch (error) {
+        this.isProcessing = false;
+        console.log("error", error);
       }
     },
   },

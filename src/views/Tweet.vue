@@ -24,7 +24,7 @@ import Navbar from "../components/Navbar.vue";
 import Popular from "../components/Popular.vue";
 // import tweetData from "./../../public/v3/api-tweets-id-v3.json";
 // import userData from "./../../public/v3/api-users-id-userInfo-new.json"
-import {fetchData} from "./../api/tweet"
+import {tweet} from "./../api/tweet"
 
 export default {
   components: {
@@ -46,7 +46,7 @@ export default {
     // },    
     async fetchTweet(id) {
       try {
-        const response = await fetchData.getTweet(id)
+        const response = await tweet.getTweet(id)
         
         if (response.statusText !== "OK") {
           throw new Error(response.data.message)
@@ -63,7 +63,7 @@ export default {
     },
     async fetchCurrentUser(id) {
       try {
-        const response = await fetchData.getCurrentUser(id)
+        const response = await tweet.getCurrentUser(id)
         
         if (response.data.message !== "ok") {
           throw new Error(response.data.message);

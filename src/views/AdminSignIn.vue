@@ -41,13 +41,13 @@
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="email" />
-          <hr />
+          <input type="text" name="email" v-model="email" @focus="focusInput" />
+          <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="text" v-model="password" />
-          <hr />
+          <input type="password" name="password" v-model="password" @focus="focusInput" />
+          <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
       </form>
       <button type="submit" form="sign-in-form" :disabled="isProcessing">
@@ -125,6 +125,10 @@
           border-bottom: unset;
           border-radius: 0px 0px 4px 4px;
         }
+        // input focus 底下那條線的style
+        .now-focus {
+          background-color: #50b5ff;
+        }
       }
     }
     button {
@@ -171,10 +175,14 @@ export default {
     return {
       email: "",
       password: "",
-      isProcessing: false
+      isProcessing: false,
+      nowFocus: "",
     };
   },
   methods: {    
+    focusInput(e) {
+      this.nowFocus = e.target.name;
+    },
     async handleSubmit() {
       try {
         if (!this.email || !this.password) {
@@ -199,9 +207,9 @@ export default {
         const { data } = response;
 
         // 存 token
-        localStorage.setItem('token', data.token.token)
+        localStorage.setItem('token', JSON.stringify(data.token.token))
         // 存 user role
-        localStorage.setItem('role', data.user.role)
+        localStorage.setItem('role', JSON.stringify(data.user.role))
         
         if (response.data.message !== "ok") {
           throw new Error(data.message);
