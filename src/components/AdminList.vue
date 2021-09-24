@@ -89,6 +89,8 @@ import { fromNowFilter } from "./../utils/mixins";
 import axios from "axios";
 import { Toast } from "./../utils/helpers";
 
+const getToken = () => localStorage.getItem("token");
+
 export default {
   name: "AdminList",
   mixins: [fromNowFilter],
@@ -109,7 +111,12 @@ export default {
     // API
     async fetchApiData() {
       try {
-        const response = await axios.get("/api/admin");
+        const response = await axios.get(
+          "https://actwitter.herokuapp.com/api/admin",
+          {
+            headers: { Authorization: `Bearer ${getToken()}` },
+          }
+        );
 
         console.log("admin");
         console.log(response);
