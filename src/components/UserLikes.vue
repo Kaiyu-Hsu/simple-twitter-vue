@@ -155,9 +155,15 @@ import userAPI from "./../api/userProfile";
 
 export default {
   name: "UserLikes",
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      likes: [],
+      likes: [],      
       user: {},
       // isLike: true,
     };
@@ -248,6 +254,9 @@ export default {
         });
       }
     },
+    unlikeTweet(id) { // 取消"喜歡"某一則推文
+      this.likes = this.likes.filter(like => like.TweetId !== id)
+    }
   },
   created() {
     // this.fetchJSON();

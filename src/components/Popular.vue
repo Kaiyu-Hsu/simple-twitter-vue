@@ -30,7 +30,7 @@
 
 <style scoped>
 .container {
-  position: fixed;
+  position: fixed;  
   top: 15px;
   left: 75%;
   background: #f5f8fa;
@@ -109,9 +109,7 @@ img {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/tweets.json";
-import axios from "axios";
-// import { apiHelper } from "./../utils/helpers";
+import { apiHelper } from "./../utils/helpers";
 import { Toast } from "./../utils/helpers";
 
 const getToken = () => localStorage.getItem("token");
@@ -122,24 +120,13 @@ export default {
       users: [],
     };
   },
-  methods: {
-    fetchUsers() {
-      this.users = tweetsJSON.popular;
-    },
+  methods: {    
     //TODO following 有些是null，所以顯示不出來
     async fetchPopular() {
       try {
         const getUserId = () => localStorage.getItem("user");
-        // ruby route
-        // const response = await apiHelper.get(
-        //   `/api/tweets/${getUserId()}/top10`,
-        //   {
-        //     headers: { Authorization: `Bearer ${getToken()}` },
-        //   }
-        // );
-        // rex route
-        const response = await axios.get(
-          `https://actwitter.herokuapp.com/api/tweets/${getUserId()}/top10`,
+        const response = await apiHelper.get(
+          `api/tweets/${getUserId()}/top10`,
           {
             headers: { Authorization: `Bearer ${getToken()}` },
           }
@@ -179,8 +166,7 @@ export default {
       });
     },
   },
-  created() {
-    // this.fetchUsers();
+  created() {    
     this.fetchPopular();
   },
 };

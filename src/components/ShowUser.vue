@@ -171,8 +171,6 @@ header {
 </style>
 
 <script>
-import data from "./../../public/api-users-id-userInfo-new.json";
-import tweets from "./../../public/api-users-id-tweets-v3.json";
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
@@ -186,12 +184,7 @@ export default {
       followersNum: "",
     };
   },
-  methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = data;
-      this.tweetsNum = tweets.length;
-    },
+  methods: {    
     editProfile() {
       this.$emit("open-edit-modal");
     },

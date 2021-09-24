@@ -13,7 +13,7 @@
           {{ tweet.description }}
         </div>
         <div class="replies-likes">
-          <div class="replies">
+          <div class="replies" @click.stop.prevent="openReplyModal(tweet.id)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -31,25 +31,49 @@
             <div class="replies-num">{{ tweet.replies.length }}</div>
           </div>
           <div class="likes">
-            <div class="likes-icon">
+            <div class="likes-icon" @click.stop.prevent="changeLike(tweet.id)">
+              <!-- 普通的愛心 -->
               <svg
                 width="15"
                 height="15"
                 viewBox="0 0 15 15"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                v-show="!ifLiked(tweet)"
               >
                 <path
                   d="M7.5 13.5236H7.49125C5.87687 13.4936 1.21875 9.28489 1.21875 5.29864C1.21875 3.38364 2.79687 1.70239 4.59562 1.70239C6.02687 1.70239 6.98937 2.68989 7.49937 3.40864C8.00812 2.69114 8.97062 1.70239 10.4025 1.70239C12.2025 1.70239 13.78 3.38364 13.78 5.29927C13.78 9.28427 9.12125 13.493 7.50687 13.5224H7.5V13.5236ZM4.59625 2.64052C3.29625 2.64052 2.15687 3.88302 2.15687 5.29989C2.15687 8.88739 6.55312 12.5474 7.50062 12.5861C8.44937 12.5474 12.8444 8.88802 12.8444 5.29989C12.8444 3.88302 11.705 2.64052 10.405 2.64052C8.825 2.64052 7.9425 4.47552 7.935 4.49364C7.79125 4.84489 7.2125 4.84489 7.06812 4.49364C7.05937 4.47489 6.1775 2.64052 4.59687 2.64052H4.59625Z"
                   fill="#657786"
                 />
               </svg>
+              <!-- 喜歡的愛心 -->
+              <svg
+                width="22"
+                height="20"
+                viewBox="0 0 22 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                v-show="ifLiked(tweet)"
+              >
+                <path
+                  d="M11 19.6381H10.986C8.40295 19.5901 0.949951 12.8561 0.949951 6.47812C0.949951 3.41412 3.47495 0.724121 6.35295 0.724121C8.64295 0.724121 10.183 2.30412 10.999 3.45412C11.813 2.30612 13.353 0.724121 15.644 0.724121C18.524 0.724121 21.048 3.41412 21.048 6.47912C21.048 12.8551 13.594 19.5891 11.011 19.6361H11V19.6381Z"
+                  fill="#E0245E"
+                />
+              </svg>
             </div>
-            <div class="likes-num">{{ tweet.likes.length }}</div>
+            <div :class="{ 'likes-num': ifLiked(tweet) }">
+              {{ tweet.likes.length }}
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <ReplyModal
+      v-if="isReplyModalVisible"
+      :tweet-content="oneTweet"
+      :initial-user="initialUser"
+      @close-modal="closeModal"
+    />
   </div>
 </template>
 
@@ -112,6 +136,9 @@
         .replies-icon,
         .likes-icon {
           margin-right: 12px;
+        }
+        .likes-num {
+          color: #e0245e;
         }
       }
     }

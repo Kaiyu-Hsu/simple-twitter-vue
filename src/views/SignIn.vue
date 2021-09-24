@@ -38,7 +38,12 @@
       <span>登入 Alphitter</span>
     </div>
     <div class="form-container">
-      <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
+      <form
+        action=""
+        method=""
+        id="sign-in-form"
+        @submit.prevent.stop="handleSubmit"
+      >
         <div class="input-wrapper">
           <span>帳號</span>
           <input type="text" v-model="email" required />
@@ -46,8 +51,14 @@
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" v-model="password" required />
-          <hr />
+          <input
+            type="password"
+            name="password"
+            v-model="password"
+            @focus="focusInput"
+            required
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
       </form>
       <button type="submit" form="sign-in-form" :disabled="isProcessing">
@@ -129,6 +140,10 @@
           border-bottom: unset;
           border-radius: 0px 0px 4px 4px;
         }
+        // input focus 底下那條線的style
+        .now-focus {
+          background-color: #50b5ff;
+        }
       }
     }
     button {
@@ -195,19 +210,13 @@ export default {
       email: "",
       password: "",
       isProcessing: false,
+      nowFocus: "",
     };
   },
   methods: {
-    // handleSubmit() {
-    //   const data = JSON.stringify({
-    //     account: this.account,
-    //     password: this.password,
-    //   });
-    // TODO: 向後端驗證使用者登入資訊是否合法
-    //   console.log("data", data);
-    // },
-
-    // TODO 接api  async / await寫法
+    focusInput(e) {
+      this.nowFocus = e.target.name;
+    },
     async handleSubmit() {
       try {
         if (!this.email || !this.password) {
@@ -224,6 +233,10 @@ export default {
           email: this.email,
           password: this.password,
         });
+        console.log(
+          "🚀 ~ file: SignIn.vue ~ line 229 ~ handleSubmit ~ response",
+          response
+        );
 
         // 取得 API 請求後的資料
         const { data } = response;

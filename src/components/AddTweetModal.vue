@@ -20,13 +20,13 @@
         </div>
 
         <div class="modal-body">
-          <img :src="user.avatar" />
+          <img :src="initialUser.avatar" />
           <textarea
             rows="4"
             cols="50"
             maxlength="140"
             placeholder="有什麼新鮮事?"
-            v-model="tweet"
+            v-model="newTweet"
           ></textarea>
         </div>
 
@@ -40,7 +40,7 @@
 
 <style lang="scss" scoped>
 .modal-backdrop {
-  position: fixed;
+  position: fixed;  
   top: 0;
   bottom: 0;
   left: 0;
@@ -52,7 +52,7 @@
 }
 
 .modal {
-  position: absolute;
+  position: absolute;  
   top: 54px;
   width: 600px;
   height: 300px;
@@ -71,21 +71,20 @@
 }
 
 .modal-header {
-  position: relative;
+  position: relative;  
   border-bottom: 1px solid #e6ecf0;
   color: #4aae9b;
   justify-content: space-between;
 }
 
-.modal-footer {
-  //   border-top: 1px solid red;
+.modal-footer {  
   flex-direction: column;
   justify-content: flex-end;
 }
 
 .modal-body {
   display: flex;
-  position: relative;
+  position: relative;  
   padding: 15px;
 }
 
@@ -104,8 +103,7 @@ textarea {
   font-size: 18px;
   border: 0; // 外框
   outline: none; // 打字時的外框
-  //   沒有顯示 placeholder style
-  ::placeholder {
+  &::placeholder {
     font-family: "Noto Sans TC", sans-serif;
     font-style: normal;
     font-weight: 500;
@@ -115,7 +113,7 @@ textarea {
 }
 
 .btn-close {
-  position: absolute;
+  position: absolute;  
   left: 19.5px;
   top: 19.5px;
   padding: 0px;
@@ -132,7 +130,7 @@ textarea {
   justify-content: center;
   width: 66px;
   height: 38px;
-  position: relative;
+  position: relative;  
   left: 519px;
   background: #ff6600;
   border: 1px solid #ff6600;
@@ -144,30 +142,27 @@ textarea {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/tweets.json";
-
-const currentUser = tweetsJSON.userData;
 export default {
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      user: {},
-      tweet: "",
+      newTweet: "",
     };
   },
   methods: {
-    fetchUser() {
-      this.user = currentUser;
-    },
     close() {
+      // TODO 向後端發送新推文資料
       this.$emit("close");
-      console.log(this.tweet);
+      console.log(this.newTweet);
     },
     btnClose() {
       this.$emit("close");
     },
-  },
-  created() {
-    this.fetchUser();
   },
 };
 </script>

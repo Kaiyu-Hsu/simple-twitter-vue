@@ -35,7 +35,7 @@
       </svg>
     </div>
     <div class="nav-group">
-      <router-link to="/">
+      <router-link to="/main">
         <div class="main">
           <div class="main-icon">
             <svg
@@ -154,7 +154,11 @@
       </router-link>
       <div class="tweet" @click="showModal">推文</div>
       <!-- use the modal component, pass in the prop -->
-      <addTweet v-if="isModalVisible" @click="showModal" @close="closeModal" />
+      <addTweet
+        v-if="isModalVisible"
+        @close="closeModal"
+        :initial-user="initialUser"
+      />
     </div>
     <div class="log-out" @click="logOut">
       <svg
@@ -180,6 +184,7 @@
 <style scoped>
 .navbar {
   position: fixed;
+  z-index: 2;
   left: 113px;
   top: 4px;
   width: 235px;
@@ -242,13 +247,18 @@ span {
 </style>
 
 <script>
-import addTweet from "./../components/addTweet.vue";
-import axios from "axios";
-import { Toast } from "./../utils/helpers";
+import addTweet from "./AddTweetModal.vue";
+import authorizationAPI from "./../api/authorization";
 
 export default {
   components: {
     addTweet,
+  },
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
@@ -262,30 +272,9 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    async logOut() {
-      try {
-        const response = await axios.get("/api/logout");
-
-        console.log("logOut");
-        console.log(response);
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (data.status !== "success") {
-          throw new Error(data.message);
-        }
-
-        localStorage.removeItem("token");
-        // 成功登出後到 SignIn
-        this.$router.push("/");
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法登出，請稍後在試",
-        });
-      }
+    logOut() {
+      authorizationAPI.logOut();
+      this.$router.push("/signin");    
     },
   },
 };

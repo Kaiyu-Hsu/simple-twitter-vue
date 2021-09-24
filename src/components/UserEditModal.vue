@@ -314,7 +314,6 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-v2.json";
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
@@ -328,15 +327,7 @@ export default {
       oringinalAvatar: "",
     };
   },
-  methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = data.userData;
-      this.oringinalName = data.userData.name;
-      this.oringinalIntro = data.userData.introduction;
-      this.oringinalCover = data.userData.cover;
-      this.oringinalAvatar = data.userData.avatar;
-    },
+  methods: {    
     // API 先取得原有user的資料
     async fetchApiData() {
       try {

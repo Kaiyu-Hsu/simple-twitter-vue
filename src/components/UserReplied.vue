@@ -1,6 +1,7 @@
 <template>
   <div class="a-tweet-container">
-    <div class="a-tweet" v-for="replied in replieds" :key="replied.TweetId">
+    <!-- TODO 點擊任一回覆後，跳轉到特定推文頁面 -->
+    <div class="a-tweet" v-for="replied in replies" :key="replied.TweetId">
       <img :src="user.avatar" class="avatar" />
       <div class="content">
         <div class="name-account">
@@ -91,7 +92,7 @@ export default {
   data() {
     return {
       user: {},
-      replieds: [],
+      replies: [],
     };
   },
   mixins: [fromNowFilter],
