@@ -68,7 +68,7 @@
       <!-- 通知 -->
       <router-link to="/notification">
         <div class="notification">
-          <div class="notification_icon">
+          <div class="notification-icon">
             <svg
               width="20"
               height="21"
@@ -77,13 +77,19 @@
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
+                v-if="$route.name === 'notification'"
+                d="M19.697 15.468C19.677 15.452 17.557 13.828 17.594 9.43799C17.614 6.90599 16.782 4.65599 15.247 3.10299C13.872 1.70999 12.01 0.939993 10.005 0.929993H9.99204C7.98804 0.939993 6.12604 1.70999 4.75004 3.10399C3.21604 4.65699 2.38204 6.90599 2.40404 9.43799C2.44104 13.768 0.384036 15.405 0.302036 15.468C0.0420358 15.661 -0.0639643 15.998 0.0370357 16.306C0.139036 16.614 0.427036 16.821 0.749036 16.821H5.66904C5.77104 19.131 7.66604 20.981 9.99904 20.981C12.332 20.981 14.225 19.131 14.326 16.821H19.248C19.57 16.821 19.858 16.615 19.958 16.307C20.061 16 19.955 15.662 19.695 15.469L19.697 15.468ZM10 19.478C8.49504 19.478 7.27004 18.301 7.17204 16.82H12.828C12.728 18.3 11.505 19.48 10 19.48V19.478ZM2.38004 15.32C3.12004 14.188 3.92804 12.292 3.90404 9.42399C3.88604 7.26399 4.54804 5.44199 5.81704 4.15699C6.91004 3.04999 8.39704 2.43699 10 2.42999C11.603 2.43799 13.087 3.04999 14.18 4.15799C15.45 5.44299 16.113 7.26399 16.095 9.42499C16.071 12.293 16.88 14.19 17.62 15.321H2.38004V15.32Z"
+                fill="#FF6600"
+              />
+              <path
+                v-else
                 d="M19.697 15.468C19.677 15.452 17.557 13.828 17.594 9.43799C17.614 6.90599 16.782 4.65599 15.247 3.10299C13.872 1.70999 12.01 0.939993 10.005 0.929993H9.99204C7.98804 0.939993 6.12604 1.70999 4.75004 3.10399C3.21604 4.65699 2.38204 6.90599 2.40404 9.43799C2.44104 13.768 0.384036 15.405 0.302036 15.468C0.0420358 15.661 -0.0639643 15.998 0.0370357 16.306C0.139036 16.614 0.427036 16.821 0.749036 16.821H5.66904C5.77104 19.131 7.66604 20.981 9.99904 20.981C12.332 20.981 14.225 19.131 14.326 16.821H19.248C19.57 16.821 19.858 16.615 19.958 16.307C20.061 16 19.955 15.662 19.695 15.469L19.697 15.468ZM10 19.478C8.49504 19.478 7.27004 18.301 7.17204 16.82H12.828C12.728 18.3 11.505 19.48 10 19.48V19.478ZM2.38004 15.32C3.12004 14.188 3.92804 12.292 3.90404 9.42399C3.88604 7.26399 4.54804 5.44199 5.81704 4.15699C6.91004 3.04999 8.39704 2.43699 10 2.42999C11.603 2.43799 13.087 3.04999 14.18 4.15799C15.45 5.44299 16.113 7.26399 16.095 9.42499C16.071 12.293 16.88 14.19 17.62 15.321H2.38004V15.32Z"
                 fill="#000000"
               />
             </svg>
           </div>
           <span
-            class="notification_words"
+            class="notification-words"
             :style="{
               color: $route.name === 'notification' ? '#FF6600' : '#000000',
             }"
@@ -93,9 +99,10 @@
         </div></router-link
       >
       <!-- 公開聊天室 -->
+      <!-- TODO path -->
       <router-link to="/publicChatRoom"
-        ><div class="publicChatRoom">
-          <div class="publicChatRoom_icon">
+        ><div class="public-chat-room">
+          <div class="public-chat-room-icon">
             <svg
               width="20"
               height="19"
@@ -103,14 +110,22 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
+              <!-- TODO route.name -->
               <path
+                v-if="$route.name === 'publicChatRoom'"
+                d="M17.25 0.0180054H2.75C1.233 0.0180054 0 1.25201 0 2.77001V15.265C0 16.783 1.233 18.018 2.75 18.018H17.25C18.767 18.018 20 16.783 20 15.265V2.77001C20 1.25201 18.767 0.0180054 17.25 0.0180054ZM2.75 1.51801H17.25C17.94 1.51801 18.5 2.07801 18.5 2.76801V3.48201L10.45 8.84901C10.177 9.02901 9.824 9.03101 9.55 8.84701L1.5 3.48201V2.76801C1.5 2.07801 2.06 1.51801 2.75 1.51801ZM17.25 16.516H2.75C2.06 16.516 1.5 15.956 1.5 15.266V5.24001L8.74 10.07C9.123 10.326 9.562 10.454 10 10.454C10.44 10.454 10.877 10.326 11.26 10.071L18.5 5.24101V15.263C18.5 15.953 17.94 16.513 17.25 16.513V16.516Z"
+                fill="#FF6600"
+              />
+              <path
+                v-else
                 d="M17.25 0.0180054H2.75C1.233 0.0180054 0 1.25201 0 2.77001V15.265C0 16.783 1.233 18.018 2.75 18.018H17.25C18.767 18.018 20 16.783 20 15.265V2.77001C20 1.25201 18.767 0.0180054 17.25 0.0180054ZM2.75 1.51801H17.25C17.94 1.51801 18.5 2.07801 18.5 2.76801V3.48201L10.45 8.84901C10.177 9.02901 9.824 9.03101 9.55 8.84701L1.5 3.48201V2.76801C1.5 2.07801 2.06 1.51801 2.75 1.51801ZM17.25 16.516H2.75C2.06 16.516 1.5 15.956 1.5 15.266V5.24001L8.74 10.07C9.123 10.326 9.562 10.454 10 10.454C10.44 10.454 10.877 10.326 11.26 10.071L18.5 5.24101V15.263C18.5 15.953 17.94 16.513 17.25 16.513V16.516Z"
                 fill="black"
               />
             </svg>
           </div>
+          <!-- TODO route.name -->
           <span
-            class="publicChatRoom_words"
+            class="public-chat-room-words"
             :style="{
               color: $route.name === 'publicChatRoom' ? '#FF6600' : '#000000',
             }"
@@ -120,9 +135,10 @@
         </div></router-link
       >
       <!-- 私人訊息 -->
+      <!-- TODO path -->
       <router-link to="/privateMessage"
-        ><div class="privateMessage">
-          <div class="privateMessage_icon">
+        ><div class="private-message">
+          <div class="private-message-icon">
             <svg
               width="20"
               height="19"
@@ -130,14 +146,22 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
+              <!-- TODO route.name -->
               <path
+                v-if="$route.name === 'privateMessage'"
+                d="M17.25 0.0180054H2.75C1.233 0.0180054 0 1.25201 0 2.77001V15.265C0 16.783 1.233 18.018 2.75 18.018H17.25C18.767 18.018 20 16.783 20 15.265V2.77001C20 1.25201 18.767 0.0180054 17.25 0.0180054ZM2.75 1.51801H17.25C17.94 1.51801 18.5 2.07801 18.5 2.76801V3.48201L10.45 8.84901C10.177 9.02901 9.824 9.03101 9.55 8.84701L1.5 3.48201V2.76801C1.5 2.07801 2.06 1.51801 2.75 1.51801ZM17.25 16.516H2.75C2.06 16.516 1.5 15.956 1.5 15.266V5.24001L8.74 10.07C9.123 10.326 9.562 10.454 10 10.454C10.44 10.454 10.877 10.326 11.26 10.071L18.5 5.24101V15.263C18.5 15.953 17.94 16.513 17.25 16.513V16.516Z"
+                fill="#FF6600"
+              />
+              <path
+                v-else
                 d="M17.25 0.0180054H2.75C1.233 0.0180054 0 1.25201 0 2.77001V15.265C0 16.783 1.233 18.018 2.75 18.018H17.25C18.767 18.018 20 16.783 20 15.265V2.77001C20 1.25201 18.767 0.0180054 17.25 0.0180054ZM2.75 1.51801H17.25C17.94 1.51801 18.5 2.07801 18.5 2.76801V3.48201L10.45 8.84901C10.177 9.02901 9.824 9.03101 9.55 8.84701L1.5 3.48201V2.76801C1.5 2.07801 2.06 1.51801 2.75 1.51801ZM17.25 16.516H2.75C2.06 16.516 1.5 15.956 1.5 15.266V5.24001L8.74 10.07C9.123 10.326 9.562 10.454 10 10.454C10.44 10.454 10.877 10.326 11.26 10.071L18.5 5.24101V15.263C18.5 15.953 17.94 16.513 17.25 16.513V16.516Z"
                 fill="black"
               />
             </svg>
           </div>
+          <!-- TODO route.name -->
           <span
-            class="privateMessage_words"
+            class="private-message-words"
             :style="{
               color: $route.name === 'privateMessage' ? '#FF6600' : '#000000',
             }"
@@ -262,7 +286,7 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .navbar {
   position: fixed;
   z-index: 2;
@@ -274,56 +298,58 @@
   font-size: 18px;
   font-weight: bold;
   color: #1c1c1c;
-}
 
-a {
-  text-decoration: none;
-}
+  .icon {
+    width: 50px;
+    height: 50px;
+  }
 
-span {
-  margin-left: 20px;
-}
+  span {
+    margin-left: 20px;
+  }
 
-.icon {
-  width: 50px;
-  height: 50px;
-}
+  .nav-group {
+    width: 235px;
+    height: 226px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-top: 40px;
 
-.main,
-.profile,
-.setting {
-  display: flex;
-  margin: 10px;
-}
+    a {
+      text-decoration: none;
+    }
 
-.nav-group {
-  width: 235px;
-  height: 226px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  margin-top: 40px;
-}
+    .main,
+    .profile,
+    .setting,
+    .notification,
+    .public-chat-room,
+    .private-message {
+      display: flex;
+      margin: 10px;
+    }
+    .tweet {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 87px;
+      width: auto;
+      height: 20px;
+      background: #ff6600;
+      border-radius: 100px;
+      color: #ffffff;
+      cursor: pointer;
+    }
+  }
 
-.tweet {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 87px;
-  width: auto;
-  height: 20px;
-  background: #ff6600;
-  border-radius: 100px;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-.log-out {
-  position: absolute;
-  top: 95%;
-  left: 10px;
-  cursor: pointer;
+  .log-out {
+    position: absolute;
+    top: 95%;
+    left: 10px;
+    cursor: pointer;
+  }
 }
 </style>
 
@@ -355,7 +381,7 @@ export default {
     },
     logOut() {
       authorizationAPI.logOut();
-      this.$router.push("/signin");    
+      this.$router.push("/signin");
     },
   },
 };
