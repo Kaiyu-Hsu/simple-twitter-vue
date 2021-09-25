@@ -78,6 +78,13 @@
             font-size: 15px;
             color: #657786;
           }
+
+          .time {
+            position: relative;
+            // TODO 微調位置
+            left: 172px;
+            top: 0px;
+          }
         }
         .content {
           font-weight: 500;
@@ -92,10 +99,43 @@
 
 <script>
 import Navbar from "./../components/Navbar";
+import { apiHelper } from "./../utils/helpers";
+// import axios from "axios";
+
+const getToken = () => localStorage.getItem("token");
+
 export default {
   name: "PrivateMessage",
   components: {
     Navbar,
+  },
+  data() {
+    return {
+      users: [],
+    };
+  },
+  methods: {
+    async fetchData() {
+      try {
+        // TODO 被拒絕了
+        const response = await apiHelper.get(`/api/users/chatRecords`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        });
+        const { data } = response;
+        console.log(response);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // this.users = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  created() {
+    this.fetchData();
   },
 };
 </script>
