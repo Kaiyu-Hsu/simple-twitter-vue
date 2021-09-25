@@ -184,7 +184,7 @@ export default {
       followersNum: "",
     };
   },
-  methods: {    
+  methods: {
     editProfile() {
       this.$emit("open-edit-modal");
     },
@@ -287,7 +287,7 @@ export default {
     this.fetchFollowers();
   },
   updated() {
-    this.fetchApiData();
+    // this.fetchApiData();
   },
 };
 </script>
