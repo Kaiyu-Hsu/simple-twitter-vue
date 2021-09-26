@@ -29,7 +29,7 @@ import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
 import { tweets } from "./../api/tweets";
 import user from "./../api/user";
-import admin from "./../api/admin"
+import admin from "./../api/admin";
 
 export default {
   name: "Main",
@@ -45,7 +45,7 @@ export default {
       tweetsReply: [],
       popular: [],
       userData: {},
-      tweetsReplies: []
+      tweetsReplies: [],
     };
   },
   methods: {
@@ -146,16 +146,16 @@ export default {
         console.log("error", error);
       }
     },
-    async getPopular(id) {            
+    async getPopular(id) {
       try {
         const response = await user.getPopular(id);
-        
+
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
         console.log("Get popular tweets");
         console.log(response);
-        this.popular = [...response.data]
+        this.popular = [...response.data];
       } catch (error) {
         console.log("error", error);
       }
@@ -163,7 +163,7 @@ export default {
     async adminTweets() {
       try {
         const response = await admin.getAllTweets();
-        
+
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
@@ -173,16 +173,16 @@ export default {
       } catch (error) {
         console.log("error", error);
       }
-    }
+    },
   },
   created() {
     this.getTweets();
     // this.getPopular(JSON.parse(localStorage.getItem('user')).id)
-    // this.getPopular(275) 
+    // this.getPopular(275)
     // this.getFollowers(295);
     // this.getFollowings(295);
     // this.getReplied(265);
-    // this.fetchUser(25);
+    this.fetchUser(25);
     // this.getEditUser()
     // this.getTweetsReply(1705)
     // this.adminTweets()
