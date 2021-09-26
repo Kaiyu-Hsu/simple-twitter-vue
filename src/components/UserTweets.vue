@@ -76,12 +76,6 @@
         </div>
       </div>
     </div>
-    <ReplyModal
-      v-if="isReplyModalVisible"
-      :tweet-content="oneTweet"
-      :initial-user="initialUser"
-      @close-modal="closeModal"
-    />
   </div>
 </template>
 
