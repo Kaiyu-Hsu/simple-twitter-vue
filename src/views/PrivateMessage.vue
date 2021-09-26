@@ -19,7 +19,7 @@
           </svg>
         </div>
       </div>
-      <div class="a-message">
+      <div class="a-message" @click="join">
         <img src="" />
         <div class="a-message-inner">
           <div class="name-account">
@@ -57,6 +57,10 @@
       padding: 15px 0px 15px 15px;
       border-bottom: 1px solid #e6ecf0;
       display: flex;
+      .messages-icon {
+        position: relative;
+        left: 300px;
+      }
     }
 
     .a-message {
@@ -97,12 +101,29 @@
 }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script>
 import Navbar from "./../components/Navbar";
 import { apiHelper } from "./../utils/helpers";
 // import axios from "axios";
 
 const getToken = () => localStorage.getItem("token");
+// 連線到heroku
+// const socket = io("https://actwitter.herokuapp.com");
+// const getUserId = () => localStorage.getItem("user");
+// TODO 送出user id 被拒絕了
+// socket.emit("connectServer", getUserId());
+// 聊天室資訊
+// socket.on("room-info", { roomId, targetId, chatRecord });
+// 聊天室訊息
+// socket.on("chatMessage", ({ message, roomId }) => {
+//   console.log(message, roomId);
+// });
+// 使用者下線訊息
+// socket.on("chat-offline-notice", (userId) => {
+//   console.log(userId);
+// });
 
 export default {
   name: "PrivateMessage",
@@ -132,6 +153,10 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    // TODO 加入私人房間
+    join() {
+      socket.emit("join-room", { roomId: "2" });
     },
   },
   created() {
