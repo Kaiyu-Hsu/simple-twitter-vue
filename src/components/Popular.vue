@@ -2,13 +2,10 @@
   <div class="container">
     <h1>Popular</h1>
     <div v-for="user in users" :key="user.followingId" class="popular-users">
-      <!-- <img :src="user.avatar" /> -->
-      <img src="" alt="avatar" />
+      <img :src="user.following.avatar" alt="" />
       <div class="name-account">
-        <!-- {{ user.following.name }} -->
-        <div class="name">?</div>
-        <!-- {{ user.following.account }} -->
-        <div class="account">@ ?</div>
+        <div class="name">{{ user.following.name }}</div>
+        <div class="account">@ {{ user.following.account }}</div>
       </div>
       <div
         v-if="user.isFollowed"
@@ -30,7 +27,7 @@
 
 <style scoped>
 .container {
-  position: fixed;  
+  position: fixed;
   top: 15px;
   left: 75%;
   background: #f5f8fa;
@@ -120,8 +117,7 @@ export default {
       users: [],
     };
   },
-  methods: {    
-    //TODO following 有些是null，所以顯示不出來
+  methods: {
     async fetchPopular() {
       try {
         const getUserId = () => localStorage.getItem("user");
@@ -166,7 +162,7 @@ export default {
       });
     },
   },
-  created() {    
+  created() {
     this.fetchPopular();
   },
 };
