@@ -24,7 +24,7 @@
             </svg>
           </button>
           <div class="title">編輯個人資料</div>
-          <button type="submit" class="save-btn" @click="save">儲存</button>
+          <button type="submit" class="save-btn">儲存</button>
         </div>
         <div class="pic">
           <!-- background cover -->
@@ -318,6 +318,12 @@ import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
 export default {
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       user: {},
@@ -327,44 +333,14 @@ export default {
       oringinalAvatar: "",
     };
   },
-  methods: {    
+  methods: {
     // API 先取得原有user的資料
     async fetchApiData() {
-      try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await userAPI.getInfo(getUserId());
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-        console.log(response);
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        this.user = data;
-        this.oringinalName = data.name;
-        this.oringinalIntro = data.introduction;
-        this.oringinalCover = data.cover;
-        this.oringinalAvatar = data.avatar;
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
-    },
-    save() {
-      if (
-        this.user.name.trim().length === 0 ||
-        this.user.introduction.trim().length === 0
-      ) {
-        alert("尚有空白請填寫完畢!");
-      } else {
-        this.$emit("close");
-        // console.log(this.user.name, this.user.introduction);
-      }
+      this.user = this.initialUser;
+      this.oringinalName = this.initialUser.name;
+      this.oringinalIntro = this.initialUser.introduction;
+      this.oringinalCover = this.initialUser.cover;
+      this.oringinalAvatar = this.initialUser.avatar;
     },
     btnClose() {
       this.user.name = this.oringinalName;
@@ -412,6 +388,18 @@ export default {
         console.log(form);
         console.log(formData);
 
+        if (
+          this.user.name.trim().length === 0 ||
+          this.user.introduction.trim().length === 0
+        ) {
+          Toast.fire({
+            icon: "warning",
+            title: "尚有空白請填寫完畢!",
+          });
+        } else {
+          this.$emit("close");
+        }
+
         const response = await userAPI.updataForm(this.user.id, { formData });
 
         console.log("update profile");
@@ -433,7 +421,6 @@ export default {
     },
   },
   created() {
-    // this.fetchJSON();
     this.fetchApiData();
   },
   watch: {
@@ -441,7 +428,10 @@ export default {
       {
         handler: function () {
           if (this.user.name.length === 50) {
-            alert("名稱的字數到達上限!");
+            Toast.fire({
+              icon: "warning",
+              title: "名稱的字數到達上限!",
+            });
           }
         },
         deep: true,
@@ -450,7 +440,10 @@ export default {
       {
         handler: function () {
           if (this.user.introduction.length === 160) {
-            alert("自我介紹的字數到達上限!");
+            Toast.fire({
+              icon: "warning",
+              title: "自我介紹的字數到達上限!",
+            });
           }
         },
         deep: true,
