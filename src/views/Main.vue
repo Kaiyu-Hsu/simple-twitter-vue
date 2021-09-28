@@ -177,7 +177,6 @@ export default {
   },
   created() {
     this.getTweets();
-    // this.getPopular(JSON.parse(localStorage.getItem('user')).id)
     // this.getPopular(275)
     // this.getFollowers(295);
     // this.getFollowings(295);

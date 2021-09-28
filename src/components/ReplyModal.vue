@@ -39,7 +39,9 @@
               </p>
               <div class="reply-container">
                 <span>回覆給</span>
-                <span class="reply-target">@{{ tweetContent.user.account }}</span>
+                <span class="reply-target"
+                  >@{{ tweetContent.user.account }}</span
+                >
               </div>
             </div>
           </div>
@@ -101,7 +103,7 @@
   justify-content: space-between;
 }
 
-.modal-footer {  
+.modal-footer {
   flex-direction: column;
   justify-content: flex-end;
 }
@@ -275,7 +277,7 @@ export default {
         userAvatar:
           "https://loremflickr.com/320/240/restaurant,food/?random=23.186501555235584&lock=0.0465555806777429",
         userName: "user1",
-      })
+      }),
     },
     initialUser: {
       type: Object,

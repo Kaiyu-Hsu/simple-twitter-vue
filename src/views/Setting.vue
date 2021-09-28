@@ -31,9 +31,7 @@
             <hr />
           </div>
         </form>
-        <button type="submit" form="setting-form" >
-          儲存
-        </button>
+        <button type="submit" form="setting-form">儲存</button>
       </div>
     </div>
   </div>
@@ -147,9 +145,7 @@ export default {
   methods: {
     async getEditUser() {
       try {
-        const response = await user.getEditUser(
-          JSON.parse(localStorage.getItem("user")).id
-        );
+        const response = await user.getEditUser(localStorage.getItem("user"));
 
         if (response.statusText !== "OK") {
           Toast.fire({
@@ -175,22 +171,22 @@ export default {
         name: this.name,
         email: this.email,
         password: this.password,
-        checkPassword: this.checkPassword
-      }
+        checkPassword: this.checkPassword,
+      };
 
-      if(this.password !== this.checkPassword) {
+      if (this.password !== this.checkPassword) {
         Toast.fire({
-            icon: "warning",
-            title: "密碼 與 密碼確認 請輸入相同組合",
-          });
+          icon: "warning",
+          title: "密碼 與 密碼確認 請輸入相同組合",
+        });
       }
       try {
         const response = await user.putEditUser(
-          JSON.parse(localStorage.getItem("user")).id, 
+          localStorage.getItem("user"),
           data
         );
 
-        if (response.statusText !== "OK") {          
+        if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
 
@@ -203,7 +199,7 @@ export default {
       } catch (error) {
         console.log("error", error);
       }
-    },    
+    },
   },
   created() {
     console.log(`created at Setting.vue`);

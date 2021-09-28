@@ -170,6 +170,10 @@ export default {
       this.user = data;
       this.tweets = tweets;
     },
+    // TODO 愛心的功能
+    ifLiked(tweet) {
+      console.log(tweet);
+    },
     // API
     async fetchApiData() {
       try {
@@ -216,8 +220,8 @@ export default {
   },
   created() {
     // this.fetchJSON();
-    this.fetchApiData();
-    this.fetchApiTweets();
+    // this.fetchApiData();
+    // this.fetchApiTweets();
   },
 };
 </script>
