@@ -32,8 +32,12 @@
         <div class="time">{{ tweet.createdAt }}</div>
       </div>
       <div class="card-footer">
-        <span class="reply-count"><span class="count">{{tweet.replies.length}}</span> 回覆</span>
-        <span class="like-count"><span class="count">{{tweet.likes.length}}</span> 喜歡次數</span>
+        <span class="reply-count"
+          ><span class="count">{{ tweet.replies.length }}</span> 回覆</span
+        >
+        <span class="like-count"
+          ><span class="count">{{ tweet.likes.length }}</span> 喜歡次數</span
+        >
       </div>
       <div class="icon-wrapper">
         <div
@@ -157,7 +161,7 @@
       }
     }
     .card-body {
-      margin: 0% 0% 0% 15px;      
+      margin: 0% 0% 0% 15px;
       .description {
         width: 510px;
         margin: 15px 0%;
@@ -236,19 +240,19 @@ export default {
     return {
       tweet: {},
       isModalVisible: false,
-      oneTweet: {},    
+      oneTweet: {},
     };
   },
   methods: {
     showModal() {
       this.oneTweet = { ...this.tweetData };
-      this.isModalVisible = true;      
+      this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
     },
     changeLike() {
-      // TODO 要把資料送到後端更新      
+      // TODO 要把資料送到後端更新
 
       if (
         this.tweet.likes.some(
@@ -262,14 +266,16 @@ export default {
         return;
       }
       // 使用者未"喜歡"該則推文時，點擊愛心就會變成"喜歡"
-      this.tweet.likes.push({ id: this.userData.id});
+      this.tweet.likes.push({ id: this.userData.id });
     },
     ifLiked() {
-      return this.tweet.likes.some((likeRecord) => likeRecord.id === this.userData.id);
+      return this.tweet.likes.some(
+        (likeRecord) => likeRecord.id === this.userData.id
+      );
     },
-  },  
+  },
   created() {
-    this.tweet = {...this.tweetData}
+    this.tweet = { ...this.tweetData };
   },
 };
 </script>

@@ -222,7 +222,7 @@ export default {
     return {
       tweets: [],
       isModalVisible: false,
-      oneTweet: {},      
+      oneTweet: {},
     };
   },
   created() {
@@ -230,11 +230,8 @@ export default {
   },
   watch: {
     initialTweets(newValue) {
-      this.tweets = [
-        ... this.tweets,
-        ... newValue
-      ]
-    }
+      this.tweets = [...this.tweets, ...newValue];
+    },
   },
   methods: {
     fetchTweets() {
