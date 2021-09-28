@@ -388,10 +388,10 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
-    },    
+    },
     newPost() {
       // 通知重新渲染畫面
-      this.$emit("new-post")
+      this.$emit("new-post");
     },
     logOut() {
       authorizationAPI.logOut();

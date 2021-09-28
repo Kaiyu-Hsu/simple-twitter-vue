@@ -133,7 +133,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-        console.log('response data', data)
+
         this.users = data.topTwitters;
         // TODO 後端提供的資料缺少判斷 user 是否正在追蹤 top10 帳號
         this.users = this.users.map((user) => {
