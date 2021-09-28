@@ -246,10 +246,9 @@ export default {
           });
           return;
         }
-        
+
         // TODO 要把資料傳向後端，不知道是否正確?
         const response = await apiHelper.post("api/users", formData);
-        console.log("🚀 ~ file: SignUp.vue ~ line 252 ~ signUp ~ response", response)
 
         // 取得 API 請求後的資料
         const { data } = response;

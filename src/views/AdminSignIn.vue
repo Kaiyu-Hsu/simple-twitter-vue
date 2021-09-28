@@ -46,7 +46,12 @@
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" name="password" v-model="password" @focus="focusInput" />
+          <input
+            type="password"
+            name="password"
+            v-model="password"
+            @focus="focusInput"
+          />
           <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
       </form>
@@ -175,7 +180,7 @@ export default {
       email: "",
       password: "",
       isProcessing: false,
-      nowFocus: ""
+      nowFocus: "",
     };
   },
   methods: {
