@@ -100,7 +100,7 @@
       >
       <!-- 公開聊天室 -->
       <!-- TODO path -->
-      <router-link to="/publicChatRoom"
+      <router-link to="/public-chat-room"
         ><div class="public-chat-room">
           <div class="public-chat-room-icon">
             <svg
@@ -136,7 +136,7 @@
       >
       <!-- 私人訊息 -->
       <!-- TODO path -->
-      <router-link to="/privateMessage"
+      <router-link to="/private-message"
         ><div class="private-message">
           <div class="private-message-icon">
             <svg

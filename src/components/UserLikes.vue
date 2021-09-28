@@ -163,7 +163,7 @@ export default {
   },
   data() {
     return {
-      likes: [],      
+      likes: [],
       user: {},
       // isLike: true,
     };
@@ -228,9 +228,9 @@ export default {
     },
     async fetchApiLikes() {
       try {
-        // const getUserId = () => localStorage.getItem("user");
+        const getUserId = () => localStorage.getItem("user");
         // TODO 改回 getUserId()
-        const response = await userAPI.getLikes(255);
+        const response = await userAPI.getLikes(getUserId);
 
         console.log("user's likes");
         console.log(response);
@@ -254,9 +254,10 @@ export default {
         });
       }
     },
-    unlikeTweet(id) { // 取消"喜歡"某一則推文
-      this.likes = this.likes.filter(like => like.TweetId !== id)
-    }
+    unlikeTweet(id) {
+      // 取消"喜歡"某一則推文
+      this.likes = this.likes.filter((like) => like.TweetId !== id);
+    },
   },
   created() {
     // this.fetchJSON();

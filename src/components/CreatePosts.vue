@@ -24,7 +24,7 @@
 .container {
   width: 600px;
   margin: 0% auto;
-  position: relative;  
+  position: relative;
   top: -8px;
   border: 1px solid #e6ecf0;
   border-bottom: 10px solid #e6ecf0;
@@ -46,11 +46,11 @@
     display: flex;
     border-top: 1px solid #e6ecf0;
     .thumbnail-container {
-      position: relative;      
+      position: relative;
       width: 50px;
       margin-left: 15px;
       img {
-        position: absolute;        
+        position: absolute;
         top: 10px;
         border-radius: 50%;
         width: 50px;
@@ -80,7 +80,8 @@
         line-height: 26px;
         color: #9197a3;
       }
-      &:active, &:focus {
+      &:active,
+      &:focus {
         outline: none;
       }
     }
@@ -117,27 +118,33 @@
 </style>
 
 <script>
-import {tweets} from "./../api/tweets"
+import { tweets } from "./../api/tweets";
 
 export default {
   props: {
     initialUser: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data() {
     return {
-      newPostContent: "", 
+      newPostContent: "",
     };
   },
   methods: {
     async newTweet() {
       // TODO 需跟後端確認發送 POST 新增推文請求的資料結構為何
       console.log("送出新推文內容: " + this.newPostContent);
-      
-      const response = await tweets.postTweets(this.initialUser.id, this.newPostContent)
-      console.log("🚀 ~ file: CreatePosts.vue ~ line 154 ~ newTweet ~ response", response)
+
+      const response = await tweets.postTweets(
+        this.initialUser.id,
+        this.newPostContent
+      );
+      console.log(
+        "🚀 ~ file: CreatePosts.vue ~ line 154 ~ newTweet ~ response",
+        response
+      );
     },
   },
 };
