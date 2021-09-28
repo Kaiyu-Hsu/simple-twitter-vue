@@ -396,6 +396,7 @@ export default {
             icon: "warning",
             title: "尚有空白請填寫完畢!",
           });
+          return;
         } else {
           this.$emit("close");
         }
