@@ -46,8 +46,8 @@
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" v-model="password" />
-          <hr />
+          <input type="password" name="password" v-model="password" @focus="focusInput" />
+          <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
       </form>
       <button form="sign-in-form" :disabled="isProcessing">登入</button>
@@ -62,8 +62,6 @@
 
 <style lang="scss" scoped>
 .container {
-  height: 1200px;
-  width: 1440px;
   .header {
     margin-bottom: 40px;
     margin-top: 65px;
@@ -177,16 +175,20 @@ export default {
       email: "",
       password: "",
       isProcessing: false,
+      nowFocus: ""
     };
   },
   methods: {
+    focusInput(e) {
+      this.nowFocus = e.target.name;
+    },
     // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
-        if (!this.account || !this.password) {
+        if (!this.email || !this.password) {
           Toast.fire({
             icon: "warning",
-            title: "請填入 account 和 password",
+            title: "請填入 email 和 password",
           });
           return;
         }
@@ -207,7 +209,7 @@ export default {
         localStorage.setItem("token", data.token);
 
         // 成功登入後轉址到首頁
-        this.$router.push("/main");
+        this.$router.push("/admin");
       } catch (error) {
         // 將密碼欄位清空
         this.password = "";

@@ -46,8 +46,15 @@
       >
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="email" required />
-          <hr />
+          <input
+            type="text"
+            name="account"
+            placeholder="xxx@example.com"
+            v-model="email"
+            @focus="focusInput"
+            required
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'account' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
@@ -77,8 +84,6 @@
 
 <style lang="scss" scoped>
 .container {
-  height: 1200px;
-  width: 1440px;
   .header {
     margin-bottom: 40px;
     margin-top: 65px;

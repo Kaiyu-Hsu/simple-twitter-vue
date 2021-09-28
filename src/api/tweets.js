@@ -22,8 +22,8 @@ export const tweets = {
     // TODO
     return apiHelper.post(
       "api/tweets",
-      {        
-        description  // req.body.description        
+      {
+        description, // req.body.description
       },
       {
         headers: { Authorization: `Bearer ${token}` },
