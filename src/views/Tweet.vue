@@ -1,6 +1,6 @@
 <template>
   <div class="reply">
-    <Navbar :initial-user="userData" />
+    <Navbar />
     <OneTweet :tweet-data="tweetData" :user-data="userData" />
     <ReplyList :tweet-data="tweetData" />
     <Popular />

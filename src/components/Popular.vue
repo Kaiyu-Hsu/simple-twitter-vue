@@ -110,6 +110,7 @@ import { apiHelper } from "./../utils/helpers";
 import { Toast } from "./../utils/helpers";
 
 const getToken = () => localStorage.getItem("token");
+const getUserId = () => localStorage.getItem("user");
 
 export default {
   data() {
@@ -120,7 +121,6 @@ export default {
   methods: {
     async fetchPopular() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await apiHelper.get(
           `api/tweets/${getUserId()}/top10`,
           {
@@ -128,16 +128,14 @@ export default {
           }
         );
 
-        console.log("top10");
-        console.log(response);
-
         const { data } = response;
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-
+        console.log('response data', data)
         this.users = data.topTwitters;
+        // TODO 後端提供的資料缺少判斷 user 是否正在追蹤 top10 帳號
         this.users = this.users.map((user) => {
           return { ...user, isFollowed: true };
         });

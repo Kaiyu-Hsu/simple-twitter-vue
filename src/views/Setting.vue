@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Navbar :initial-user="userData" />
+    <Navbar />
     <div class="setting">
       <header>帳戶設定</header>
       <div class="form-container">
@@ -126,6 +126,8 @@ import Navbar from "./../components/Navbar";
 import { Toast } from "./../utils/helpers";
 import user from "./../api/user";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   name: "Setting",
   components: {
@@ -145,7 +147,7 @@ export default {
   methods: {
     async getEditUser() {
       try {
-        const response = await user.getEditUser(localStorage.getItem("user"));
+        const response = await user.getEditUser(getUserId());
 
         if (response.statusText !== "OK") {
           Toast.fire({
@@ -182,7 +184,7 @@ export default {
       }
       try {
         const response = await user.putEditUser(
-          localStorage.getItem("user"),
+          getUserId(),
           data
         );
 

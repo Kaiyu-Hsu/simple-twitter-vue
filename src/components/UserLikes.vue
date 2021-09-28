@@ -153,6 +153,8 @@ import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   name: "UserLikes",
   props: {
@@ -204,7 +206,7 @@ export default {
     // API
     async fetchApiData() {
       try {
-        const getUserId = () => localStorage.getItem("user");
+        
         const response = await userAPI.getUser(getUserId());
 
         console.log("users");
@@ -228,9 +230,9 @@ export default {
     },
     async fetchApiLikes() {
       try {
-        const getUserId = () => localStorage.getItem("user");
+        
         // TODO 改回 getUserId()
-        const response = await userAPI.getLikes(getUserId);
+        const response = await userAPI.getLikes(getUserId());
 
         console.log("user's likes");
         console.log(response);
