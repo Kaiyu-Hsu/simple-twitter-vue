@@ -5,7 +5,7 @@
     </div>
     <div class="textarea-wrapper">
       <div class="thumbnail-container">
-        <img :src="initialUser.avatar" alt="" />
+        <img :src="user.avatar" alt="" />
       </div>
       <textarea
         name="new-tweet"
@@ -129,22 +129,34 @@ export default {
   },
   data() {
     return {
+      user: {},
       newPostContent: "",
     };
   },
   methods: {
     async newTweet() {
-      // TODO 需跟後端確認發送 POST 新增推文請求的資料結構為何
-      console.log("送出新推文內容: " + this.newPostContent);
+      try {
+        const response = await tweets.postTweets(this.newPostContent);
+        const { data } = response;
 
-      const response = await tweets.postTweets(
-        this.initialUser.id,
-        this.newPostContent
-      );
-      console.log(
-        "🚀 ~ file: CreatePosts.vue ~ line 154 ~ newTweet ~ response",
-        response
-      );
+        console.log(
+          "🚀 ~ file: CreatePosts.vue ~ line 154 ~ newTweet ~ response",
+          response
+        );
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.$emit("new-post");
+      } catch (error) {
+        console.log("Error", error);
+      }
+    },
+  },
+  watch: {
+    initialUser(newValue) {
+      this.user = { ...this.user, ...newValue };
     },
   },
 };

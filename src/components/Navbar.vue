@@ -261,8 +261,9 @@
       <!-- use the modal component, pass in the prop -->
       <addTweet
         v-if="isModalVisible"
+        @new-post="newPost"
         @close="closeModal"
-        :initial-user="initialUser"
+        :initial-user="userData"
       />
     </div>
     <div class="log-out" @click="logOut">
@@ -356,33 +357,49 @@
 <script>
 import addTweet from "./AddTweetModal.vue";
 import authorizationAPI from "./../api/authorization";
+import user from "./../api/user";
 
 export default {
   components: {
     addTweet,
   },
-  props: {
-    initialUser: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
+      userData: {},
       isModalVisible: false,
     };
   },
   methods: {
+    async fetchUser(id) {
+      try {
+        const response = await user.getUserInfo(id);
+
+        if (response.statusText !== "OK") {
+          throw new Error(response.statusText);
+        }
+
+        this.userData = { ...response.data };
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
     showModal() {
       this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
+    },    
+    newPost() {
+      // 通知重新渲染畫面
+      this.$emit("new-post")
     },
     logOut() {
       authorizationAPI.logOut();
       this.$router.push("/signin");
     },
+  },
+  created() {
+    this.fetchUser(localStorage.getItem("user"));
   },
 };
 </script>

@@ -26,12 +26,14 @@
             cols="50"
             maxlength="140"
             placeholder="有什麼新鮮事?"
-            v-model="newTweet"
+            v-model="newPostContent"
           ></textarea>
         </div>
 
         <footer class="modal-footer">
-          <button type="button" class="btn-tweet" @click="close">推文</button>
+          <button type="button" class="btn-tweet" @click="newTweet">
+            推文
+          </button>
         </footer>
       </div>
     </div>
@@ -142,6 +144,8 @@ textarea {
 </style>
 
 <script>
+import tweets from "./../api/tweets";
+
 export default {
   props: {
     initialUser: {
@@ -151,14 +155,25 @@ export default {
   },
   data() {
     return {
-      newTweet: "",
+      newPostContent: "",
     };
   },
   methods: {
-    close() {
-      // TODO 向後端發送新推文資料
+    async newTweet() {
+      try {
+        const response = await tweets.postTweets(this.newPostContent);
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+      // 通知重新渲染畫面
+      this.$emit("new-post");
+      // 關閉 modal
       this.$emit("close");
-      console.log(this.newTweet);
     },
     btnClose() {
       this.$emit("close");
