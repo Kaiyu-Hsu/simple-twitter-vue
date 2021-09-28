@@ -180,14 +180,6 @@ export default {
     };
   },
   methods: {
-    // handleSubmit() {
-    //   const data = JSON.stringify({
-    //     account: this.account,
-    //     password: this.password,
-    //   });
-    //   // TODO: 向後端驗證使用者登入資訊是否合法
-    //   console.log("data", data);
-    // },
     // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
@@ -202,7 +194,7 @@ export default {
         this.isProcessing = true;
 
         const response = await authorizationAPI.signIn({
-          account: this.account,
+          email: this.email,
           password: this.password,
         });
         // 取得 API 請求後的資料

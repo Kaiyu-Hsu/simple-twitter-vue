@@ -164,7 +164,7 @@ export default {
       users: [],
     };
   },
-  methods: {    
+  methods: {
     // API
     async fetchApiData() {
       try {
@@ -191,7 +191,7 @@ export default {
       }
     },
   },
-  created() {    
+  created() {
     this.fetchApiData();
   },
 };

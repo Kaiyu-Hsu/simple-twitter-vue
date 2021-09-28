@@ -47,12 +47,12 @@
             v-model="account"
             @focus="focusInput"
           />
-          <hr :class="{'now-focus': nowFocus === 'account'}" />
+          <hr :class="{ 'now-focus': nowFocus === 'account' }" />
         </div>
         <div class="input-wrapper">
           <span>名稱</span>
           <input type="text" name="name" v-model="name" @focus="focusInput" />
-          <hr :class="{'now-focus': nowFocus === 'name'}" />
+          <hr :class="{ 'now-focus': nowFocus === 'name' }" />
         </div>
         <div class="input-wrapper">
           <span>Email</span>

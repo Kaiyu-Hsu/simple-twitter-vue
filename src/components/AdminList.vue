@@ -98,7 +98,7 @@ export default {
       tweets: [],
     };
   },
-  methods: {    
+  methods: {
     deleteTweet() {
       console.log("delete");
       // TODO 刪除資料
@@ -134,7 +134,7 @@ export default {
       }
     },
   },
-  created() {    
+  created() {
     this.fetchApiData();
   },
 };

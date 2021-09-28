@@ -40,13 +40,13 @@ const routes = [
   },
   // 公開聊天室
   {
-    path: "/publicChatRoom",
+    path: "/public-chat-room",
     name: "publicChatRoom",
     component: () => import("./../views/PublicChatRoom.vue"),
   },
   // 私人聊天室
   {
-    path: "/privateMessage",
+    path: "/private-message",
     name: "privateMessage",
     component: () => import("./../views/PrivateMessage.vue"),
   },
