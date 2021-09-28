@@ -75,9 +75,9 @@ const routes = [
   },
   // 跟隨者
   {
-    path: "/user-self-followings",
-    name: "user-self-followings",
-    component: () => import("../views/UserSelf.vue"),
+    path: "/user-followers",
+    name: "user-followers",
+    component: () => import("../views/UserFollowers.vue"),
   },
   // 正在跟隨中
   // {
