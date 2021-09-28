@@ -45,7 +45,11 @@
       <!-- 跟隨中 & 跟隨者 -->
       <div class="followings-followers">
         <div class="followings">
-          <div class="num">{{ followingsNum }}個</div>
+          <div class="num">
+            <router-link to="/user-self-followings">
+              {{ followingsNum }}個
+            </router-link>
+          </div>
           跟隨中
         </div>
         <div class="followers">
@@ -165,6 +169,10 @@ header {
     }
     .num {
       color: #000000;
+    }
+
+    a {
+      text-decoration: none;
     }
   }
 }
