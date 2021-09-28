@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Navbar :initial-user="userData" />
+    <Navbar />
     <!-- TODO 在線使用者名單 -->
     <aside class="user-list">
       <p class="user-list-title">上線使用者({{ attendees.length }})</p>
@@ -31,7 +31,12 @@
         </div>
       </div>
       <div class="room-footer">
-        <input type="text" placeholder="輸入訊息..." v-model="newMsg" />
+        <input
+          type="text"
+          placeholder="輸入訊息..."
+          v-model="newMsg"
+          @keyup.enter="sendMessage"
+        />
         <svg
           @click="sendMessage"
           width="20"
@@ -231,7 +236,7 @@ export default {
       userId: localStorage.getItem("user"),
       userData: {},
       msgs: [
-        { text: "I came", type: "connection", time: `${TWLocale.showTime}` }, // TODO 顯示中文時間
+        { text: "I came", type: "connection", time: `` },
         { text: "I saw", type: "msg-in", time: `${TWLocale.showTime}` },
         { text: "Icecream", type: "msg-out", time: `${TWLocale.showTime}` },
       ],
@@ -250,8 +255,8 @@ export default {
           account: "JOJO",
         },
       ],
-      // 連線至socket server
-      socket: io("https://socket-chat-parctice.herokuapp.com/"),
+      // 連線至 socket server
+      socket: io("https://actwitter.herokuapp.com"),
     };
   },
   methods: {
@@ -399,7 +404,7 @@ export default {
     },
   },
   created() {
-    this.fetchUser(localStorage.getItem("user"));
+    this.fetchUser(this.userId);
     // this.socketStart(this.userId);
     // this.listenToServer();
   },
