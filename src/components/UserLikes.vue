@@ -206,7 +206,6 @@ export default {
     // API
     async fetchApiData() {
       try {
-        
         const response = await userAPI.getUser(getUserId());
 
         console.log("users");
@@ -230,7 +229,6 @@ export default {
     },
     async fetchApiLikes() {
       try {
-        
         // TODO 改回 getUserId()
         const response = await userAPI.getLikes(getUserId());
 

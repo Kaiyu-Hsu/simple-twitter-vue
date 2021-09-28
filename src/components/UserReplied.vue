@@ -107,7 +107,6 @@ export default {
     // API
     async fetchApiData() {
       try {
-        
         const response = await userAPI.getUser(getUserId());
 
         console.log("users");
@@ -131,7 +130,6 @@ export default {
     },
     async fetchApiReplieds() {
       try {
-        
         const response = await userAPI.getReplieds(getUserId());
 
         console.log("user's replieds");

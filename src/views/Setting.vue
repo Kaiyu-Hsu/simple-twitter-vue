@@ -183,10 +183,7 @@ export default {
         });
       }
       try {
-        const response = await user.putEditUser(
-          getUserId(),
-          data
-        );
+        const response = await user.putEditUser(getUserId(), data);
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);

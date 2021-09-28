@@ -58,7 +58,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        
+
         this.tweets = [...response.data];
       } catch (error) {
         console.log("error", error);
@@ -83,7 +83,7 @@ export default {
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
-        }        
+        }
       } catch (error) {
         console.log("error", error);
       }
@@ -95,7 +95,6 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        
       } catch (error) {
         console.log("error", error);
       }
@@ -107,7 +106,6 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        
       } catch (error) {
         console.log("error", error);
       }
@@ -119,7 +117,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        
+
         this.tweetsReplies = [...response.data];
       } catch (error) {
         console.log("error", error);
@@ -132,7 +130,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        
+
         this.tweetsReply = [...response.data];
       } catch (error) {
         console.log("error", error);
@@ -145,7 +143,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        
+
         this.popular = [...response.data];
       } catch (error) {
         console.log("error", error);
@@ -158,8 +156,8 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        
-        this.tweets = [...response.data]
+
+        this.tweets = [...response.data];
       } catch (error) {
         console.log("error", error);
       }
