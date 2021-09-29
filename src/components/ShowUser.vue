@@ -196,7 +196,6 @@ export default {
   },
   data() {
     return {
-      user: {},
       tweetsNum: "",
       followingsNum: "",
       followersNum: "",
