@@ -45,11 +45,20 @@
       <!-- 跟隨中 & 跟隨者 -->
       <div class="followings-followers">
         <div class="followings">
-          <div class="num">{{ followingsNum }}個</div>
+          <div class="num">
+            <!-- TODO 連結正在跟隨的頁面 -->
+            <!-- <router-link to="/user-followers"> -->
+            {{ followingsNum }}個
+            <!-- </router-link> -->
+          </div>
           跟隨中
         </div>
         <div class="followers">
-          <div class="num">{{ followersNum }}位</div>
+          <div class="num">
+            <router-link to="/user-followers">
+              {{ followersNum }}位
+            </router-link>
+          </div>
           跟隨者
         </div>
       </div>
@@ -166,6 +175,10 @@ header {
     .num {
       color: #000000;
     }
+
+    a {
+      text-decoration: none;
+    }
   }
 }
 </style>
@@ -183,7 +196,6 @@ export default {
   },
   data() {
     return {
-      user: {},
       tweetsNum: "",
       followingsNum: "",
       followersNum: "",
@@ -264,7 +276,6 @@ export default {
     this.fetchApiTweets();
     this.fetchFollowings();
     this.fetchFollowers();
-    this.fetchData();
   },
 };
 </script>

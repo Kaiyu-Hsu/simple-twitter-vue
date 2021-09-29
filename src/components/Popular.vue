@@ -128,8 +128,8 @@ export default {
           }
         );
 
-        console.log("top10");
-        console.log(response);
+        // console.log("top10");
+        // console.log(response);
 
         const { data } = response;
 

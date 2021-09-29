@@ -31,7 +31,12 @@
         </div>
       </div>
       <div class="room-footer">
-        <input type="text" placeholder="輸入訊息..." v-model="newMsg" />
+        <input
+          type="text"
+          placeholder="輸入訊息..."
+          v-model="newMsg"
+          @keyup.enter="sendMessage"
+        />
         <svg
           @click="sendMessage"
           width="20"
@@ -251,7 +256,7 @@ export default {
         },
       ],
       // 連線至socket server
-      socket: io("https://socket-chat-parctice.herokuapp.com/"),
+      socket: io("https://actwitter.herokuapp.com"),
     };
   },
   methods: {
@@ -400,8 +405,8 @@ export default {
   },
   created() {
     this.fetchUser(localStorage.getItem("user"));
-    // this.socketStart(this.userId);
-    // this.listenToServer();
+    this.socketStart(this.userId);
+    this.listenToServer();
   },
 };
 </script>
