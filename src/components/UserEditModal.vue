@@ -1,13 +1,7 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
-      <!-- <form
-          action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
-          method="POST"
-          enctype="multipart/form-data"
-          @submit.stop.prevent="handleSubmit"
-        > -->
-      <form class="modal" action="" @submit.stop.prevent="handleSubmit">
+      <form class="modal" @submit.stop.prevent="handleSubmit">
         <div class="modal-header">
           <button type="button" class="btn-close" @click="btnClose">
             <svg
@@ -334,7 +328,7 @@ export default {
     };
   },
   methods: {
-    // API 先取得原有user的資料
+    // 先取得原有user的資料
     async fetchApiData() {
       this.user = this.initialUser;
       this.oringinalName = this.initialUser.name;
@@ -377,7 +371,6 @@ export default {
       this.user.cover = this.oringinalCover;
       console.log("取消更改圖片", this.oringinalCover);
     },
-    // TODO PUT到後端 ，照片上傳 500
     async handleSubmit(e) {
       try {
         const form = e.target;
@@ -385,7 +378,6 @@ export default {
         for (let [name, value] of formData.entries()) {
           console.log(name + ": " + value);
         }
-        console.log(form);
         console.log(formData);
 
         if (
@@ -403,8 +395,7 @@ export default {
 
         const response = await userAPI.updataForm(this.user.id, { formData });
 
-        console.log("update profile");
-        console.log(response);
+        console.log("update profile", response);
 
         // 取得 API 請求後的資料
         const { data } = response;
