@@ -2,11 +2,12 @@
   <div class="container">
     <h1>Popular</h1>
     <div v-for="user in users" :key="user.followingId" class="popular-users">
-      <img :src="user.following.avatar" alt="" />
+      <img :src="user.following.avatar" />
       <div class="name-account">
         <div class="name">{{ user.following.name }}</div>
         <div class="account">@ {{ user.following.account }}</div>
       </div>
+      <!-- TODO userFollowingList 用來切換是否跟隨 -->
       <div
         v-if="user.isFollowed"
         @click.stop.prevent="toggleFollowing(user.followingId)"
@@ -15,7 +16,6 @@
         正在跟隨
       </div>
       <div
-        v-else
         @click.stop.prevent="toggleFollowing(user.followingId)"
         class="unfollowing-btn"
       >
@@ -120,6 +120,7 @@ export default {
   methods: {
     async fetchPopular() {
       try {
+        // TODO 有null
         const getUserId = () => localStorage.getItem("user");
         const response = await apiHelper.get(
           `api/tweets/${getUserId()}/top10`,
@@ -128,8 +129,7 @@ export default {
           }
         );
 
-        // console.log("top10");
-        // console.log(response);
+        console.log("top10", response);
 
         const { data } = response;
 
