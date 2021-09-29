@@ -50,8 +50,18 @@
                 <div class="account">@{{ follower.follower.account }}</div>
               </div>
               <div class="btn">
-                <div class="following-btn">正在跟隨</div>
-                <div class="unfollowing-btn">跟隨</div>
+                <div
+                  class="following-btn"
+                  @click="unfollowing(follower.followerId)"
+                >
+                  正在跟隨
+                </div>
+                <div
+                  class="unfollowing-btn"
+                  @click="following(follower.followerId)"
+                >
+                  跟隨
+                </div>
               </div>
             </div>
             <div class="content">
@@ -154,7 +164,7 @@
         margin-left: 10px;
         .top {
           display: flex;
-          margin: 0 auto;
+          // margin: 0 auto;
           .name-account {
             display: flex;
             flex-direction: column;
@@ -215,6 +225,7 @@ import Popular from "../components/Popular.vue";
 import Navbar from "../components/Navbar.vue";
 import { Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
+import followerships from "./../api/followerships";
 
 export default {
   name: "UserSelf",
@@ -288,15 +299,53 @@ export default {
           throw new Error(data.message);
         }
 
-        // console.log(data);
+        console.log(data);
         this.followers = data;
-        // TODO 需要向後端要 isFollowing
-        this.followers = this.followers.map((follower) => {
-          return {
-            ...follower,
-            isFollowing: false,
-          };
+        // TODO 同時發followings api ，做交叉比對
+        // this.followers = this.followers.map((follower) => {
+        //   return {
+        //     ...follower,
+        //     isFollowing: false,
+        //   };
+        // });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
         });
+      }
+    },
+    // btn
+    async following() {
+      try {
+        // TODO 待改
+        const response = await followerships.following();
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        console.log("following", data);
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async unfollowing(followerId) {
+      try {
+        const response = await followerships.unfollowing(followerId);
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        console.log("unfollowing", response);
       } catch (error) {
         console.log("error", error);
         Toast.fire({
