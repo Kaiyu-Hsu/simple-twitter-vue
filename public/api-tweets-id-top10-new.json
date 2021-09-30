@@ -1,1 +1,87 @@
-{"topTwitters":[{"followingId":6,"count":7,"following":{"name":"user5","avatar":"https://loremflickr.com/320/240/restaurant,food/?random=9.52029547879647&lock=1.8356969306294824","account":"Vel r"}},{"followingId":2,"count":5,"following":{"name":"user1","avatar":"https://loremflickr.com/320/240/restaurant,food/?random=8.858769683928713&lock=89.77442629509149","account":"Eum e"}},{"followingId":0,"count":2,"following":null},{"followingId":4,"count":2,"following":{"name":"user3","avatar":"https://loremflickr.com/320/240/restaurant,food/?random=3.671418316359776&lock=72.76022308409178","account":"Nihil"}},{"followingId":1,"count":2,"following":{"name":"root","avatar":"https://loremflickr.com/320/240/restaurant,food/?random=28.25493564190298&lock=56.77383415758277","account":"Conse"}},{"followingId":5,"count":1,"following":{"name":"user4","avatar":"https://loremflickr.com/320/240/restaurant,food/?random=0.8554638881023369&lock=38.035091171965284","account":"Ipsum"}},{"followingId":3,"count":1,"following":{"name":"user2","avatar":"https://loremflickr.com/320/240/restaurant,food/?random=2.5869077130310725&lock=43.027964398427486","account":"Iste "}}],"userFollowingList":[{"followerId":4,"followingId":0,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"},{"followerId":4,"followingId":1,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"},{"followerId":4,"followingId":2,"createdAt":"2021-09-17T11:04:07.000Z","updatedAt":"2021-09-17T11:04:07.000Z"}]}
+{
+  "topTwitters": [
+    {
+      "followingId": 6,
+      "count": 7,
+      "following": {
+        "name": "user5",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=9.52029547879647&lock=1.8356969306294824",
+        "account": "Vel r"
+      }
+    },
+    {
+      "followingId": 2,
+      "count": 5,
+      "following": {
+        "name": "user1",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=8.858769683928713&lock=89.77442629509149",
+        "account": "Eum e"
+      }
+    },
+    {
+      "followingId": 0,
+      "count": 2,
+      "following": {
+        "name": "usersthgbsr th",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=3.671418316359776&lock=72.76022308409178",
+        "account": "vgsebhgbe"
+      }
+    },
+    {
+      "followingId": 4,
+      "count": 2,
+      "following": {
+        "name": "user3",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=3.671418316359776&lock=72.76022308409178",
+        "account": "Nihil"
+      }
+    },
+    {
+      "followingId": 1,
+      "count": 2,
+      "following": {
+        "name": "root",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=28.25493564190298&lock=56.77383415758277",
+        "account": "Conse"
+      }
+    },
+    {
+      "followingId": 5,
+      "count": 1,
+      "following": {
+        "name": "user4",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=0.8554638881023369&lock=38.035091171965284",
+        "account": "Ipsum"
+      }
+    },
+    {
+      "followingId": 3,
+      "count": 1,
+      "following": {
+        "name": "user2",
+        "avatar": "https://loremflickr.com/320/240/restaurant,food/?random=2.5869077130310725&lock=43.027964398427486",
+        "account": "Iste "
+      }
+    }
+  ],
+  "userFollowingList": [
+    {
+      "followerId": 4,
+      "followingId": 0,
+      "createdAt": "2021-09-17T11:04:07.000Z",
+      "updatedAt": "2021-09-17T11:04:07.000Z"
+    },
+    {
+      "followerId": 4,
+      "followingId": 1,
+      "createdAt": "2021-09-17T11:04:07.000Z",
+      "updatedAt": "2021-09-17T11:04:07.000Z"
+    },
+    {
+      "followerId": 4,
+      "followingId": 2,
+      "createdAt": "2021-09-17T11:04:07.000Z",
+      "updatedAt": "2021-09-17T11:04:07.000Z"
+    }
+  ]
+}

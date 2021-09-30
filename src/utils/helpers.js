@@ -17,3 +17,11 @@ export const Toast = Swal.mixin({
   showConfirmButton: false,
   timer: 3000,
 });
+
+// axios 攔截器觀察 requset 內容
+apiHelper.interceptors.request.use((req) => {
+  console.log(`${req.method} ${req.url}`);
+  console.log(req);
+  // Important: request interceptors **must** return the request.
+  return req;
+});

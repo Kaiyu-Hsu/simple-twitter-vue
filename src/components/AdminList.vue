@@ -84,7 +84,6 @@
 </style>
 
 <script>
-import data from "./../../public/api-admin.json";
 import { fromNowFilter } from "./../utils/mixins";
 import axios from "axios";
 import { Toast } from "./../utils/helpers";
@@ -100,10 +99,6 @@ export default {
     };
   },
   methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.tweets = data.allTweets;
-    },
     deleteTweet() {
       console.log("delete");
       // TODO 刪除資料
@@ -140,7 +135,6 @@ export default {
     },
   },
   created() {
-    this.fetchJSON();
     this.fetchApiData();
   },
 };

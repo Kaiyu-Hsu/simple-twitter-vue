@@ -1,13 +1,7 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
-      <!-- <form
-          action="/admin/restaurants/{{restaurant.id}}?_method=PUT"
-          method="POST"
-          enctype="multipart/form-data"
-          @submit.stop.prevent="handleSubmit"
-        > -->
-      <form class="modal" action="" @submit.stop.prevent="handleSubmit">
+      <form class="modal" @submit.stop.prevent="handleSubmit">
         <div class="modal-header">
           <button type="button" class="btn-close" @click="btnClose">
             <svg
@@ -24,7 +18,7 @@
             </svg>
           </button>
           <div class="title">編輯個人資料</div>
-          <button type="submit" class="save-btn" @click="save">儲存</button>
+          <button type="submit" class="save-btn">儲存</button>
         </div>
         <div class="pic">
           <!-- background cover -->
@@ -314,11 +308,16 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-v2.json";
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
 export default {
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       user: {},
@@ -329,51 +328,13 @@ export default {
     };
   },
   methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = data.userData;
-      this.oringinalName = data.userData.name;
-      this.oringinalIntro = data.userData.introduction;
-      this.oringinalCover = data.userData.cover;
-      this.oringinalAvatar = data.userData.avatar;
-    },
-    // API 先取得原有user的資料
+    // 先取得原有user的資料
     async fetchApiData() {
-      try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await userAPI.getInfo(getUserId());
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-        console.log(response);
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        this.user = data;
-        this.oringinalName = data.name;
-        this.oringinalIntro = data.introduction;
-        this.oringinalCover = data.cover;
-        this.oringinalAvatar = data.avatar;
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
-    },
-    save() {
-      if (
-        this.user.name.trim().length === 0 ||
-        this.user.introduction.trim().length === 0
-      ) {
-        alert("尚有空白請填寫完畢!");
-      } else {
-        this.$emit("close");
-        // console.log(this.user.name, this.user.introduction);
-      }
+      this.user = this.initialUser;
+      this.oringinalName = this.initialUser.name;
+      this.oringinalIntro = this.initialUser.introduction;
+      this.oringinalCover = this.initialUser.cover;
+      this.oringinalAvatar = this.initialUser.avatar;
     },
     btnClose() {
       this.user.name = this.oringinalName;
@@ -410,7 +371,6 @@ export default {
       this.user.cover = this.oringinalCover;
       console.log("取消更改圖片", this.oringinalCover);
     },
-    // TODO PUT到後端 ，照片上傳 500
     async handleSubmit(e) {
       try {
         const form = e.target;
@@ -418,13 +378,24 @@ export default {
         for (let [name, value] of formData.entries()) {
           console.log(name + ": " + value);
         }
-        console.log(form);
         console.log(formData);
+
+        if (
+          this.user.name.trim().length === 0 ||
+          this.user.introduction.trim().length === 0
+        ) {
+          Toast.fire({
+            icon: "warning",
+            title: "尚有空白請填寫完畢!",
+          });
+          return;
+        } else {
+          this.$emit("close");
+        }
 
         const response = await userAPI.updataForm(this.user.id, { formData });
 
-        console.log("update profile");
-        console.log(response);
+        console.log("update profile", response);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -442,7 +413,6 @@ export default {
     },
   },
   created() {
-    // this.fetchJSON();
     this.fetchApiData();
   },
   watch: {
@@ -450,7 +420,10 @@ export default {
       {
         handler: function () {
           if (this.user.name.length === 50) {
-            alert("名稱的字數到達上限!");
+            Toast.fire({
+              icon: "warning",
+              title: "名稱的字數到達上限!",
+            });
           }
         },
         deep: true,
@@ -459,7 +432,10 @@ export default {
       {
         handler: function () {
           if (this.user.introduction.length === 160) {
-            alert("自我介紹的字數到達上限!");
+            Toast.fire({
+              icon: "warning",
+              title: "自我介紹的字數到達上限!",
+            });
           }
         },
         deep: true,

@@ -1,5 +1,5 @@
 <template>
-  <div class="show-user" v-if="!isLoading">
+  <div class="show-user">
     <header>
       <div class="icon-back">
         <svg
@@ -16,18 +16,18 @@
         </svg>
       </div>
       <div class="name-tweets">
-        <div class="name">{{ user.name }}</div>
+        <div class="name">{{ initialUser.name }}</div>
         <div class="tweets">{{ tweetsNum }}推文</div>
       </div>
     </header>
     <div class="user-info">
       <!-- background cover -->
       <div class="background-cover">
-        <img class="cover" :src="user.cover" />
+        <img class="cover" :src="initialUser.cover" />
       </div>
       <div class="avatar-btn">
         <!-- avatar -->
-        <img class="avatar" :src="user.avatar" />
+        <img class="avatar" :src="initialUser.avatar" />
         <!-- btn follow -->
         <div class="btn-follow" @click.stop.prevent="editProfile">
           編輯個人資料
@@ -35,21 +35,29 @@
       </div>
       <!-- name & account -->
       <div class="name-account">
-        <div class="name">{{ user.name }}</div>
-        <div class="account">@{{ user.account }}</div>
+        <div class="name">{{ initialUser.name }}</div>
+        <div class="account">@{{ initialUser.account }}</div>
       </div>
       <!-- info -->
       <div class="info">
-        {{ user.introduction }}
+        {{ initialUser.introduction }}
       </div>
       <!-- 跟隨中 & 跟隨者 -->
       <div class="followings-followers">
         <div class="followings">
-          <div class="num">{{ followingsNum }}個</div>
+          <div class="num">
+            <router-link to="/user-followings">
+              {{ followingsNum }}位
+            </router-link>
+          </div>
           跟隨中
         </div>
         <div class="followers">
-          <div class="num">{{ followersNum }}位</div>
+          <div class="num">
+            <router-link to="/user-followers">
+              {{ followersNum }}位
+            </router-link>
+          </div>
           跟隨者
         </div>
       </div>
@@ -166,58 +174,35 @@ header {
     .num {
       color: #000000;
     }
+
+    a {
+      text-decoration: none;
+    }
   }
 }
 </style>
 
 <script>
-import data from "./../../public/api-users-id-userInfo-new.json";
-import tweets from "./../../public/api-users-id-tweets-v3.json";
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
 export default {
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      isLoading: true,
-      user: {},
       tweetsNum: "",
       followingsNum: "",
       followersNum: "",
     };
   },
   methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = data;
-      this.tweetsNum = tweets.length;
-    },
     editProfile() {
       this.$emit("open-edit-modal");
-    },
-    // user file
-    async fetchApiData() {
-      try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await userAPI.getUser(getUserId());
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        this.user = data;
-        this.isLoading = false;
-      } catch (error) {
-        this.isLoading = false;
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
     },
     // tweets num
     async fetchApiTweets() {
@@ -287,14 +272,9 @@ export default {
     },
   },
   created() {
-    // this.fetchJSON();
-    this.fetchApiData();
     this.fetchApiTweets();
     this.fetchFollowings();
     this.fetchFollowers();
-  },
-  updated() {
-    this.fetchApiData();
   },
 };
 </script>

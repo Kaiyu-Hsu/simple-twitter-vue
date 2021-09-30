@@ -2,13 +2,10 @@
   <div class="container">
     <h1>Popular</h1>
     <div v-for="user in users" :key="user.followingId" class="popular-users">
-      <!-- <img :src="user.avatar" /> -->
-      <img src="" alt="avatar" />
+      <img :src="user.following.avatar" alt="" />
       <div class="name-account">
-        <!-- {{ user.following.name }} -->
-        <div class="name">?</div>
-        <!-- {{ user.following.account }} -->
-        <div class="account">@ ?</div>
+        <div class="name">{{ user.following.name }}</div>
+        <div class="account">@ {{ user.following.account }}</div>
       </div>
       <div
         v-if="user.isFollowed"
@@ -109,9 +106,7 @@ img {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/tweets.json";
-import axios from "axios";
-// import { apiHelper } from "./../utils/helpers";
+import { apiHelper } from "./../utils/helpers";
 import { Toast } from "./../utils/helpers";
 
 const getToken = () => localStorage.getItem("token");
@@ -123,30 +118,18 @@ export default {
     };
   },
   methods: {
-    fetchUsers() {
-      this.users = tweetsJSON.popular;
-    },
-    //TODO following 有些是null，所以顯示不出來
     async fetchPopular() {
       try {
         const getUserId = () => localStorage.getItem("user");
-        // ruby route
-        // const response = await apiHelper.get(
-        //   `/api/tweets/${getUserId()}/top10`,
-        //   {
-        //     headers: { Authorization: `Bearer ${getToken()}` },
-        //   }
-        // );
-        // rex route
-        const response = await axios.get(
-          `https://actwitter.herokuapp.com/api/tweets/${getUserId()}/top10`,
+        const response = await apiHelper.get(
+          `api/tweets/${getUserId()}/top10`,
           {
             headers: { Authorization: `Bearer ${getToken()}` },
           }
         );
 
-        console.log("top10");
-        console.log(response);
+        // console.log("top10");
+        // console.log(response);
 
         const { data } = response;
 
@@ -180,7 +163,6 @@ export default {
     },
   },
   created() {
-    // this.fetchUsers();
     this.fetchPopular();
   },
 };

@@ -20,13 +20,13 @@
         </div>
 
         <div class="modal-body">
-          <img :src="user.avatar" />
+          <img :src="initialUser.avatar" />
           <textarea
             rows="4"
             cols="50"
             maxlength="140"
             placeholder="有什麼新鮮事?"
-            v-model="tweet"
+            v-model="newTweet"
           ></textarea>
         </div>
 
@@ -78,7 +78,6 @@
 }
 
 .modal-footer {
-  //   border-top: 1px solid red;
   flex-direction: column;
   justify-content: flex-end;
 }
@@ -104,8 +103,7 @@ textarea {
   font-size: 18px;
   border: 0; // 外框
   outline: none; // 打字時的外框
-  //   沒有顯示 placeholder style
-  ::placeholder {
+  &::placeholder {
     font-family: "Noto Sans TC", sans-serif;
     font-style: normal;
     font-weight: 500;
@@ -144,30 +142,27 @@ textarea {
 </style>
 
 <script>
-import tweetsJSON from "./../../public/tweets.json";
-
-const currentUser = tweetsJSON.userData;
 export default {
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      user: {},
-      tweet: "",
+      newTweet: "",
     };
   },
   methods: {
-    fetchUser() {
-      this.user = currentUser;
-    },
     close() {
+      // TODO 向後端發送新推文資料
       this.$emit("close");
-      console.log(this.tweet);
+      console.log(this.newTweet);
     },
     btnClose() {
       this.$emit("close");
     },
-  },
-  created() {
-    this.fetchUser();
   },
 };
 </script>

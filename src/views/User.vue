@@ -1,16 +1,20 @@
 <template>
-  <div class="home">
-    <Navbar />
+  <div class="user" v-show="!isLoading">
+    <Navbar :initial-user="userData" />
     <div class="profile">
       <!-- ShowUser -->
-      <ShowUser @open-edit-modal="openModal" />
+      <ShowUser :initial-user="userData" @open-edit-modal="openModal" />
       <!-- UserTabs -->
       <UserTabs />
       <!-- 推文 -->
-      <router-view />
+      <router-view :initial-user="userData" />
     </div>
     <!-- edit modal -->
-    <UserEditModal v-if="isModalVisible" @close="closeModal" />
+    <UserEditModal
+      :initial-user="userData"
+      v-if="isModalVisible"
+      @close="closeModal"
+    />
     <Popular />
   </div>
 </template>
@@ -24,16 +28,17 @@
   bottom: 0px;
   width: 42%;
   height: 100%;
-  z-index: -1;
 }
 </style>
 
 <script>
-import Popular from "./../components/Popular";
-import Navbar from "./../components/Navbar";
-import ShowUser from "./../components/ShowUser";
-import UserTabs from "./../components/UserTabs";
-import UserEditModal from "../components/UserEditModal.vue";
+import Popular from "./../components/Popular.vue";
+import Navbar from "./../components/Navbar.vue";
+import ShowUser from "./../components/ShowUser.vue";
+import UserTabs from "./../components/UserTabs.vue";
+import UserEditModal from "./../components/UserEditModal.vue";
+import { Toast } from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
 
 export default {
   name: "User",
@@ -46,16 +51,45 @@ export default {
   },
   data() {
     return {
+      userData: {},
       isModalVisible: false,
+      isLoading: true,
     };
   },
   methods: {
+    // user file
+    async fetchUser() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getUser(getUserId());
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.userData = data;
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
     openModal() {
       this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
     },
+  },
+  created() {
+    this.fetchUser();
   },
 };
 </script>

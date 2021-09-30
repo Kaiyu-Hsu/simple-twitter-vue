@@ -41,8 +41,8 @@
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
           <span>帳號</span>
-          <input type="text" v-model="account" />
-          <hr />
+          <input type="text" name="email" v-model="email" @focus="focusInput" />
+          <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
@@ -125,6 +125,10 @@
           border-bottom: unset;
           border-radius: 0px 0px 4px 4px;
         }
+        // input focus 底下那條線的style
+        .now-focus {
+          background-color: #50b5ff;
+        }
       }
     }
     button {
@@ -170,20 +174,12 @@ import { Toast } from "./../utils/helpers";
 export default {
   data() {
     return {
-      account: "",
+      email: "",
       password: "",
       isProcessing: false,
     };
   },
   methods: {
-    // handleSubmit() {
-    //   const data = JSON.stringify({
-    //     account: this.account,
-    //     password: this.password,
-    //   });
-    //   // TODO: 向後端驗證使用者登入資訊是否合法
-    //   console.log("data", data);
-    // },
     // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
@@ -198,7 +194,7 @@ export default {
         this.isProcessing = true;
 
         const response = await authorizationAPI.signIn({
-          account: this.account,
+          email: this.email,
           password: this.password,
         });
         // 取得 API 請求後的資料

@@ -40,13 +40,13 @@ const routes = [
   },
   // 公開聊天室
   {
-    path: "/publicChatRoom",
+    path: "/public-chat-room",
     name: "publicChatRoom",
     component: () => import("./../views/PublicChatRoom.vue"),
   },
   // 私人聊天室
   {
-    path: "/privateMessage",
+    path: "/private-message",
     name: "privateMessage",
     component: () => import("./../views/PrivateMessage.vue"),
   },
@@ -72,6 +72,46 @@ const routes = [
         component: () => import("../components/UserLikes.vue"),
       },
     ],
+  },
+  {
+    path: "/profile/:id",
+    name: "other-profile",
+    component: () => import("../views/OtherUser.vue"),
+    redirect: "/profile/:id/tweets",
+    children: [
+      {
+        path: "tweets",
+        name: "other-tweets",
+        component: () => import("../components/OtherUserTweets.vue"),
+      },
+      {
+        path: "replied",
+        name: "other-replied",
+        component: () => import("../components/OtherUserReplied.vue"),
+      },
+      {
+        path: "likes",
+        name: "other-likes",
+        component: () => import("../components/OtherUserLikes.vue"),
+      },
+    ],
+  },
+  // 跟隨者
+  {
+    path: "/user-followers",
+    name: "user-followers",
+    component: () => import("../views/UserFollowers.vue"),
+  },
+  // 正在跟隨中
+  {
+    path: "/user-followings",
+    name: "user-followings",
+    component: () => import("../views/UserFollowings.vue"),
+  },
+  {
+    path: "/tweets/:id",
+    name: "tweet",
+    component: () => import("../views/Tweet.vue"),
   },
   {
     path: "/setting",
