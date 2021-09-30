@@ -50,15 +50,16 @@
                 <div class="account">@{{ follower.follower.account }}</div>
               </div>
               <div class="btn">
+                <!-- v-if="isFollowing"  v-else-->
                 <div
                   class="following-btn"
-                  @click="unfollowing(follower.followerId)"
+                  @click="toggleFollowing(follower.followerId)"
                 >
                   正在跟隨
                 </div>
                 <div
                   class="unfollowing-btn"
-                  @click="following(follower.followerId)"
+                  @click="toggleFollowing(follower.followerId)"
                 >
                   跟隨
                 </div>
@@ -137,15 +138,12 @@
   }
 
   .followers-card {
-    // border-bottom: 1px solid #e6ecf0;
     font-family: "Noto Sans TC", sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 15px;
     color: #1c1c1c;
     min-height: 136px;
-    // margin-top: 10px;
-    // display: flex;
     .a-card {
       display: flex;
       border-bottom: 1px solid #e6ecf0;
@@ -162,15 +160,16 @@
         display: flex;
         flex-direction: column;
         margin-left: 10px;
+        width: 100%;
+        align-content: space-around;
         .top {
           display: flex;
-          // margin: 0 auto;
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
           .name-account {
             display: flex;
             flex-direction: column;
-            .name {
-              // margin: auto 5px auto 0px;
-            }
             .account {
               font-weight: 500;
               color: #657786;
@@ -179,8 +178,6 @@
           .btn {
             cursor: pointer;
             .following-btn {
-              // width: 60px;
-              // height: 15px;
               padding: 0px 15px;
               background: #ff6600;
               border: 1px solid #ff6600;
@@ -194,9 +191,6 @@
               align-items: center;
             }
             .unfollowing-btn {
-              // width: 30px;
-              // height: 15px;
-              // padding: 2px 15px;
               border: 1px solid #ff6600;
               box-sizing: border-box;
               border-radius: 100px;
@@ -225,10 +219,10 @@ import Popular from "../components/Popular.vue";
 import Navbar from "../components/Navbar.vue";
 import { Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
-import followerships from "./../api/followerships";
+import followershipsAPI from "./../api/followerships";
 
 export default {
-  name: "UserSelf",
+  name: "UserFollowers",
   components: {
     Popular,
     Navbar,
@@ -316,11 +310,38 @@ export default {
         });
       }
     },
+    // followings list
+    async fetchFollowings() {
+      try {
+        const getUserId = () => localStorage.getItem("user");
+        const response = await userAPI.getFollowings(getUserId());
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        console.log(data);
+        // this.followers = data;
+        // this.followers = this.followers.map((follower) => {
+        //   return {
+        //     ...follower,
+        //     isFollowing: false,
+        //   };
+        // });
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
     // btn
     async following() {
       try {
         // TODO 待改
-        const response = await followerships.following();
+        const response = await followershipsAPI.following();
         const { data } = response;
 
         if (response.statusText !== "OK") {
@@ -338,7 +359,7 @@ export default {
     },
     async unfollowing(followerId) {
       try {
-        const response = await followerships.unfollowing(followerId);
+        const response = await followershipsAPI.unfollowing(followerId);
         const { data } = response;
 
         if (response.statusText !== "OK") {
@@ -354,11 +375,25 @@ export default {
         });
       }
     },
+    // TODO 切換按鈕 待改
+    toggleFollowing(followerId) {
+      this.followers = this.followers.map((follower) => {
+        if (follower.followingId === followerId) {
+          return {
+            ...follower,
+            isFollowing: !follower.isFollowing,
+          };
+        }
+
+        return follower;
+      });
+    },
   },
   created() {
     this.fetchUser();
     this.fetchApiTweets();
     this.fetchFollowers();
+    this.fetchFollowings();
   },
 };
 </script>
