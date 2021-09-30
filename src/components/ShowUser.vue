@@ -47,9 +47,9 @@
         <div class="followings">
           <div class="num">
             <!-- TODO 連結正在跟隨的頁面 -->
-            <!-- <router-link to="/user-followers"> -->
-            {{ followingsNum }}個
-            <!-- </router-link> -->
+            <router-link to="/user-followings">
+              {{ followingsNum }}位
+            </router-link>
           </div>
           跟隨中
         </div>
