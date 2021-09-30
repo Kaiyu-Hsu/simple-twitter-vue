@@ -1,18 +1,10 @@
 <template>
   <div class="a-tweet-container">
     <div class="a-tweet" v-for="like in likes" :key="like.TweetId">
-      <router-link
-        :to="{ name: 'other-profile', params: { id: like.TweetId } }"
-      >
-        <img :src="like.tweet.user.avatar" class="avatar" alt="?" />
-      </router-link>
+      <img :src="like.tweet.user.avatar" class="avatar" alt="?" />
       <div class="content">
         <div class="name-account">
-          <router-link
-            :to="{ name: 'other-profile', params: { id: like.TweetId } }"
-          >
-            <div class="name">{{ like.tweet.user.name }}</div>
-          </router-link>
+          <div class="name">{{ like.tweet.user.name }}</div>
           <div class="account">
             @{{ like.tweet.user.account }}・{{ like.createdAt | fromNow }}
           </div>
@@ -170,7 +162,6 @@ export default {
   data() {
     return {
       likes: [],
-      user: {},
       // isLike: true,
     };
   },
@@ -205,8 +196,8 @@ export default {
 
     async fetchApiLikes() {
       try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await userAPI.getLikes(getUserId());
+        const userid = Number(this.$route.params.id);
+        const response = await userAPI.getLikes(userid);
 
         console.log("user's likes");
         console.log(response);

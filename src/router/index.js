@@ -73,6 +73,29 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/profile/:id",
+    name: "other-profile",
+    component: () => import("../views/OtherUser.vue"),
+    redirect: "/profile/:id/tweets",
+    children: [
+      {
+        path: "tweets",
+        name: "other-tweets",
+        component: () => import("../components/OtherUserTweets.vue"),
+      },
+      {
+        path: "replied",
+        name: "other-replied",
+        component: () => import("../components/OtherUserReplied.vue"),
+      },
+      {
+        path: "likes",
+        name: "other-likes",
+        component: () => import("../components/OtherUserLikes.vue"),
+      },
+    ],
+  },
   // 跟隨者
   {
     path: "/user-followers",
