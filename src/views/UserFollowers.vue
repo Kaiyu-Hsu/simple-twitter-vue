@@ -29,12 +29,13 @@
         <div
           class="followers"
           :class="{ active: $route.name === 'user-followers' }"
-          @click.stop.prevent="followers"
         >
           跟隨者
         </div>
         <!-- :class="{ active: $route.name === 'user-followings' }" -->
-        <div class="followings" @click.stop.prevent="followings">正在跟隨</div>
+        <div class="followings" @click.stop.prevent="toFollowings">
+          正在跟隨
+        </div>
       </div>
       <div class="followers-card">
         <div
@@ -353,7 +354,7 @@ export default {
         console.log("error", error);
         Toast.fire({
           icon: "warning",
-          title: "無法載入資料",
+          title: "無法追蹤",
         });
       }
     },
@@ -371,7 +372,7 @@ export default {
         console.log("error", error);
         Toast.fire({
           icon: "warning",
-          title: "無法載入資料",
+          title: "無法取消追蹤",
         });
       }
     },
@@ -387,6 +388,10 @@ export default {
 
         return follower;
       });
+    },
+    // change route
+    toFollowings() {
+      this.$router.push({ name: "user-followings" });
     },
   },
   created() {
