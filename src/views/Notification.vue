@@ -66,6 +66,7 @@
 <script>
 import Navbar from "./../components/Navbar.vue";
 import Followers from "./../components/Followers.vue";
+import { keepUnauthorizedOut } from "./../utils/helpers";
 
 export default {
   name: "Notification",
@@ -73,5 +74,8 @@ export default {
     Navbar,
     Followers,
   },
+  created() {
+    keepUnauthorizedOut(this)
+  }
 };
 </script>

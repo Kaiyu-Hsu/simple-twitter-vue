@@ -37,7 +37,7 @@ import Navbar from "./../components/Navbar.vue";
 import ShowUser from "./../components/ShowUser.vue";
 import UserTabs from "./../components/UserTabs.vue";
 import UserEditModal from "./../components/UserEditModal.vue";
-import { Toast } from "./../utils/helpers";
+import { keepUnauthorizedOut, Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
 const getUserId = () => localStorage.getItem("user");
@@ -90,7 +90,8 @@ export default {
     },
   },
   created() {
-    this.fetchUser();
+    keepUnauthorizedOut(this);
+    this.fetchUser();    
   },
 };
 </script>

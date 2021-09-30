@@ -226,6 +226,7 @@ import Navbar from "../components/Navbar.vue";
 import { Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
 import followerships from "./../api/followerships";
+import { keepUnauthorizedOut } from "./../utils/helpers";
 
 export default {
   name: "UserSelf",
@@ -356,9 +357,10 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this)
     this.fetchUser();
     this.fetchApiTweets();
-    this.fetchFollowers();
+    this.fetchFollowers();    
   },
 };
 </script>

@@ -137,8 +137,7 @@
           color: #657786;
         }
         input {
-          // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-          // 並且回來刪除 all: unset 這一行
+          // 取消預設style
           all: unset;
 
           text-align: start;
@@ -165,8 +164,7 @@
       }
     }
     button {
-      // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-      // 並且回來刪除 all: unset 這一行
+      // 取消預設style
       all: unset;
 
       margin-top: 10px;
@@ -201,7 +199,7 @@
 </style>
 
 <script>
-import { apiHelper } from "./../utils/helpers";
+import { apiHelper} from "./../utils/helpers";
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -224,6 +222,16 @@ export default {
       try {
         const form = e.target; // <form></form>
         const formData = new FormData(form);
+        // const formData = new FormData();
+        // formData.set("account", this.account);
+        // formData.set("name", this.name);
+        // formData.set("email", this.email);
+        // formData.set("password", this.password);
+        // formData.set("account", this.checkPassword);
+
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
 
         if (
           !this.account ||
@@ -234,7 +242,8 @@ export default {
         ) {
           Toast.fire({
             icon: "warning",
-            title: "請填寫完整",
+            position: "top",
+            title: "請填寫完整資料",
           });
           return;
         }
@@ -248,7 +257,7 @@ export default {
         }
 
         // TODO 要把資料傳向後端，不知道是否正確?
-        const response = await apiHelper.post("api/users", formData);
+        const response = await apiHelper.post("api/users", { formData });
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -266,7 +275,7 @@ export default {
           icon: "warning",
           title: "註冊失敗，請稍後再試",
         });
-        console.log("error", error);
+        console.log("error", error.response || error);
       }
     },
   },

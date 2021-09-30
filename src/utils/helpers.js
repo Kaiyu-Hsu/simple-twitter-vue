@@ -18,6 +18,19 @@ export const Toast = Swal.mixin({
   timer: 3000,
 });
 
+// 阻擋未登入的使用者透過修改網址進入特定頁面
+export function keepUnauthorizedOut(VueComponet) {
+  if (!localStorage.getItem("token")) {
+    Toast.fire({
+      icon: "warning",
+      position: "top",
+      title: "請先登入",
+    });
+    VueComponet.$router.push("/");
+    throw "Please sign in first"
+  }
+}
+
 // axios 攔截器觀察 requset 內容
 apiHelper.interceptors.request.use((req) => {
   console.log(`${req.method} ${req.url}`);

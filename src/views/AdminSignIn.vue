@@ -40,8 +40,15 @@
     <div class="form-container">
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
-          <span>帳號</span>
-          <input type="text" name="email" v-model="email" @focus="focusInput" />
+          <span>Email</span>
+          <input
+            type="text"
+            name="email"
+            pattern="\S+"
+            title="不接受空白鍵"
+            v-model="email"
+            @focus="focusInput"
+          />
           <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
@@ -49,6 +56,8 @@
           <input
             type="password"
             name="password"
+            pattern="\S+"
+            title="不接受空白鍵"
             v-model="password"
             @focus="focusInput"
           />
@@ -107,8 +116,7 @@
           color: #657786;
         }
         input {
-          // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-          // 並且回來刪除 all: unset 這一行
+          // 取消預設style
           all: unset;
 
           text-align: start;
@@ -135,8 +143,7 @@
       }
     }
     button {
-      // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-      // 並且回來刪除 all: unset 這一行
+      // 取消預設style
       all: unset;
 
       margin-top: 10px;
@@ -206,10 +213,21 @@ export default {
         });
         // 取得 API 請求後的資料
         const { data } = response;
+        console.log(
+          "🚀 ~ file: AdminSignIn.vue ~ line 209 ~ handleSubmit ~ response",
+          response
+        );
 
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        if (response.data.user.role !== "admin") {
+          return Toast.fire({
+            icon: "warning",
+            title: "請確認您輸入了正確的帳號和密碼",
+          });
+        }
+
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token);
 

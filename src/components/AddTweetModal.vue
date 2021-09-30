@@ -31,6 +31,10 @@
         </div>
 
         <footer class="modal-footer">
+          <!-- TODO 須調整 word count 的位置 -->
+          <span class="word-count"
+            >{{ contentLength }} 須調整 word count 的位置</span
+          >
           <button type="button" class="btn-tweet" @click="newTweet">
             推文
           </button>
@@ -80,8 +84,14 @@
 }
 
 .modal-footer {
-  flex-direction: column;
-  justify-content: flex-end;
+  display: flex;
+  justify-content: end;
+  padding-right: 15px;
+
+  .word-count {
+    padding-top: 6px;
+    margin-right: 3px;
+  }
 }
 
 .modal-body {
@@ -132,8 +142,6 @@ textarea {
   justify-content: center;
   width: 66px;
   height: 38px;
-  position: relative;
-  left: 519px;
   background: #ff6600;
   border: 1px solid #ff6600;
   border-radius: 100px;
@@ -144,7 +152,8 @@ textarea {
 </style>
 
 <script>
-import tweets from "./../api/tweets";
+import { Toast } from "../utils/helpers";
+import { tweets } from "./../api/tweets";
 
 export default {
   props: {
@@ -156,10 +165,26 @@ export default {
   data() {
     return {
       newPostContent: "",
+      contentLength: "",
     };
   },
   methods: {
     async newTweet() {
+      if (this.newPostContent.trim().length < 1) {
+        return Toast.fire({
+          position: "top",
+          width: "26rem",
+          icon: "warning",
+          title: "在輸入欄勇敢說出你的想法吧!",
+        });
+      } else if (this.contentLength > 140) {
+        return Toast.fire({
+          position: "top",
+          icon: "warning",
+          title: "推文字數140字以內",
+        });
+      }
+
       try {
         const response = await tweets.postTweets(this.newPostContent);
         const { data } = response;
@@ -177,6 +202,12 @@ export default {
     },
     btnClose() {
       this.$emit("close");
+    },
+  },
+  watch: {
+    newPostContent() {
+      // 即時顯示當前的 word count
+      this.contentLength = this.newPostContent.length;
     },
   },
 };

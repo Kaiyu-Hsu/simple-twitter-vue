@@ -17,17 +17,32 @@
           </div>
           <div class="input-wrapper">
             <span>Email</span>
-            <input type="text" v-model="email" />
+            <input
+              type="text"
+              pattern="\S+"
+              title="不接受空白鍵"
+              v-model="email"
+            />
             <hr />
           </div>
           <div class="input-wrapper">
             <span>密碼</span>
-            <input type="text" v-model="password" />
+            <input
+              type="password"
+              pattern="\S+"
+              title="不接受空白鍵"
+              v-model="password"
+            />
             <hr />
           </div>
           <div class="input-wrapper">
             <span>密碼確認</span>
-            <input type="text" v-model="checkPassword" />
+            <input
+              type="password"
+              pattern="\S+"
+              title="不接受空白鍵"
+              v-model="checkPassword"
+            />
             <hr />
           </div>
         </form>
@@ -78,8 +93,7 @@
           color: #657786;
         }
         input {
-          // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-          // 並且回來刪除 all: unset 這一行
+          // 取消預設style
           all: unset;
 
           text-align: start;
@@ -102,8 +116,7 @@
       }
     }
     button {
-      // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-      // 並且回來刪除 all: unset 這一行
+      // 取消預設style,
       all: unset;
 
       margin-top: 10px;
@@ -123,7 +136,7 @@
 
 <script>
 import Navbar from "./../components/Navbar";
-import { Toast } from "./../utils/helpers";
+import { keepUnauthorizedOut, Toast } from "./../utils/helpers";
 import user from "./../api/user";
 
 const getUserId = () => localStorage.getItem("user");
@@ -136,7 +149,6 @@ export default {
   data() {
     return {
       userData: {},
-      // TODO 向後端要資料，這筆隨便寫的
       account: "",
       name: "",
       email: "",
@@ -147,13 +159,9 @@ export default {
   methods: {
     async getEditUser() {
       try {
-        const response = await user.getEditUser(getUserId());
+        const response = await user.getUserInfo(getUserId());
 
         if (response.statusText !== "OK") {
-          Toast.fire({
-            icon: "warning",
-            title: "伺服器忙碌中，請重新整理頁面",
-          });
           throw new Error(response.statusText);
         }
 
@@ -164,7 +172,11 @@ export default {
         this.name = this.userData.name;
         this.email = this.userData.email;
       } catch (error) {
-        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "伺服器忙碌中，請重新整理頁面",
+        });
+        console.log("error", error.response || error);
       }
     },
     async putEditUser() {
@@ -172,16 +184,30 @@ export default {
         account: this.account,
         name: this.name,
         email: this.email,
-        password: this.password,
-        checkPassword: this.checkPassword,
       };
+      const password = this.password.replace(/\s/g, "");
+      const checkPassword = this.checkPassword.replace(/\s/g, "");
 
-      if (this.password !== this.checkPassword) {
-        Toast.fire({
+      if (password !== checkPassword) {
+        return Toast.fire({
           icon: "warning",
           title: "密碼 與 密碼確認 請輸入相同組合",
         });
       }
+
+      // 避免送出空的 password
+      if (password.length !== 0 && checkPassword.length !== 0) {
+        // TODO 密碼字元檢查
+
+        // 有輸入新密碼時才在 data 裡面加入 password property
+        data.password = password;
+        data.checkPassword = checkPassword;
+      }
+      console.log(
+        "🚀 ~ file: Setting.vue ~ line 192 ~ putEditUser ~ data",
+        data
+      );
+
       try {
         const response = await user.putEditUser(getUserId(), data);
 
@@ -189,20 +215,19 @@ export default {
           throw new Error(response.statusText);
         }
 
-        console.log("Edit User");
-        console.log(response);
-        this.userData = { ...response.data };
-        this.account = this.userData.account;
-        this.name = this.userData.name;
-        this.email = this.userData.email;
+        this.getEditUser();
       } catch (error) {
-        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "伺服器忙碌中，請稍後再試",
+        });
+        console.log("error", error.response || error);
       }
     },
   },
   created() {
-    console.log(`created at Setting.vue`);
-    this.getEditUser();
+    keepUnauthorizedOut(this)
+    this.getEditUser();    
   },
 };
 </script>

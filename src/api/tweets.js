@@ -19,11 +19,11 @@ export const tweets = {
   },
   postTweets(description) {
     const token = localStorage.getItem("token");
-    // TODO
+        
     return apiHelper.post(
       "api/tweets",
       {
-        description, // req.body.description
+        description: description.trim(), // req.body.description
       },
       {
         headers: { Authorization: `Bearer ${token}` },

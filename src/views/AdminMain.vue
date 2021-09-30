@@ -19,11 +19,15 @@
 </style>
 
 <script>
+import { keepUnauthorizedOut } from "../utils/helpers";
 import AdminNavbar from "./../components/AdminNavbar.vue";
 export default {
   name: "AdminMain",
   components: {
     AdminNavbar,
+  },
+  created() {
+    keepUnauthorizedOut(this);
   },
 };
 </script>

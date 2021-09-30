@@ -27,6 +27,8 @@ import Popular from "./../components/Popular";
 import Navbar from "./../components/Navbar";
 import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
+// functions
+import { keepUnauthorizedOut } from "./../utils/helpers";
 import { tweets } from "./../api/tweets";
 import user from "./../api/user";
 import admin from "./../api/admin";
@@ -164,12 +166,13 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this);
     this.getTweets();
+    this.fetchUser();
     // this.getPopular(275)
     // this.getFollowers(295);
     // this.getFollowings(295);
-    // this.getReplied(265);
-    this.fetchUser();
+    // this.getReplied(265);    
     // this.getEditUser()
     // this.getTweetsReply(1705)
     // this.adminTweets()

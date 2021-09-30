@@ -15,7 +15,10 @@
         class="scrollbar"
         v-model="newPostContent"
       ></textarea>
-      <button type="button" @click.stop.prevent="newTweet">推文</button>
+      <div class="button-area">
+        <span class="word-count">{{ contentLength }}</span>
+        <button type="button" @click.stop.prevent="newTweet">推文</button>
+      </div>
     </div>
   </div>
 </template>
@@ -85,22 +88,25 @@
         outline: none;
       }
     }
-    button {
-      width: 66px;
-      height: 38px;
-      border-radius: 100px;
-      border: none;
-      margin-top: 71px;
-      margin-bottom: 10px;
-      background: #ff6600;
-      font-family: Noto Sans TC;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 18px;
-      color: #ffffff;
-      &:hover {
-        cursor: pointer;
+    .button-area {
+      display: flex;
+      button {
+        width: 66px;
+        height: 38px;
+        border-radius: 100px;
+        border: none;
+        margin-top: 71px;
+        margin-bottom: 10px;
+        background: #ff6600;
+        font-family: Noto Sans TC;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 18px;
+        color: #ffffff;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }
@@ -118,6 +124,7 @@
 </style>
 
 <script>
+import { Toast } from "../utils/helpers";
 import { tweets } from "./../api/tweets";
 
 export default {
@@ -131,10 +138,26 @@ export default {
     return {
       user: {},
       newPostContent: "",
+      contentLength: "",
     };
   },
   methods: {
     async newTweet() {
+      if (this.newPostContent.trim().length < 1) {
+        return Toast.fire({
+          position: "top",
+          width: "26rem",
+          icon: "warning",
+          title: "在輸入欄勇敢說出你的想法吧!",
+        });
+      } else if (this.contentLength > 140) {
+        return Toast.fire({
+          position: "top",
+          icon: "warning",
+          title: "推文字數140字以內",
+        });
+      }
+
       try {
         const response = await tweets.postTweets(this.newPostContent);
         const { data } = response;
@@ -157,6 +180,9 @@ export default {
   watch: {
     initialUser(newValue) {
       this.user = { ...this.user, ...newValue };
+    },
+    newPostContent() {
+      this.contentLength = this.newPostContent.length;
     },
   },
 };

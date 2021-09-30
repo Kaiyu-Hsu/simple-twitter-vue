@@ -22,6 +22,7 @@ import Popular from "../components/Popular.vue";
 // import tweetData from "./../../public/v3/api-tweets-id-v3.json";
 // import userData from "./../../public/v3/api-users-id-userInfo-new.json"
 import { tweet } from "./../api/tweet";
+import { keepUnauthorizedOut } from "../utils/helpers";
 
 export default {
   components: {
@@ -75,6 +76,7 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this);
     this.fetchTweet();
     this.fetchCurrentUser();
   },

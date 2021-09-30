@@ -8,13 +8,9 @@ export default {
       password,
     });
   },
-  signUp({ account, name, email, password, checkPassword }) {
-    return apiHelper.post("api/users", {
-      account,
-      name,
-      email,
-      password,
-      checkPassword,
+  signUp({ formData }) {
+    return apiHelper.post("api/users", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
   },
   logOut() {
