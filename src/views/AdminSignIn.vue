@@ -218,14 +218,8 @@ export default {
           response
         );
 
-        if (data.status !== "success") {
-          throw new Error(data.message);
-        }
-        if (response.data.user.role !== "admin") {
-          return Toast.fire({
-            icon: "warning",
-            title: "請確認您輸入了正確的帳號和密碼",
-          });
+        if (data.status !== "success" || data.user.role !== "admin") {
+          throw new Error('Invalid access');
         }
 
         // 將 token 存放在 localStorage 內
@@ -240,12 +234,13 @@ export default {
         // 顯示錯誤提示
         Toast.fire({
           icon: "warning",
+          position: "top",
           title: "請確認您輸入了正確的帳號密碼",
         });
 
         // 因為登入失敗，所以要把按鈕狀態還原
         this.isProcessing = false;
-        console.log("error", error);
+        console.log("error", error.response || error);
       }
     },
   },
