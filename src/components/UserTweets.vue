@@ -1,12 +1,12 @@
 <template>
   <div class="a-tweet-container">
     <div class="a-tweet" v-for="tweet in tweets" :key="tweet.id">
-      <img :src="user.avatar" class="avatar" />
+      <img :src="initialUser.avatar" class="avatar" />
       <div class="content">
         <div class="name-account">
-          <div class="name">{{ user.name }}</div>
+          <div class="name">{{ initialUser.name }}</div>
           <div class="account">
-            @{{ user.account }}・{{ tweet.createdAt | fromNow }}
+            @{{ initialUser.account }}・{{ tweet.createdAt | fromNow }}
           </div>
         </div>
         <div class="description">
@@ -31,22 +31,15 @@
             <div class="replies-num">{{ tweet.replies.length }}</div>
           </div>
           <div class="likes">
-            <div class="likes-icon" @click.stop.prevent="changeLike(tweet.id)">
+            <div class="likes-icon">
               <!-- 普通的愛心 -->
-              <!-- <svg
-                width="15"
-                height="15"
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                v-show="!ifLiked(tweet)"
-              > -->
               <svg
                 width="15"
                 height="15"
                 viewBox="0 0 15 15"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                @click="like(tweet.id)"
               >
                 <path
                   d="M7.5 13.5236H7.49125C5.87687 13.4936 1.21875 9.28489 1.21875 5.29864C1.21875 3.38364 2.79687 1.70239 4.59562 1.70239C6.02687 1.70239 6.98937 2.68989 7.49937 3.40864C8.00812 2.69114 8.97062 1.70239 10.4025 1.70239C12.2025 1.70239 13.78 3.38364 13.78 5.29927C13.78 9.28427 9.12125 13.493 7.50687 13.5224H7.5V13.5236ZM4.59625 2.64052C3.29625 2.64052 2.15687 3.88302 2.15687 5.29989C2.15687 8.88739 6.55312 12.5474 7.50062 12.5861C8.44937 12.5474 12.8444 8.88802 12.8444 5.29989C12.8444 3.88302 11.705 2.64052 10.405 2.64052C8.825 2.64052 7.9425 4.47552 7.935 4.49364C7.79125 4.84489 7.2125 4.84489 7.06812 4.49364C7.05937 4.47489 6.1775 2.64052 4.59687 2.64052H4.59625Z"
@@ -54,19 +47,20 @@
                 />
               </svg>
               <!-- 喜歡的愛心 -->
-              <!-- <svg
-                width="22"
-                height="20"
+              <svg
+                v-show="tweet.likes.find((like) => like.id === tweet.UserId)"
+                width="15"
+                height="15"
                 viewBox="0 0 22 20"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                v-show="ifLiked(tweet)"
+                @click="unlike(tweet.id)"
               >
                 <path
                   d="M11 19.6381H10.986C8.40295 19.5901 0.949951 12.8561 0.949951 6.47812C0.949951 3.41412 3.47495 0.724121 6.35295 0.724121C8.64295 0.724121 10.183 2.30412 10.999 3.45412C11.813 2.30612 13.353 0.724121 15.644 0.724121C18.524 0.724121 21.048 3.41412 21.048 6.47912C21.048 12.8551 13.594 19.5891 11.011 19.6361H11V19.6381Z"
                   fill="#E0245E"
                 />
-              </svg> -->
+              </svg>
             </div>
             <!-- <div :class="{ 'likes-num': ifLiked(tweet) }"> -->
             <div class="likes-num">
@@ -152,43 +146,24 @@
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
+import { tweets } from "./../api/tweets";
 
 export default {
   name: "UserTweets",
+  props: {
+    initialUser: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      user: {},
       tweets: [],
     };
   },
   mixins: [fromNowFilter],
   methods: {
-    // TODO 愛心的功能
-    ifLiked(tweet) {
-      console.log(tweet);
-    },
     // API
-    async fetchApiData() {
-      try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await userAPI.getUser(getUserId());
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        this.user = data;
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
-    },
     async fetchApiTweets() {
       try {
         const getUserId = () => localStorage.getItem("user");
@@ -210,9 +185,59 @@ export default {
         });
       }
     },
+    // TODO 愛心的功能
+    async like(id) {
+      try {
+        console.log("like tweet id:", id);
+
+        const getUserId = () => localStorage.getItem("user");
+        const response = await tweets.postLike(getUserId());
+        const { data } = response;
+        console.log(response);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // Toast.fire({
+        //   icon: "success",
+        //   title: "成功加入最愛",
+        // });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法加入最愛",
+        });
+      }
+    },
+    async unlike(id) {
+      try {
+        console.log("unlike tweet id:", id);
+
+        const getUserId = () => localStorage.getItem("user");
+        const response = await tweets.postUnlike(getUserId());
+        const { data } = response;
+        console.log(response);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        // Toast.fire({
+        //   icon: "success",
+        //   title: "成功移除最愛",
+        // });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法移除最愛",
+        });
+      }
+    },
   },
   created() {
-    this.fetchApiData();
     this.fetchApiTweets();
   },
 };
