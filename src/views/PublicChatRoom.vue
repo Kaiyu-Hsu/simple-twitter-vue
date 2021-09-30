@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Navbar />
+    <Navbar :initial-user="userData" />
     <!-- TODO 在線使用者名單 -->
     <aside class="user-list">
       <p class="user-list-title">上線使用者({{ attendees.length }})</p>
@@ -236,7 +236,7 @@ export default {
       userId: localStorage.getItem("user"),
       userData: {},
       msgs: [
-        { text: "I came", type: "connection", time: `` },
+        { text: "I came", type: "connection", time: `${TWLocale.showTime}` }, // TODO 顯示中文時間
         { text: "I saw", type: "msg-in", time: `${TWLocale.showTime}` },
         { text: "Icecream", type: "msg-out", time: `${TWLocale.showTime}` },
       ],
@@ -255,7 +255,7 @@ export default {
           account: "JOJO",
         },
       ],
-      // 連線至 socket server
+      // 連線至socket server
       socket: io("https://actwitter.herokuapp.com"),
     };
   },
@@ -404,9 +404,9 @@ export default {
     },
   },
   created() {
-    this.fetchUser(this.userId);
-    // this.socketStart(this.userId);
-    // this.listenToServer();
+    this.fetchUser(localStorage.getItem("user"));
+    this.socketStart(this.userId);
+    this.listenToServer();
   },
 };
 </script>

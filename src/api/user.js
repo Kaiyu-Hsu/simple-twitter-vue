@@ -4,7 +4,7 @@ export default {
   getUserInfo(id) {
     const token = localStorage.getItem("token");
 
-    return apiHelper.get(`api/users/${id}/userinfo`, {
+    return apiHelper.get(`api/users/${id}/userInfo`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },

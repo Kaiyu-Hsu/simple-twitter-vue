@@ -147,13 +147,9 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-likes-v3.json";
-import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
-
-const getUserId = () => localStorage.getItem("user");
 
 export default {
   name: "UserLikes",
@@ -172,11 +168,6 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = userData;
-      this.likes = data;
-    },
     // TODO post('/api/tweets/:id/unlike')
     disLike(userId) {
       console.log("disLike", userId);
@@ -203,33 +194,10 @@ export default {
         return like;
       });
     },
-    // API
-    async fetchApiData() {
-      try {
-        const response = await userAPI.getUser(getUserId());
 
-        console.log("users");
-        console.log(response);
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        this.user = data;
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
-    },
     async fetchApiLikes() {
       try {
-        // TODO 改回 getUserId()
+        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getLikes(getUserId());
 
         console.log("user's likes");
@@ -260,8 +228,6 @@ export default {
     },
   },
   created() {
-    // this.fetchJSON();
-    this.fetchApiData();
     this.fetchApiLikes();
   },
   // watch: {

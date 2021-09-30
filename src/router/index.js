@@ -73,6 +73,18 @@ const routes = [
       },
     ],
   },
+  // 跟隨者
+  {
+    path: "/user-followers",
+    name: "user-followers",
+    component: () => import("../views/UserFollowers.vue"),
+  },
+  // 正在跟隨中
+  // {
+  //   path: "/user-self-followers",
+  //   name: "user-self-followers",
+  //   component: () => import("../views/UserSelf.vue"),
+  // },
   {
     path: "/tweets/:id",
     name: "tweet",

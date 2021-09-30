@@ -149,8 +149,6 @@
 </style>
 
 <script>
-import tweets from "./../../public/api-users-id-tweets-v3.json";
-import data from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
@@ -167,11 +165,6 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = data;
-      this.tweets = tweets;
-    },
     // TODO 愛心的功能
     ifLiked(tweet) {
       console.log(tweet);
@@ -219,9 +212,8 @@ export default {
     },
   },
   created() {
-    // this.fetchJSON();
-    // this.fetchApiData();
-    // this.fetchApiTweets();
+    this.fetchApiData();
+    this.fetchApiTweets();
   },
 };
 </script>
