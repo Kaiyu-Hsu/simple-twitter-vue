@@ -2,21 +2,21 @@
   <div class="user-tabs">
     <div
       class="tweets"
-      :class="{ active: $route.name == 'tweets' }"
+      :class="{ active: $route.name === 'tweets' }"
       @click.stop.prevent="tweets"
     >
       推文
     </div>
     <div
       class="repliers"
-      :class="{ active: $route.name == 'replied' }"
+      :class="{ active: $route.name === 'replied' }"
       @click.stop.prevent="replied"
     >
       推文與回覆
     </div>
     <div
       class="liked"
-      :class="{ active: $route.name == 'likes' }"
+      :class="{ active: $route.name === 'likes' }"
       @click.stop.prevent="likes"
     >
       喜歡的內容
