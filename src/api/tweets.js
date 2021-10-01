@@ -31,7 +31,10 @@ export const tweets = {
     );
   },
   postReply(id) {
-    apiHelper.post(`api/tweets/${id}/replies`, {});
+    const token = localStorage.getItem("token");
+    return apiHelper.post(`api/tweets/${id}/replies`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   },
   postLike(id) {
     const token = localStorage.getItem("token");
