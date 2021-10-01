@@ -219,11 +219,11 @@ export default {
         );
 
         if (data.status !== "success" || data.user.role !== "admin") {
-          throw new Error('Invalid access');
+          throw new Error("Invalid access");
         }
 
         // 將 token 存放在 localStorage 內
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.token.token);
 
         // 成功登入後轉址到首頁
         this.$router.push("/admin");
