@@ -154,7 +154,7 @@
 </style>
 
 <script>
-import axios from "axios";
+import admin from "./../api/admin"
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -166,9 +166,9 @@ export default {
   },
   methods: {
     // API
-    async fetchApiData() {
+    async fetchApiData() {      
       try {
-        const response = await axios.get("/api/admin");
+        const response = await admin.getAllUsers()
 
         console.log("admin");
         console.log(response);

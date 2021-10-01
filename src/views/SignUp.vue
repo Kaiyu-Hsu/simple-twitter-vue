@@ -199,8 +199,8 @@
 </style>
 
 <script>
-import { apiHelper } from "./../utils/helpers";
 import { Toast } from "./../utils/helpers";
+import authorization from "./../api/authorization";
 
 export default {
   data() {
@@ -227,7 +227,7 @@ export default {
           password: this.password,
           checkPassword: this.checkPassword,
           avatar: "",
-          cover: ""
+          cover: "",
         };
 
         if (
@@ -253,7 +253,7 @@ export default {
           return;
         }
 
-        const response = await apiHelper.post("api/users", signUpData);
+        const response = await authorization.signUp(signUpData);
 
         // 取得 API 請求後的資料
         const { data } = response;
