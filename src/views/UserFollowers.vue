@@ -51,19 +51,15 @@
                 <div class="account">@{{ follower.follower.account }}</div>
               </div>
               <div class="btn">
-                <!-- v-if="isFollowing"  v-else-->
+                <!-- v-if="follower.followerId ===
+                    this.followings.find((following) => following.followerId)"  v-else-->
                 <div
                   class="following-btn"
-                  @click="toggleFollowing(follower.followerId)"
+                  @click="unfollowing(follower.followerId)"
                 >
                   正在跟隨
                 </div>
-                <div
-                  class="unfollowing-btn"
-                  @click="toggleFollowing(follower.followerId)"
-                >
-                  跟隨
-                </div>
+                <div class="unfollowing-btn" @click="following">跟隨</div>
               </div>
             </div>
             <div class="content">
@@ -234,6 +230,7 @@ export default {
       user: {},
       tweetsNum: "",
       followers: [],
+      followings: [],
       isLoading: true,
     };
   },
@@ -276,7 +273,9 @@ export default {
         }
 
         this.tweetsNum = data.length;
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log("error", error);
         Toast.fire({
           icon: "warning",
@@ -297,13 +296,6 @@ export default {
 
         console.log(data);
         this.followers = data;
-        // TODO 同時發followings api ，做交叉比對
-        // this.followers = this.followers.map((follower) => {
-        //   return {
-        //     ...follower,
-        //     isFollowing: false,
-        //   };
-        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -324,7 +316,7 @@ export default {
         }
 
         console.log(data);
-        // this.followers = data;
+        this.followings = data;
         // this.followers = this.followers.map((follower) => {
         //   return {
         //     ...follower,
@@ -376,19 +368,6 @@ export default {
           title: "無法取消追蹤",
         });
       }
-    },
-    // TODO 切換按鈕 待改
-    toggleFollowing(followerId) {
-      this.followers = this.followers.map((follower) => {
-        if (follower.followingId === followerId) {
-          return {
-            ...follower,
-            isFollowing: !follower.isFollowing,
-          };
-        }
-
-        return follower;
-      });
     },
     // change route
     toFollowings() {

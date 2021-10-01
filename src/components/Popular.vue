@@ -9,16 +9,12 @@
       </div>
       <div
         v-if="user.isFollowed"
-        @click.stop.prevent="toggleFollowing(user.followingId)"
+        @click.stop.prevent="Unfollowing(user.followingId)"
         class="following-btn"
       >
         正在跟隨
       </div>
-      <div
-        v-else
-        @click.stop.prevent="toggleFollowing(user.followingId)"
-        class="unfollowing-btn"
-      >
+      <div v-else @click.stop.prevent="following" class="unfollowing-btn">
         跟隨
       </div>
     </div>
@@ -106,10 +102,11 @@ img {
 </style>
 
 <script>
-import { apiHelper } from "./../utils/helpers";
+import userAPI from "./../api/user";
+import followerships from "./../api/followerships";
 import { Toast } from "./../utils/helpers";
 
-const getToken = () => localStorage.getItem("token");
+const getUserId = () => localStorage.getItem("user");
 
 export default {
   data() {
@@ -120,27 +117,18 @@ export default {
   methods: {
     async fetchPopular() {
       try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await apiHelper.get(
-          `api/tweets/${getUserId()}/top10`,
-          {
-            headers: { Authorization: `Bearer ${getToken()}` },
-          }
-        );
-
-        // console.log("top10");
-        // console.log(response);
-
+        const response = await userAPI.getPopular(getUserId());
         const { data } = response;
+        console.log("top10", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.users = data.topTwitters;
-        this.users = this.users.map((user) => {
-          return { ...user, isFollowed: true };
-        });
+        // this.users = data.topTwitters;
+        // this.users = this.users.map((user) => {
+        //   return { ...user, isFollowed: true };
+        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -149,18 +137,53 @@ export default {
         });
       }
     },
-    toggleFollowing(userId) {
-      this.users = this.users.map((user) => {
-        if (user.followingId === userId) {
-          return {
-            ...user,
-            isFollowed: !user.isFollowed,
-          };
-        }
+    async following() {
+      try {
+        // TODO 待改
+        const response = await followerships.following();
+        const { data } = response;
+        console.log("following", response);
 
-        return user;
-      });
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
     },
+    async Unfollowing(followerId) {
+      try {
+        const response = await followerships.unfollowing(followerId);
+        const { data } = response;
+        console.log("unfollowing", response);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    // toggleFollowing(userId) {
+    //   this.users = this.users.map((user) => {
+    //     if (user.followingId === userId) {
+    //       return {
+    //         ...user,
+    //         isFollowed: !user.isFollowed,
+    //       };
+    //     }
+
+    //     return user;
+    //   });
+    // },
   },
   created() {
     this.fetchPopular();

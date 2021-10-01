@@ -40,17 +40,22 @@
           v-for="following in followings"
           :key="following.followerId"
         >
-          <img class="avatar" :src="following.follower.avatar" />
+          <img class="avatar" :src="following.following.avatar" />
           <div class="left">
             <div class="top">
               <div class="name-account">
-                <div class="name">{{ following.follower.name }}</div>
-                <div class="account">@{{ following.follower.account }}</div>
+                <div class="name">{{ following.following.name }}</div>
+                <div class="account">@{{ following.following.account }}</div>
               </div>
               <div class="btn">
                 <!-- v-if="isFollowing"  v-else-->
-                <div class="following-btn">正在跟隨</div>
-                <div class="unfollowing-btn">跟隨</div>
+                <div
+                  class="following-btn"
+                  @click="unfollowing(follower.followerId)"
+                >
+                  正在跟隨
+                </div>
+                <div class="unfollowing-btn" @click="following">跟隨</div>
               </div>
             </div>
             <div class="content">
@@ -262,7 +267,9 @@ export default {
         }
 
         this.tweetsNum = data.length;
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log("error", error);
         Toast.fire({
           icon: "warning",
