@@ -11,8 +11,8 @@ export default {
       }
     );
   },
-  unfollowing(followerId) {
-    return apiHelper.delete(`/api/followships/${followerId}`, {
+  unfollowing(id) {
+    return apiHelper.delete(`/api/followships/${id}`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },

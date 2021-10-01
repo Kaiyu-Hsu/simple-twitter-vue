@@ -48,14 +48,12 @@
                 <div class="account">@{{ following.following.account }}</div>
               </div>
               <div class="btn">
-                <!-- v-if="isFollowing"  v-else-->
                 <div
                   class="following-btn"
-                  @click="unfollowing(follower.followerId)"
+                  @click.stop.prevent="unfollowing(following.followingId)"
                 >
                   正在跟隨
                 </div>
-                <div class="unfollowing-btn" @click="following">跟隨</div>
               </div>
             </div>
             <div class="content">
@@ -280,7 +278,6 @@ export default {
     // followings
     async fetchFollowings() {
       try {
-        // TODO 有null值
         const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getFollowings(getUserId());
         const { data } = response;
@@ -289,7 +286,7 @@ export default {
           throw new Error(data.message);
         }
 
-        console.log(data);
+        // console.log(data);
         this.followings = data;
       } catch (error) {
         console.log("error", error);
@@ -300,35 +297,18 @@ export default {
       }
     },
     // btn
-    async following() {
+    async unfollowing(id) {
       try {
-        // TODO 待改
-        const response = await followershipsAPI.following();
+        const response = await followershipsAPI.unfollowing(id);
         const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        console.log("following", data);
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法追蹤",
-        });
-      }
-    },
-    async unfollowing(followerId) {
-      try {
-        const response = await followershipsAPI.unfollowing(followerId);
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
         console.log("unfollowing", response);
+        console.log("followerId", id);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
         Toast.fire({
