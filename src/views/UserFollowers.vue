@@ -51,15 +51,15 @@
                 <div class="account">@{{ follower.follower.account }}</div>
               </div>
               <div class="btn">
-                <!-- v-if="follower.followerId ===
-                    this.followings.find((following) => following.followerId)"  v-else-->
                 <div
+                  v-if="followings.includes(follower.followerId)"
                   class="following-btn"
                   @click="unfollowing(follower.followerId)"
                 >
                   正在跟隨
                 </div>
                 <div
+                  v-else
                   class="unfollowing-btn"
                   @click="following(follower.followerId)"
                 >
@@ -193,6 +193,7 @@
               align-items: center;
             }
             .unfollowing-btn {
+              padding: 0px 15px;
               border: 1px solid #ff6600;
               box-sizing: border-box;
               border-radius: 100px;
@@ -299,7 +300,7 @@ export default {
           throw new Error(data.message);
         }
 
-        console.log(data);
+        // console.log(data);
         this.followers = data;
       } catch (error) {
         console.log("error", error);
@@ -320,14 +321,12 @@ export default {
           throw new Error(data.message);
         }
 
-        console.log(data);
+        // console.log(data);
         this.followings = data;
-        // this.followers = this.followers.map((follower) => {
-        //   return {
-        //     ...follower,
-        //     isFollowing: false,
-        //   };
-        // });
+        // 只把 followingId 取出成 Array
+        this.followings = this.followings.map((following) => {
+          return following.followingId;
+        });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -337,6 +336,7 @@ export default {
       }
     },
     // btn
+    // TODO 請後端確認是否有收到?
     async following(followerId) {
       try {
         const response = await followerships.following(followerId);
@@ -347,6 +347,8 @@ export default {
         }
 
         console.log("following", data);
+        this.fetchFollowers();
+        this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -365,6 +367,8 @@ export default {
         }
 
         console.log("unfollowing", response);
+        this.fetchFollowers();
+        this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
         Toast.fire({

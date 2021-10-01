@@ -47,8 +47,8 @@
                 />
               </svg>
               <!-- 喜歡的愛心 -->
+              <!-- v-show="tweet.likes.find((like) => like.id === tweet.UserId)" -->
               <svg
-                v-show="tweet.likes.find((like) => like.id === tweet.UserId)"
                 width="15"
                 height="15"
                 viewBox="0 0 22 20"
@@ -168,7 +168,7 @@ export default {
     // API
     async fetchApiTweets() {
       try {
-        const response = await userAPI.getUser(getUserId());
+        const response = await userAPI.getTweets(getUserId());
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -192,16 +192,11 @@ export default {
         console.log("like tweet id:", id);
         const response = await tweets.postLike(getUserId());
         const { data } = response;
-        console.log(response);
+        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-
-        // Toast.fire({
-        //   icon: "success",
-        //   title: "成功加入最愛",
-        // });
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -215,16 +210,11 @@ export default {
         console.log("unlike tweet id:", id);
         const response = await tweets.postUnlike(getUserId());
         const { data } = response;
-        console.log(response);
+        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-
-        // Toast.fire({
-        //   icon: "success",
-        //   title: "成功移除最愛",
-        // });
       } catch (error) {
         console.log(error);
         Toast.fire({

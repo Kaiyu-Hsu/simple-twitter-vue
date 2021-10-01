@@ -7,14 +7,20 @@
         <div class="name">{{ user.following.name }}</div>
         <div class="account">@ {{ user.following.account }}</div>
       </div>
+      <!-- @click.stop.prevent="Unfollowing(user, user.followingId)" -->
       <div
-        v-if="user.isFollowed"
-        @click.stop.prevent="Unfollowing(user.followingId)"
+        v-if="userFollowings.includes(user.followingId)"
+        @click.stop.prevent="unfollowing(user.followingId)"
         class="following-btn"
       >
         正在跟隨
       </div>
-      <div v-else @click.stop.prevent="following" class="unfollowing-btn">
+      <!-- @click.stop.prevent="following(user, user.followingId)" -->
+      <div
+        v-else
+        @click.stop.prevent="following(user.followingId)"
+        class="unfollowing-btn"
+      >
         跟隨
       </div>
     </div>
@@ -23,7 +29,7 @@
 
 <style scoped>
 .container {
-  position: fixed;
+  position: relative;
   top: 15px;
   left: 75%;
   background: #f5f8fa;
@@ -111,10 +117,32 @@ const getUserId = () => localStorage.getItem("user");
 export default {
   data() {
     return {
+      userDataId: "",
       users: [],
+      userFollowings: [],
     };
   },
   methods: {
+    // 取使用者資料，用來比對
+    async fetchUserData() {
+      try {
+        const response = await userAPI.getUserInfo(getUserId());
+        const { data } = response;
+        // console.log("userData", response);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.userDataId = data.id;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入使用者資料",
+        });
+      }
+    },
     async fetchPopular() {
       try {
         const response = await userAPI.getPopular(getUserId());
@@ -125,10 +153,22 @@ export default {
           throw new Error(data.message);
         }
 
-        // this.users = data.topTwitters;
-        // this.users = this.users.map((user) => {
-        //   return { ...user, isFollowed: true };
-        // });
+        this.users = data.topTwitters;
+        this.userFollowings = data.userFollowingList;
+        this.userFollowings = this.userFollowings.map((following) => {
+          return following.followingId;
+        });
+        // TODO null包裝成emty object 待改
+        this.users = this.users.map((user) => {
+          if (user.following === null || user.followingId === null) {
+            return {
+              ...user,
+              following: {},
+              followingId: "",
+            };
+          }
+          return user;
+        });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -137,25 +177,27 @@ export default {
         });
       }
     },
-    async following() {
+    async following(followerId) {
       try {
-        // TODO 待改
-        const response = await followerships.following();
+        const response = await followerships.following(followerId);
         const { data } = response;
         console.log("following", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
+
+        this.fetchPopular();
       } catch (error) {
         console.log("error", error);
         Toast.fire({
           icon: "warning",
-          title: "無法載入資料",
+          title: "無法追隨",
         });
       }
     },
-    async Unfollowing(followerId) {
+    // TODO 請後端確認是否有收到?
+    async unfollowing(followerId) {
       try {
         const response = await followerships.unfollowing(followerId);
         const { data } = response;
@@ -164,28 +206,19 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
+
+        this.fetchPopular();
       } catch (error) {
         console.log("error", error);
         Toast.fire({
           icon: "warning",
-          title: "無法載入資料",
+          title: "無法取消追隨",
         });
       }
     },
-    // toggleFollowing(userId) {
-    //   this.users = this.users.map((user) => {
-    //     if (user.followingId === userId) {
-    //       return {
-    //         ...user,
-    //         isFollowed: !user.isFollowed,
-    //       };
-    //     }
-
-    //     return user;
-    //   });
-    // },
   },
   created() {
+    this.fetchUserData();
     this.fetchPopular();
   },
 };
