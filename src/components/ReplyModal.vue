@@ -59,7 +59,9 @@
         </div>
 
         <footer class="modal-footer">
-          <button type="button" class="btn-tweet" @click="close">回覆</button>
+          <button type="button" class="btn-tweet" @click="postReply">
+            回覆
+          </button>
         </footer>
       </div>
     </div>
@@ -260,6 +262,8 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins.js";
+import { tweet } from "./../api/tweet.js";
+import { Toast } from "./../utils/helpers";
 
 export default {
   mixins: [fromNowFilter],
@@ -294,9 +298,34 @@ export default {
     fetchUser() {
       this.user = this.initialUser;
     },
-    close() {
-      this.$emit("close-modal");
-      console.log(this.replyContent);
+    async postReply() {
+      try {
+        if (this.replyContent.trim().length === 0) {
+          return Toast.fire({
+            icon: "warning",
+            title: "放心地向對方表達心裡的想法吧!",
+            position: "top",
+          });
+        }
+
+        const response = await tweet.replyTweet(
+          this.tweetContent.id,
+          this.replyContent
+        );
+        console.log(
+          "🚀 ~ file: ReplyModal.vue ~ line 300 ~ postReply ~ response",
+          response
+        );
+
+        this.$emit("close-modal");
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "請稍後再試",
+          position: "top",
+        });
+      }
     },
     btnClose() {
       this.$emit("close-modal");
