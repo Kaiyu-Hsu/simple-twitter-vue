@@ -344,7 +344,7 @@ export default {
       try {
         const userid = Number(this.$route.params.id);
         console.log(userid);
-        const response = await userAPI.getUser(userid);
+        const response = await userAPI.getOtherUser(userid);
 
         // 取得 API 請求後的資料
         const { data } = response;
