@@ -2,12 +2,19 @@
   <div class="container">
     <h1>Popular</h1>
     <div v-for="user in users" :key="user.followingId" class="popular-users">
-      <img :src="user.following.avatar" alt="" />
+      <router-link
+        :to="{ name: 'other-profile', params: { id: user.followingId } }"
+      >
+        <img :src="user.following.avatar" alt="" />
+      </router-link>
       <div class="name-account">
-        <div class="name">{{ user.following.name }}</div>
-        <div class="account">@ {{ user.following.account }}</div>
+        <router-link
+          :to="{ name: 'other-profile', params: { id: user.followingId } }"
+        >
+          <div class="name">{{ user.following.name }}</div>
+          <div class="account">@ {{ user.following.account }}</div>
+        </router-link>
       </div>
-      <!-- @click.stop.prevent="Unfollowing(user, user.followingId)" -->
       <div
         v-if="userFollowings.includes(user.followingId)"
         @click.stop.prevent="unfollowing(user.followingId)"
@@ -15,7 +22,6 @@
       >
         正在跟隨
       </div>
-      <!-- @click.stop.prevent="following(user, user.followingId)" -->
       <div
         v-else
         @click.stop.prevent="following(user.followingId)"
