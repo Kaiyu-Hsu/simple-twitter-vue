@@ -26,44 +26,31 @@
       </header>
       <!-- UserSelfTabs -->
       <div class="user-self-tabs">
+        <div class="followers" @click.stop.prevent="toFollowers">跟隨者</div>
         <div
-          class="followers"
-          :class="{ active: $route.name === 'user-followers' }"
+          class="followings"
+          :class="{ active: $route.name === 'user-followings' }"
         >
-          跟隨者
-        </div>
-        <!-- :class="{ active: $route.name === 'user-followings' }" -->
-        <div class="followings" @click.stop.prevent="toFollowings">
           正在跟隨
         </div>
       </div>
       <div class="followers-card">
         <div
           class="a-card"
-          v-for="follower in followers"
-          :key="follower.followerId"
+          v-for="following in followings"
+          :key="following.followerId"
         >
-          <img class="avatar" :src="follower.follower.avatar" />
+          <img class="avatar" :src="following.follower.avatar" />
           <div class="left">
             <div class="top">
               <div class="name-account">
-                <div class="name">{{ follower.follower.name }}</div>
-                <div class="account">@{{ follower.follower.account }}</div>
+                <div class="name">{{ following.follower.name }}</div>
+                <div class="account">@{{ following.follower.account }}</div>
               </div>
               <div class="btn">
                 <!-- v-if="isFollowing"  v-else-->
-                <div
-                  class="following-btn"
-                  @click="toggleFollowing(follower.followerId)"
-                >
-                  正在跟隨
-                </div>
-                <div
-                  class="unfollowing-btn"
-                  @click="toggleFollowing(follower.followerId)"
-                >
-                  跟隨
-                </div>
+                <div class="following-btn">正在跟隨</div>
+                <div class="unfollowing-btn">跟隨</div>
               </div>
             </div>
             <div class="content">
@@ -220,11 +207,10 @@ import Popular from "../components/Popular.vue";
 import Navbar from "../components/Navbar.vue";
 import { Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
-import followerships from "./../api/followerships";
-import { keepUnauthorizedOut } from "./../utils/helpers";
+import followershipsAPI from "./../api/followerships";
 
 export default {
-  name: "UserFollowers",
+  name: "UserFollowings",
   components: {
     Popular,
     Navbar,
@@ -233,7 +219,7 @@ export default {
     return {
       user: {},
       tweetsNum: "",
-      followers: [],
+      followings: [],
       isLoading: true,
     };
   },
@@ -284,37 +270,10 @@ export default {
         });
       }
     },
-    // followers
-    async fetchFollowers() {
-      try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await userAPI.getFollowers(getUserId());
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        console.log(data);
-        this.followers = data;
-        // TODO 同時發followings api ，做交叉比對
-        // this.followers = this.followers.map((follower) => {
-        //   return {
-        //     ...follower,
-        //     isFollowing: false,
-        //   };
-        // });
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
-    },
-    // followings list
+    // followings
     async fetchFollowings() {
       try {
+        // TODO 有null值
         const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getFollowings(getUserId());
         const { data } = response;
@@ -324,13 +283,7 @@ export default {
         }
 
         console.log(data);
-        // this.followers = data;
-        // this.followers = this.followers.map((follower) => {
-        //   return {
-        //     ...follower,
-        //     isFollowing: false,
-        //   };
-        // });
+        this.followings = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -343,7 +296,7 @@ export default {
     async following() {
       try {
         // TODO 待改
-        const response = await followerships.following();
+        const response = await followershipsAPI.following();
         const { data } = response;
 
         if (response.statusText !== "OK") {
@@ -361,7 +314,7 @@ export default {
     },
     async unfollowing(followerId) {
       try {
-        const response = await followerships.unfollowing(followerId);
+        const response = await followershipsAPI.unfollowing(followerId);
         const { data } = response;
 
         if (response.statusText !== "OK") {
@@ -377,29 +330,14 @@ export default {
         });
       }
     },
-    // TODO 切換按鈕 待改
-    toggleFollowing(followerId) {
-      this.followers = this.followers.map((follower) => {
-        if (follower.followingId === followerId) {
-          return {
-            ...follower,
-            isFollowing: !follower.isFollowing,
-          };
-        }
-
-        return follower;
-      });
-    },
     // change route
-    toFollowings() {
-      this.$router.push({ name: "user-followings" });
+    toFollowers() {
+      this.$router.push({ name: "user-followers" });
     },
   },
   created() {
-    keepUnauthorizedOut(this);
     this.fetchUser();
     this.fetchApiTweets();
-    this.fetchFollowers();
     this.fetchFollowings();
   },
 };
