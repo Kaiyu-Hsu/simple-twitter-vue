@@ -226,6 +226,8 @@ export default {
           email: this.email,
           password: this.password,
           checkPassword: this.checkPassword,
+          avatar: "",
+          cover: ""
         };
 
         if (
