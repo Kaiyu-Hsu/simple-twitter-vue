@@ -154,7 +154,7 @@
 </style>
 
 <script>
-import adminAPI from "./../api/admin";
+import admin from "./../api/admin";
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -166,9 +166,9 @@ export default {
   },
   methods: {
     // API
-    async fetchUsers() {
+    async fetchApiData() {
       try {
-        const response = await adminAPI.getAllUsers();
+        const response = await admin.getAllUsers();
 
         console.log("users", response);
 
@@ -191,7 +191,7 @@ export default {
     },
   },
   created() {
-    this.fetchUsers();
+    this.fetchApiData();
   },
 };
 </script>

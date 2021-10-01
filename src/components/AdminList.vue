@@ -85,10 +85,8 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
-import adminAPI from "./../api/admin";
 import { Toast } from "./../utils/helpers";
-
-// const getUserId = () => localStorage.getItem("user");
+import admin from "./../api/admin";
 
 export default {
   name: "AdminList",
@@ -102,44 +100,47 @@ export default {
     // API
     async fetchApiData() {
       try {
-        const response = await adminAPI.getAllTweets();
-
-        console.log("admin", response);
+        const response = await admin.getAllTweets();
 
         // 取得 API 請求後的資料
         const { data } = response;
 
         if (response.statusText !== "OK") {
-          throw new Error(data.message);
+          throw new Error();
         }
 
-        // TODO 載入資料
-        // this.tweets = data.allTweets;
+        // 載入 tweets 資料
+        this.tweets = [...data.allTweets];
+        // description 僅能看見前 50 字元
+        this.tweets.map((tweet) => {
+          if (tweet.description.length > 50) {
+            tweet.description = tweet.description.slice(0, 50) + "...";
+          }
+        });
       } catch (error) {
-        console.log("error", error);
+        console.log("error", error.response || error);
         Toast.fire({
           icon: "warning",
           title: "無法載入資料",
         });
       }
     },
-    async deleteTweet(tweetId) {
+    async deleteTweet(id) {
+      // 刪除資料
       try {
-        const response = await adminAPI.deleteTweet(tweetId);
+        const response = await admin.deleteTweet(id);
 
-        console.log("delete", response);
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
+        if (!response.data) {
+          throw new Error();
         }
+
+        this.fetchApiData();
       } catch (error) {
-        console.log("error", error);
+        console.log(error.response || error);
         Toast.fire({
           icon: "warning",
-          title: "無法刪除推文",
+          title: "伺服器忙碌，請稍後再試",
+          position: "top",
         });
       }
     },
