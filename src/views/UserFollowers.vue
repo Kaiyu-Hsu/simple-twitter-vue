@@ -59,7 +59,12 @@
                 >
                   正在跟隨
                 </div>
-                <div class="unfollowing-btn" @click="following">跟隨</div>
+                <div
+                  class="unfollowing-btn"
+                  @click="following(follower.followerId)"
+                >
+                  跟隨
+                </div>
               </div>
             </div>
             <div class="content">
@@ -332,10 +337,9 @@ export default {
       }
     },
     // btn
-    async following() {
+    async following(followerId) {
       try {
-        // TODO 待改
-        const response = await followerships.following();
+        const response = await followerships.following(followerId);
         const { data } = response;
 
         if (response.statusText !== "OK") {
