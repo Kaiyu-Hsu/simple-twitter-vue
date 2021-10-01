@@ -199,7 +199,7 @@
 </style>
 
 <script>
-import { apiHelper} from "./../utils/helpers";
+import { apiHelper } from "./../utils/helpers";
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -218,20 +218,15 @@ export default {
     focusInput(e) {
       this.nowFocus = e.target.name;
     },
-    async signUp(e) {
+    async signUp() {
       try {
-        const form = e.target; // <form></form>
-        const formData = new FormData(form);
-        // const formData = new FormData();
-        // formData.set("account", this.account);
-        // formData.set("name", this.name);
-        // formData.set("email", this.email);
-        // formData.set("password", this.password);
-        // formData.set("account", this.checkPassword);
-
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
-        }
+        const signUpData = {
+          account: this.account,
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          checkPassword: this.checkPassword,
+        };
 
         if (
           !this.account ||
@@ -256,8 +251,7 @@ export default {
           return;
         }
 
-        // TODO 要把資料傳向後端，不知道是否正確?
-        const response = await apiHelper.post("api/users", { formData });
+        const response = await apiHelper.post("api/users", signUpData);
 
         // 取得 API 請求後的資料
         const { data } = response;
