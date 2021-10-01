@@ -8,10 +8,8 @@ export default {
       password,
     });
   },
-  signUp({ formData }) {
-    return apiHelper.post("api/users", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+  signUp(data) {
+    return apiHelper.post("api/users", data);
   },
   logOut() {
     const keysToRemove = ["token", "user"];
