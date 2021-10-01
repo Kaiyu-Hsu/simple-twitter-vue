@@ -164,9 +164,6 @@
 </style>
 
 <script>
-import axios from "axios";
-import { Toast } from "./../utils/helpers";
-
 export default {
   methods: {
     adminList() {
@@ -175,30 +172,10 @@ export default {
     adminUsers() {
       this.$router.push({ name: "users-list" });
     },
-    async logOut() {
-      try {
-        const response = await axios.get("/api/logout");
-
-        console.log("logOut");
-        console.log(response);
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        localStorage.removeItem("token");
-        // 成功登出後到 SignIn
-        this.$router.push("/");
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法登出，請稍後在試",
-        });
-      }
+    logOut() {
+      localStorage.removeItem("token");
+      // 成功登出後到 SignIn
+      this.$router.push("/");
     },
   },
 };

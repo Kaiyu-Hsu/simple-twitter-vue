@@ -26,12 +26,18 @@
             cols="50"
             maxlength="140"
             placeholder="有什麼新鮮事?"
-            v-model="newTweet"
+            v-model="newPostContent"
           ></textarea>
         </div>
 
         <footer class="modal-footer">
-          <button type="button" class="btn-tweet" @click="close">推文</button>
+          <!-- TODO 須調整 word count 的位置 -->
+          <span class="word-count"
+            >{{ contentLength }} 須調整 word count 的位置</span
+          >
+          <button type="button" class="btn-tweet" @click="newTweet">
+            推文
+          </button>
         </footer>
       </div>
     </div>
@@ -78,8 +84,14 @@
 }
 
 .modal-footer {
-  flex-direction: column;
-  justify-content: flex-end;
+  display: flex;
+  justify-content: end;
+  padding-right: 15px;
+
+  .word-count {
+    padding-top: 6px;
+    margin-right: 3px;
+  }
 }
 
 .modal-body {
@@ -130,8 +142,6 @@ textarea {
   justify-content: center;
   width: 66px;
   height: 38px;
-  position: relative;
-  left: 519px;
   background: #ff6600;
   border: 1px solid #ff6600;
   border-radius: 100px;
@@ -142,6 +152,9 @@ textarea {
 </style>
 
 <script>
+import { Toast } from "../utils/helpers";
+import { tweets } from "./../api/tweets";
+
 export default {
   props: {
     initialUser: {
@@ -151,17 +164,50 @@ export default {
   },
   data() {
     return {
-      newTweet: "",
+      newPostContent: "",
+      contentLength: "",
     };
   },
   methods: {
-    close() {
-      // TODO 向後端發送新推文資料
+    async newTweet() {
+      if (this.newPostContent.trim().length < 1) {
+        return Toast.fire({
+          position: "top",
+          width: "26rem",
+          icon: "warning",
+          title: "在輸入欄勇敢說出你的想法吧!",
+        });
+      } else if (this.contentLength > 140) {
+        return Toast.fire({
+          position: "top",
+          icon: "warning",
+          title: "推文字數140字以內",
+        });
+      }
+
+      try {
+        const response = await tweets.postTweets(this.newPostContent);
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+      // 通知重新渲染畫面
+      this.$emit("new-post");
+      // 關閉 modal
       this.$emit("close");
-      console.log(this.newTweet);
     },
     btnClose() {
       this.$emit("close");
+    },
+  },
+  watch: {
+    newPostContent() {
+      // 即時顯示當前的 word count
+      this.contentLength = this.newPostContent.length;
     },
   },
 };

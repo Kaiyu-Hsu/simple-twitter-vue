@@ -187,6 +187,8 @@ header {
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   props: {
     initialUser: {
@@ -208,7 +210,6 @@ export default {
     // tweets num
     async fetchApiTweets() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getTweets(getUserId());
 
         // 取得 API 請求後的資料
@@ -230,7 +231,6 @@ export default {
     // followingsNum
     async fetchFollowings() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getFollowings(getUserId());
 
         // 取得 API 請求後的資料
@@ -252,7 +252,6 @@ export default {
     // followersNum
     async fetchFollowers() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getFollowers(getUserId());
 
         // 取得 API 請求後的資料

@@ -17,15 +17,13 @@ export const tweets = {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
-  postTweets(id, description, paramsId) {
+  postTweets(description) {
     const token = localStorage.getItem("token");
-    // TODO
+        
     return apiHelper.post(
       "api/tweets",
       {
-        user: { id }, // user.id
-        body: { description }, // body.comment
-        params: { paramsId }, // params.id
+        description: description.trim(), // req.body.description
       },
       {
         headers: { Authorization: `Bearer ${token}` },

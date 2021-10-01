@@ -38,7 +38,7 @@
       <span>建立你的帳號</span>
     </div>
     <div class="form-container">
-      <form action="" id="sign-up-form" @submit.stop.prevent="handleSubmit">
+      <form action="" id="sign-up-form" @submit.stop.prevent="signUp">
         <div class="input-wrapper">
           <span>帳號</span>
           <input
@@ -56,18 +56,33 @@
         </div>
         <div class="input-wrapper">
           <span>Email</span>
-          <input type="email" v-model="email" />
-          <hr />
+          <input
+            type="email"
+            name="email"
+            v-model="email"
+            @focus="focusInput"
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" v-model="password" />
-          <hr />
+          <input
+            type="password"
+            name="password"
+            v-model="password"
+            @focus="focusInput"
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼確認</span>
-          <input type="password" v-model="passwordCheck" />
-          <hr />
+          <input
+            type="password"
+            name="check-password"
+            v-model="checkPassword"
+            @focus="focusInput"
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'password-check' }" />
         </div>
       </form>
       <button type="submit" form="sign-up-form" :disabled="isProcessing">
@@ -82,9 +97,6 @@
 
 <style lang="scss" scoped>
 .container {
-  width: 1440px;
-  height: 1200px;
-
   .header {
     margin-bottom: 40px;
     margin-top: 65px;
@@ -125,8 +137,7 @@
           color: #657786;
         }
         input {
-          // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-          // 並且回來刪除 all: unset 這一行
+          // 取消預設style
           all: unset;
 
           text-align: start;
@@ -153,8 +164,7 @@
       }
     }
     button {
-      // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-      // 並且回來刪除 all: unset 這一行
+      // 取消預設style
       all: unset;
 
       margin-top: 10px;
@@ -173,7 +183,7 @@
 
   .footer {
     width: 540px;
-    margin: 20px auto 0% auto;
+    margin: 20px auto 475px auto;
     text-align: center;
 
     .cancel-sign-up {
@@ -189,7 +199,7 @@
 </style>
 
 <script>
-import axios from "axios";
+import { apiHelper} from "./../utils/helpers";
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -205,61 +215,54 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      if (
-        !this.account ||
-        !this.password ||
-        !this.name ||
-        !this.email ||
-        !this.passwordCheck
-      ) {
-        Toast.fire({
-          icon: "warning",
-          title: "請填寫完整",
-        });
-        return;
-      }
-      if (this.password === this.passwordCheck) {
-        const data = JSON.stringify({
-          account: this.account,
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          checkPassword: this.checkPassword,
-        });
-        // TODO: 向後端新增使用者帳號
-        console.log("data", data);
-      } else {
-        Toast.fire({
-          icon: "warning",
-          title: "密碼與密碼確認欄位的資料不一致，請確認!",
-        });
-      }
+    focusInput(e) {
+      this.nowFocus = e.target.name;
     },
-    async sighUp(e) {
+    async signUp(e) {
       try {
         const form = e.target; // <form></form>
         const formData = new FormData(form);
+        // const formData = new FormData();
+        // formData.set("account", this.account);
+        // formData.set("name", this.name);
+        // formData.set("email", this.email);
+        // formData.set("password", this.password);
+        // formData.set("account", this.checkPassword);
+
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
+
         if (
           !this.account ||
           !this.password ||
           !this.name ||
           !this.email ||
-          !this.passwordCheck
+          !this.checkPassword
         ) {
           Toast.fire({
             icon: "warning",
-            title: "請填寫完整",
+            position: "top",
+            title: "請填寫完整資料",
           });
           return;
         }
+
+        if (this.password !== this.checkPassword) {
+          Toast.fire({
+            icon: "warning",
+            title: "密碼與密碼確認欄位的資料不一致，請確認!",
+          });
+          return;
+        }
+
         // TODO 要把資料傳向後端，不知道是否正確?
-        const response = await axios.post("/signup", formData);
+        const response = await apiHelper.post("api/users", { formData });
 
         // 取得 API 請求後的資料
         const { data } = response;
 
-        if (data.status !== "success") {
+        if (data !== "Accept") {
           throw new Error(data.message);
         }
 
@@ -267,12 +270,12 @@ export default {
         this.$router.push("/");
       } catch (error) {
         // 將密碼確認欄位清空
-        this.passwordCheck = "";
+        this.checkPassword = "";
         Toast.fire({
           icon: "warning",
-          title: "註冊失敗",
+          title: "註冊失敗，請稍後再試",
         });
-        console.log("error", error);
+        console.log("error", error.response || error);
       }
     },
   },

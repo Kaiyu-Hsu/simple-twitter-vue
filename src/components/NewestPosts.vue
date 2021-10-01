@@ -225,18 +225,7 @@ export default {
       oneTweet: {},
     };
   },
-  created() {
-    this.fetchTweets();
-  },
-  watch: {
-    initialTweets(newValue) {
-      this.tweets = [...this.tweets, ...newValue];
-    },
-  },
   methods: {
-    fetchTweets() {
-      this.tweets = [...this.initialTweets];
-    },
     showModal(id) {
       this.isModalVisible = true;
       this.oneTweet = { ...this.tweets.find((tweet) => tweet.id === id) };
@@ -267,7 +256,11 @@ export default {
       findTweet.likes.push({ UserId: this.initialUser.id, TweetId: id });
     },
   },
-  computed: {},
-  filters: {},
+  watch: {
+    // 當 initialTweets 拿到新值則重新渲染此畫面
+    initialTweets(newValue) {
+      this.tweets = [...newValue];
+    },
+  },
 };
 </script>

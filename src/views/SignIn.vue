@@ -45,15 +45,26 @@
         @submit.prevent.stop="handleSubmit"
       >
         <div class="input-wrapper">
-          <span>帳號</span>
-          <input type="text" v-model="email" required />
-          <hr />
+          <span>Email</span>
+          <input
+            type="text"
+            name="email"
+            placeholder="xxx@example.com"
+            pattern="\S+"
+            title="不接受空白鍵"
+            v-model="email"
+            @focus="focusInput"
+            required
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'account' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
           <input
             type="password"
             name="password"
+            pattern="\S+"
+            title="不接受空白鍵"
             v-model="password"
             @focus="focusInput"
             required
@@ -77,8 +88,6 @@
 
 <style lang="scss" scoped>
 .container {
-  height: 1200px;
-  width: 1440px;
   .header {
     margin-bottom: 40px;
     margin-top: 65px;
@@ -119,8 +128,7 @@
           color: #657786;
         }
         input {
-          // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-          // 並且回來刪除 all: unset 這一行
+          // 取消預設style
           all: unset;
 
           text-align: start;
@@ -147,8 +155,7 @@
       }
     }
     button {
-      // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-      // 並且回來刪除 all: unset 這一行
+      // 取消預設style
       all: unset;
 
       margin-top: 10px;
@@ -233,18 +240,21 @@ export default {
           email: this.email,
           password: this.password,
         });
-        console.log(
-          "🚀 ~ file: SignIn.vue ~ line 229 ~ handleSubmit ~ response",
-          response
-        );
 
         // 取得 API 請求後的資料
         const { data } = response;
-        console.log(response);
+        console.log(
+          "🚀 ~ file: SignIn.vue ~ line 244 ~ handleSubmit ~ response",
+          response
+        );
 
-        if (response.statusText !== "OK") {
+        if (
+          response.statusText !== "OK" ||
+          response.data.user.role === "admin"
+        ) {
           throw new Error(data.message);
         }
+
         // 將 token userId 存放在 localStorage 內
         localStorage.setItem("token", data.token.token);
         localStorage.setItem("user", data.user.id);
@@ -258,14 +268,19 @@ export default {
         // 顯示錯誤提示
         Toast.fire({
           icon: "warning",
-          title: "請確認您輸入了正確的帳號密碼",
+          position: "top",
+          title: "請確認您輸入了正確的email和密碼",
         });
 
         // 因為登入失敗，所以要把按鈕狀態還原
         this.isProcessing = false;
-        console.log("error", error);
+        console.log("error", error.response || error);
       }
     },
+  },
+  created() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   },
 };
 </script>

@@ -223,6 +223,7 @@ import Navbar from "./../components/Navbar";
 import { io } from "socket.io-client";
 import { TWLocale } from "./../utils/mixins";
 import user from "./../api/user";
+import { keepUnauthorizedOut } from '../utils/helpers';
 
 let c = 0; // testing
 
@@ -404,9 +405,10 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this)
     this.fetchUser(localStorage.getItem("user"));
     this.socketStart(this.userId);
-    this.listenToServer();
+    this.listenToServer();    
   },
 };
 </script>

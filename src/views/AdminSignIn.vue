@@ -40,14 +40,28 @@
     <div class="form-container">
       <form action="" id="sign-in-form" @submit.stop.prevent="handleSubmit">
         <div class="input-wrapper">
-          <span>帳號</span>
-          <input type="text" name="email" v-model="email" @focus="focusInput" />
+          <span>Email</span>
+          <input
+            type="text"
+            name="email"
+            pattern="\S+"
+            title="不接受空白鍵"
+            v-model="email"
+            @focus="focusInput"
+          />
           <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
-          <input type="password" v-model="password" />
-          <hr />
+          <input
+            type="password"
+            name="password"
+            pattern="\S+"
+            title="不接受空白鍵"
+            v-model="password"
+            @focus="focusInput"
+          />
+          <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
       </form>
       <button form="sign-in-form" :disabled="isProcessing">登入</button>
@@ -62,8 +76,6 @@
 
 <style lang="scss" scoped>
 .container {
-  height: 1200px;
-  width: 1440px;
   .header {
     margin-bottom: 40px;
     margin-top: 65px;
@@ -104,8 +116,7 @@
           color: #657786;
         }
         input {
-          // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-          // 並且回來刪除 all: unset 這一行
+          // 取消預設style
           all: unset;
 
           text-align: start;
@@ -132,8 +143,7 @@
       }
     }
     button {
-      // 取消預設style, 後續整合再透過reset.scss檔案取消瀏覽器預設style
-      // 並且回來刪除 all: unset 這一行
+      // 取消預設style
       all: unset;
 
       margin-top: 10px;
@@ -177,16 +187,20 @@ export default {
       email: "",
       password: "",
       isProcessing: false,
+      nowFocus: "",
     };
   },
   methods: {
+    focusInput(e) {
+      this.nowFocus = e.target.name;
+    },
     // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
-        if (!this.account || !this.password) {
+        if (!this.email || !this.password) {
           Toast.fire({
             icon: "warning",
-            title: "請填入 account 和 password",
+            title: "請填入 email 和 password",
           });
           return;
         }
@@ -199,15 +213,20 @@ export default {
         });
         // 取得 API 請求後的資料
         const { data } = response;
+        console.log(
+          "🚀 ~ file: AdminSignIn.vue ~ line 209 ~ handleSubmit ~ response",
+          response
+        );
 
-        if (data.status !== "success") {
-          throw new Error(data.message);
+        if (data.status !== "success" || data.user.role !== "admin") {
+          throw new Error('Invalid access');
         }
+
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token);
 
         // 成功登入後轉址到首頁
-        this.$router.push("/main");
+        this.$router.push("/admin");
       } catch (error) {
         // 將密碼欄位清空
         this.password = "";
@@ -215,12 +234,13 @@ export default {
         // 顯示錯誤提示
         Toast.fire({
           icon: "warning",
+          position: "top",
           title: "請確認您輸入了正確的帳號密碼",
         });
 
         // 因為登入失敗，所以要把按鈕狀態還原
         this.isProcessing = false;
-        console.log("error", error);
+        console.log("error", error.response || error);
       }
     },
   },
