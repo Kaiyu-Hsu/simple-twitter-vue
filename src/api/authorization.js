@@ -8,7 +8,7 @@ export default {
       password,
     });
   },
-  signUp(data) {
+  signUp({ data }) {
     return apiHelper.post("api/users", data);
   },
   logOut() {

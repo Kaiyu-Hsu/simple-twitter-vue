@@ -154,7 +154,7 @@
 </style>
 
 <script>
-import admin from "./../api/admin"
+import admin from "./../api/admin";
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -166,12 +166,11 @@ export default {
   },
   methods: {
     // API
-    async fetchApiData() {      
+    async fetchApiData() {
       try {
-        const response = await admin.getAllUsers()
+        const response = await admin.getAllUsers();
 
-        console.log("admin");
-        console.log(response);
+        console.log("users", response);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -180,8 +179,8 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO 載入資料
-        // this.tweets = data.allUsers;
+        // TODO have null value
+        this.users = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
