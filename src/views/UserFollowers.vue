@@ -220,7 +220,8 @@ import Popular from "../components/Popular.vue";
 import Navbar from "../components/Navbar.vue";
 import { Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
-import followershipsAPI from "./../api/followerships";
+import followerships from "./../api/followerships";
+import { keepUnauthorizedOut } from "./../utils/helpers";
 
 export default {
   name: "UserFollowers",
@@ -342,7 +343,7 @@ export default {
     async following() {
       try {
         // TODO 待改
-        const response = await followershipsAPI.following();
+        const response = await followerships.following();
         const { data } = response;
 
         if (response.statusText !== "OK") {
@@ -360,7 +361,7 @@ export default {
     },
     async unfollowing(followerId) {
       try {
-        const response = await followershipsAPI.unfollowing(followerId);
+        const response = await followerships.unfollowing(followerId);
         const { data } = response;
 
         if (response.statusText !== "OK") {
@@ -395,6 +396,7 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this);
     this.fetchUser();
     this.fetchApiTweets();
     this.fetchFollowers();

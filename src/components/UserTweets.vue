@@ -148,6 +148,8 @@ import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 import { tweets } from "./../api/tweets";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   name: "UserTweets",
   props: {
@@ -166,8 +168,7 @@ export default {
     // API
     async fetchApiTweets() {
       try {
-        const getUserId = () => localStorage.getItem("user");
-        const response = await userAPI.getTweets(getUserId());
+        const response = await userAPI.getUser(getUserId());
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -189,8 +190,6 @@ export default {
     async like(id) {
       try {
         console.log("like tweet id:", id);
-
-        const getUserId = () => localStorage.getItem("user");
         const response = await tweets.postLike(getUserId());
         const { data } = response;
         console.log(response);
@@ -214,8 +213,6 @@ export default {
     async unlike(id) {
       try {
         console.log("unlike tweet id:", id);
-
-        const getUserId = () => localStorage.getItem("user");
         const response = await tweets.postUnlike(getUserId());
         const { data } = response;
         console.log(response);

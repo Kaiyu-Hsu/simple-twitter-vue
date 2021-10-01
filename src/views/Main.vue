@@ -1,9 +1,9 @@
 <template>
   <div class="main">
     <!-- Navbar.vue -->
-    <Navbar :initial-user="userData" />
+    <Navbar @new-post="getTweets" />
     <!-- CreatePosts.vue -->
-    <CreatePosts :initial-user="userData" />
+    <CreatePosts :initial-user="userData" @new-post="getTweets" />
     <!-- NewestPosts.vue -->
     <NewestPosts
       :initial-tweets="tweets"
@@ -27,9 +27,13 @@ import Popular from "./../components/Popular";
 import Navbar from "./../components/Navbar";
 import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
+// functions
+import { keepUnauthorizedOut } from "./../utils/helpers";
 import { tweets } from "./../api/tweets";
 import user from "./../api/user";
 import admin from "./../api/admin";
+
+const getUserId = () => localStorage.getItem("user");
 
 export default {
   name: "Main",
@@ -56,23 +60,20 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Fetch Tweets Data");
-        console.dir(response);
+
         this.tweets = [...response.data];
-        // this.apiTweets = [...response.data];
       } catch (error) {
         console.log("error", error);
       }
     },
-    async fetchUser(id) {
+    async fetchUser() {
       try {
-        const response = await user.getUserInfo(id);
+        const response = await user.getUserInfo(getUserId());
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Fetch User");
-        console.dir(response);
+
         this.userData = { ...response.data };
       } catch (error) {
         console.log("error", error);
@@ -85,76 +86,66 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-
-        console.log("Edit User");
-        console.log(response);
       } catch (error) {
         console.log("error", error);
       }
     },
-    async getFollowers(id) {
+    async getFollowers() {
       try {
-        const response = await user.getFollowers(id);
+        const response = await user.getFollowers(getUserId());
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Get followers");
-        console.log(response);
       } catch (error) {
         console.log("error", error);
       }
     },
-    async getFollowings(id) {
+    async getFollowings() {
       try {
-        const response = await user.getFollowings(id);
+        const response = await user.getFollowings(getUserId());
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Get followings");
-        console.log(response);
       } catch (error) {
         console.log("error", error);
       }
     },
-    async getTweetsReply(id) {
+    async getTweetsReply() {
       try {
-        const response = await tweets.getReply(id);
+        const response = await tweets.getReply(getUserId());
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Get tweets reply");
-        console.log(response);
+
         this.tweetsReplies = [...response.data];
       } catch (error) {
         console.log("error", error);
       }
     },
-    async getReplied(id) {
+    async getReplied() {
       try {
-        const response = await user.getReplied(id);
+        const response = await user.getReplied(getUserId());
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Get replied tweets");
-        console.log(response);
+
         this.tweetsReply = [...response.data];
       } catch (error) {
         console.log("error", error);
       }
     },
-    async getPopular(id) {
+    async getPopular() {
       try {
-        const response = await user.getPopular(id);
+        const response = await user.getPopular(getUserId());
 
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Get popular tweets");
-        console.log(response);
+
         this.popular = [...response.data];
       } catch (error) {
         console.log("error", error);
@@ -167,21 +158,21 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Get All tweets");
-        console.log(response);
-        // this.popular = [...response.data]
+
+        this.tweets = [...response.data];
       } catch (error) {
         console.log("error", error);
       }
     },
   },
   created() {
+    keepUnauthorizedOut(this);
     this.getTweets();
+    this.fetchUser();
     // this.getPopular(275)
     // this.getFollowers(295);
     // this.getFollowings(295);
-    // this.getReplied(265);
-    this.fetchUser(25);
+    // this.getReplied(265);    
     // this.getEditUser()
     // this.getTweetsReply(1705)
     // this.adminTweets()

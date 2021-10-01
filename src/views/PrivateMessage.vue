@@ -105,7 +105,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script>
 import Navbar from "./../components/Navbar";
-import { apiHelper } from "./../utils/helpers";
+import { apiHelper, keepUnauthorizedOut } from "./../utils/helpers";
 // import axios from "axios";
 
 const getToken = () => localStorage.getItem("token");
@@ -160,6 +160,7 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this);
     this.fetchData();
   },
 };

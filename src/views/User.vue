@@ -1,6 +1,6 @@
 <template>
   <div class="user" v-show="!isLoading">
-    <Navbar :initial-user="userData" />
+    <Navbar />
     <div class="profile">
       <!-- ShowUser -->
       <ShowUser :initial-user="userData" @open-edit-modal="openModal" />
@@ -37,8 +37,10 @@ import Navbar from "./../components/Navbar.vue";
 import ShowUser from "./../components/ShowUser.vue";
 import UserTabs from "./../components/UserTabs.vue";
 import UserEditModal from "./../components/UserEditModal.vue";
-import { Toast } from "./../utils/helpers";
+import { keepUnauthorizedOut, Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
+
+const getUserId = () => localStorage.getItem("user");
 
 export default {
   name: "User",
@@ -60,7 +62,6 @@ export default {
     // user file
     async fetchUser() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getUser(getUserId());
 
         // 取得 API 請求後的資料
@@ -89,7 +90,8 @@ export default {
     },
   },
   created() {
-    this.fetchUser();
+    keepUnauthorizedOut(this);
+    this.fetchUser();    
   },
 };
 </script>

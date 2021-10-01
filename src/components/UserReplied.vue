@@ -87,6 +87,8 @@ import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   name: "UserReplied",
   data() {
@@ -105,7 +107,6 @@ export default {
     // API
     async fetchApiData() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getUser(getUserId());
 
         console.log("users");
@@ -129,7 +130,6 @@ export default {
     },
     async fetchApiReplieds() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getReplieds(getUserId());
 
         console.log("user's replieds");
