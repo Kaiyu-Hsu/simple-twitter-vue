@@ -15,4 +15,11 @@ export default {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+  deleteTweet(tweetId) {
+    const token = localStorage.getItem("token");
+
+    return apiHelper.delete(`api/admin/tweets/${tweetId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };

@@ -14,7 +14,7 @@
           {{ tweet.description }}
         </div>
       </div>
-      <div class="delete" @click="deleteTweet">
+      <div class="delete" @click="deleteTweet(tweet.id)">
         <svg
           width="24"
           height="24"
@@ -85,10 +85,10 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
-import axios from "axios";
+import adminAPI from "./../api/admin";
 import { Toast } from "./../utils/helpers";
 
-const getToken = () => localStorage.getItem("token");
+// const getUserId = () => localStorage.getItem("user");
 
 export default {
   name: "AdminList",
@@ -99,22 +99,12 @@ export default {
     };
   },
   methods: {
-    deleteTweet() {
-      console.log("delete");
-      // TODO 刪除資料
-    },
     // API
     async fetchApiData() {
       try {
-        const response = await axios.get(
-          "https://actwitter.herokuapp.com/api/admin",
-          {
-            headers: { Authorization: `Bearer ${getToken()}` },
-          }
-        );
+        const response = await adminAPI.getAllTweets();
 
-        console.log("admin");
-        console.log(response);
+        console.log("admin", response);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -130,6 +120,26 @@ export default {
         Toast.fire({
           icon: "warning",
           title: "無法載入資料",
+        });
+      }
+    },
+    async deleteTweet(tweetId) {
+      try {
+        const response = await adminAPI.deleteTweet(tweetId);
+
+        console.log("delete", response);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法刪除推文",
         });
       }
     },
