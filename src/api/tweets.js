@@ -19,7 +19,7 @@ export const tweets = {
   },
   postTweets(description) {
     const token = localStorage.getItem("token");
-        
+
     return apiHelper.post(
       "api/tweets",
       {
@@ -38,14 +38,22 @@ export const tweets = {
   },
   postLike(id) {
     const token = localStorage.getItem("token");
-    return apiHelper.post(`api/tweets/${id}/like`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return apiHelper.post(
+      `api/tweets/${id}/like`,
+      { id },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
   },
   postUnlike(id) {
     const token = localStorage.getItem("token");
-    return apiHelper.post(`api/tweets/${id}/unlike`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return apiHelper.post(
+      `api/tweets/${id}/unlike`,
+      { id },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
   },
 };
