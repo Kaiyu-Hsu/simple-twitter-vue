@@ -75,7 +75,7 @@ export default {
     Followers,
   },
   created() {
-    keepUnauthorizedOut(this)
-  }
+    keepUnauthorizedOut(this);
+  },
 };
 </script>

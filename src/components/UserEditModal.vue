@@ -243,7 +243,7 @@
           color: #657786;
         }
         input {
-          // 取消預設style          
+          // 取消預設style
           all: unset;
 
           font-weight: 500;

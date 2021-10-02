@@ -226,8 +226,8 @@ export default {
     },
   },
   created() {
-    keepUnauthorizedOut(this)
-    this.getEditUser();    
+    keepUnauthorizedOut(this);
+    this.getEditUser();
   },
 };
 </script>

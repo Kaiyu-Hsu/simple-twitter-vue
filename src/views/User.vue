@@ -91,7 +91,7 @@ export default {
   },
   created() {
     keepUnauthorizedOut(this);
-    this.fetchUser();    
+    this.fetchUser();
   },
 };
 </script>
