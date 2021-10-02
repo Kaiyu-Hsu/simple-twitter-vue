@@ -27,7 +27,7 @@ export function keepUnauthorizedOut(VueComponet) {
       title: "請先登入",
     });
     VueComponet.$router.push("/");
-    throw "Please sign in first"
+    throw "Please sign in first";
   }
 }
 
