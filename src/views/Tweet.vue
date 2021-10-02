@@ -1,7 +1,11 @@
 <template>
   <div class="reply">
     <Navbar />
-    <OneTweet :tweet-data="tweetData" :user-data="userData" />
+    <OneTweet
+      :tweet-data="tweetData"
+      :user-data="userData"
+      @close-modal="fetchTweet"
+    />
     <ReplyList :tweet-data="tweetData" />
     <Popular />
   </div>
@@ -19,8 +23,6 @@ import OneTweet from "../components/OneTweet.vue";
 import ReplyList from "../components/ReplyList.vue";
 import Navbar from "../components/Navbar.vue";
 import Popular from "../components/Popular.vue";
-// import tweetData from "./../../public/v3/api-tweets-id-v3.json";
-// import userData from "./../../public/v3/api-users-id-userInfo-new.json"
 import { tweet } from "./../api/tweet";
 import { keepUnauthorizedOut } from "../utils/helpers";
 
@@ -38,37 +40,28 @@ export default {
     };
   },
   methods: {
-    // fetchData() {
-    //   this.userData = {...userData}
-    //   this.tweetData = { ...tweetData };
-    // },
-    async fetchTweet(id) {
+    async fetchTweet() {
+      const id = this.$route.params.id;
       try {
         const response = await tweet.getTweet(id);
 
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
-        console.log("我拿到資料囉嘿嘿 ");
-        console.dir(response);
-        console.log(`---`);
 
         this.tweetData = { ...response.data };
       } catch (error) {
         console.log("error", error);
       }
     },
-    async fetchCurrentUser(id) {
+    async fetchCurrentUser() {
       try {
-        const response = await tweet.getCurrentUser(id);
+        const response = await tweet.getCurrentUser();
 
-        if (response.data.message !== "ok") {
+        if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
 
-        console.log("我拿到資料囉嘿嘿 ");
-        console.dir(response);
-        console.log(`---`);
         this.userData = { ...response.data };
       } catch (error) {
         console.log("error", error);

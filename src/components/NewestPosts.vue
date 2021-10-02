@@ -1,17 +1,17 @@
 <template>
   <div class="container scrollbar">
     <div class="tweet-card" v-for="tweet in tweets" :key="tweet.id">
-      <div class="thumbnail-container">
+      <div class="thumbnail-container" @click="toOneTweet(tweet)">
         <img :src="tweet.user.avatar" alt="" />
       </div>
       <div class="right-content">
-        <div class="title-wrapper">
+        <div class="title-wrapper" @click="toOneTweet(tweet)">
           <div class="name">{{ tweet.user.name }}</div>
           <div class="account">@{{ tweet.user.account }}</div>
           <div class="dot"></div>
           <div class="createdAt">{{ tweet.createdAt | fromNow }}</div>
         </div>
-        <p class="description">
+        <p class="description" @click="toOneTweet(tweet)">
           {{ tweet.description }}
         </p>
         <div class="icon-wrapper">
@@ -94,9 +94,11 @@
     display: flex;
     .thumbnail-container {
       position: relative;
-      z-index: -1;
       width: 50px;
       margin-left: 15px;
+      &:hover {
+        cursor: pointer;
+      }
       img {
         position: absolute;
         z-index: -1;
@@ -111,6 +113,9 @@
       flex: 1;
       .title-wrapper {
         display: flex;
+        &:hover {
+          cursor: pointer;
+        }
 
         .name {
           font-family: Noto Sans TC;
@@ -150,9 +155,15 @@
       }
       .description {
         margin: 6px 15px 14px 0px;
+        &:hover {
+          cursor: pointer;
+        }
       }
       .icon-wrapper {
         display: flex;
+        &:hover {
+          cursor: pointer;
+        }
         .reply-icon-wrapper {
           margin-right: 51.22px;
           span {
@@ -254,6 +265,9 @@ export default {
       }
       // 使用者未"喜歡"該則推文時，點擊愛心就會變成"喜歡"
       findTweet.likes.push({ UserId: this.initialUser.id, TweetId: id });
+    },
+    toOneTweet(tweet) {
+      this.$router.push({ name: "tweet", params: { id: tweet.id } });
     },
   },
   watch: {

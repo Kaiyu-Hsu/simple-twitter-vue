@@ -107,7 +107,6 @@
   width: 600px;
   border: 1px solid #e6ecf0;
   border-top: none;
-  // max-height: 453px;
   header {
     display: flex;
     margin-bottom: 15px;
@@ -250,6 +249,7 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      this.$emit("close-modal");
     },
     changeLike() {
       // TODO 要把資料送到後端更新
@@ -276,6 +276,11 @@ export default {
   },
   created() {
     this.tweet = { ...this.tweetData };
+  },
+  watch: {
+    tweetData(newValue) {
+      this.tweet = newValue;
+    },
   },
 };
 </script>
