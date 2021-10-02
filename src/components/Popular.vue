@@ -15,6 +15,7 @@
           <div class="account">@ {{ user.following.account }}</div>
         </router-link>
       </div>
+      <!-- v-if="userFollowings.includes(user.followingId)" v-else-->
       <div
         v-if="userFollowings.includes(user.followingId)"
         @click.stop.prevent="unfollowing(user.followingId)"
@@ -164,17 +165,16 @@ export default {
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;
         });
-        // TODO null包裝成emty object 待改
-        this.users = this.users.map((user) => {
-          if (user.following === null || user.followingId === null) {
-            return {
-              ...user,
-              following: {},
-              followingId: "",
-            };
-          }
-          return user;
-        });
+        // this.users = this.users.map((user) => {
+        //   if (user.following === null || user.followingId === null) {
+        //     return {
+        //       ...user,
+        //       following: {},
+        //       followingId: "",
+        //     };
+        //   }
+        //   return user;
+        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -202,7 +202,6 @@ export default {
         });
       }
     },
-    // TODO 請後端確認是否有收到?
     async unfollowing(followerId) {
       try {
         const response = await followerships.unfollowing(followerId);

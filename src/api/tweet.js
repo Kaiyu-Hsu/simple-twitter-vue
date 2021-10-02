@@ -23,3 +23,5 @@ export const tweet = {
     );
   },
 };
+
+//, params: { id }

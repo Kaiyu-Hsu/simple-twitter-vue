@@ -9,7 +9,7 @@ export default {
     });
   },
   signUp({ data }) {
-    return apiHelper.post("api/users", data);
+    return apiHelper.post("api/users", { data });
   },
   logOut() {
     const keysToRemove = ["token", "user"];

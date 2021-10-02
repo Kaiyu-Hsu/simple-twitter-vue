@@ -8,6 +8,7 @@ export default {
       { id },
       {
         headers: { Authorization: `Bearer ${getToken()}` },
+        params: { id },
       }
     );
   },
