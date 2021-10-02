@@ -392,7 +392,7 @@ export default {
           this.$emit("close");
         }
 
-        const response = await userAPI.updataForm(this.user.id, { formData });
+        const response = await userAPI.updateForm(this.user.id, { formData });
 
         console.log("update profile", response);
 
