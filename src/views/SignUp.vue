@@ -78,11 +78,11 @@
           <span>密碼確認</span>
           <input
             type="password"
-            name="check-password"
+            name="checkPassword"
             v-model="checkPassword"
             @focus="focusInput"
           />
-          <hr :class="{ 'now-focus': nowFocus === 'password-check' }" />
+          <hr :class="{ 'now-focus': nowFocus === 'checkPassword' }" />
         </div>
       </form>
       <button type="submit" form="sign-up-form" :disabled="isProcessing">
