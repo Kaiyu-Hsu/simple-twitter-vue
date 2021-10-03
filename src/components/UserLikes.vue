@@ -43,7 +43,7 @@
             class="likes"
             v-if="like.tweet.likes.find((like) => like.id === initialUser.id)"
           >
-            <div class="likes-icon" @click.stop.prevent="disLike(like.TweetId)">
+            <div class="likes-icon" @click.stop.prevent="unlike(like.TweetId)">
               <svg
                 width="24"
                 height="24"
@@ -60,10 +60,7 @@
             <div class="likes-num">{{ like.tweet.likes.length }}</div>
           </div>
           <div class="dislikes" v-else>
-            <div
-              class="likes-icon"
-              @click.stop.prevent="likeThis(like.TweetId)"
-            >
+            <div class="likes-icon" @click.stop.prevent="like(like.TweetId)">
               <svg
                 width="15"
                 height="15"
