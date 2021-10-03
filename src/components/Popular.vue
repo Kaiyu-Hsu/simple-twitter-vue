@@ -177,6 +177,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("change-follow-state") // event bus
         this.fetchPopular();
       } catch (error) {
         console.log("error", error);
@@ -194,7 +195,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-
+        this.$bus.$emit("change-follow-state") // event bus
         this.fetchPopular();
       } catch (error) {
         console.log("error", error);

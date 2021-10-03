@@ -3,7 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+// 建立 event bus
 Vue.config.productionTip = false;
+
+Vue.prototype.$bus = new Vue();
 
 new Vue({
   router,

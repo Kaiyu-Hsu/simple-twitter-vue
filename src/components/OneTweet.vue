@@ -20,7 +20,7 @@
       <div class="card-head">
         <div class="thumbnail-container">
           <img
-            :src="userData.avatar"
+            :src="tweetData.user.avatar"
             alt=""
             @click="othersProfile(tweetData.UserId)"
           />

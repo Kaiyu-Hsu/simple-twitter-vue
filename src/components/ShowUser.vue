@@ -277,5 +277,8 @@ export default {
     this.fetchFollowings();
     this.fetchFollowers();
   },
+  mounted() {
+    this.$bus.$on("change-follow-state", () => this.fetchFollowings());
+  },
 };
 </script>
