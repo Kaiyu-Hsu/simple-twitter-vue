@@ -8,8 +8,8 @@ export default {
       password,
     });
   },
-  signUp({ data }) {
-    return apiHelper.post("api/users", { data });
+  signUp(data) {
+    return apiHelper.post("api/users", data);
   },
   logOut() {
     const keysToRemove = ["token", "user"];
