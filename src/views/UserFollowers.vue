@@ -336,7 +336,6 @@ export default {
       }
     },
     // btn
-    // TODO 請後端確認是否有收到?
     async following(followerId) {
       try {
         const response = await followerships.following(followerId);

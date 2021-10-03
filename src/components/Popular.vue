@@ -134,7 +134,6 @@ export default {
       try {
         const response = await userAPI.getUserInfo(getUserId());
         const { data } = response;
-        // console.log("userData", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -164,17 +163,17 @@ export default {
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;
         });
-        // TODO null包裝成emty object 待改
-        this.users = this.users.map((user) => {
-          if (user.following === null || user.followingId === null) {
-            return {
-              ...user,
-              following: {},
-              followingId: "",
-            };
-          }
-          return user;
-        });
+        // if 有null值需蓋過去的方法
+        // this.users = this.users.map((user) => {
+        //   if (user.following === null || user.followingId === null) {
+        //     return {
+        //       ...user,
+        //       following: {},
+        //       followingId: "",
+        //     };
+        //   }
+        //   return user;
+        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -202,7 +201,6 @@ export default {
         });
       }
     },
-    // TODO 請後端確認是否有收到?
     async unfollowing(followerId) {
       try {
         const response = await followerships.unfollowing(followerId);

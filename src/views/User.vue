@@ -1,6 +1,6 @@
 <template>
   <div class="user" v-show="!isLoading">
-    <Navbar />
+    <Navbar @new-post="fetchUser" />
     <div class="profile">
       <!-- ShowUser -->
       <ShowUser :initial-user="userData" @open-edit-modal="openModal" />

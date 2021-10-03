@@ -311,7 +311,6 @@ export default {
         this.followings = this.followings.filter(
           (following) => following.followingId !== id
         );
-        // TODO 請後端確認是否有收到?
         this.fetchFollowings();
       } catch (error) {
         console.log("error", error);

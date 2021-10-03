@@ -1,8 +1,12 @@
 <template>
   <div class="a-tweet-container">
     <!-- TODO 點擊任一回覆後，跳轉到特定推文頁面 -->
-    <div class="a-tweet" v-for="replied in replies" :key="replied.TweetId">
-      <img :src="initialUser.avatar" class="avatar" />
+    <div class="a-tweet" v-for="replied in replieds" :key="replied.TweetId">
+      <img
+        :src="initialUser.avatar"
+        @click.stop.prevent="othersProfile(replied.tweet.user.id)"
+        class="avatar"
+      />
       <div class="content">
         <div class="name-account">
           <div class="name">{{ initialUser.name }}</div>
@@ -95,7 +99,7 @@ export default {
   },
   data() {
     return {
-      replies: [],
+      replieds: [],
     };
   },
   mixins: [fromNowFilter],
@@ -116,6 +120,15 @@ export default {
         }
 
         this.replieds = data;
+        // this.replieds = this.replieds.map((replied) => {
+        //   if (replied.tweet.user === null || replied.followingId === null) {
+        //     return {
+        //       ...replied,
+        //       this.tweet.user: {},
+        //     };
+        //   }
+        //   return replied;
+        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -123,6 +136,10 @@ export default {
           title: "無法載入資料",
         });
       }
+    },
+    othersProfile(id) {
+      console.log("id", id);
+      this.$router.push({ name: "other-profile", params: { id } });
     },
   },
   created() {
