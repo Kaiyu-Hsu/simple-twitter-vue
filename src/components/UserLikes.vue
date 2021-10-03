@@ -41,7 +41,9 @@
 
           <div
             class="likes"
-            v-if="like.tweet.likes.find((like) => like.id === initialUser.id)"
+            v-if="
+              like.tweet.likes.find((like) => like.UserId === initialUser.id)
+            "
           >
             <div class="likes-icon" @click.stop.prevent="unlike(like.TweetId)">
               <svg
@@ -179,7 +181,6 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    // TODO 愛心的功能 沒有一個判定的依據
     async unlike(tweetId) {
       try {
         console.log("unlike tweet id:", tweetId);
@@ -191,7 +192,7 @@ export default {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -211,7 +212,7 @@ export default {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
