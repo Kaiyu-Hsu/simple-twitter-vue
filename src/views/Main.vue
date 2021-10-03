@@ -10,8 +10,10 @@
       :initial-tweets-reply="tweetsReply"
       :initial-user="userData"
     />
-    <!-- Popular.vue -->
-    <Popular />
+    <div class="popular">
+      <!-- Popular.vue -->
+      <Popular />
+    </div>
   </div>
 </template>
 
@@ -19,6 +21,11 @@
 .main {
   width: 1440px;
   height: 1200px;
+  .popular {
+    position: absolute;
+    top: 0px;
+    left: 65%;
+  }
 }
 </style>
 
@@ -172,7 +179,7 @@ export default {
     // this.getPopular(275)
     // this.getFollowers(295);
     // this.getFollowings(295);
-    // this.getReplied(265);    
+    // this.getReplied(265);
     // this.getEditUser()
     // this.getTweetsReply(1705)
     // this.adminTweets()
