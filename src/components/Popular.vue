@@ -15,7 +15,6 @@
           <div class="account">@ {{ user.following.account }}</div>
         </router-link>
       </div>
-      <!-- v-if="userFollowings.includes(user.followingId)" v-else-->
       <div
         v-if="userFollowings.includes(user.followingId)"
         @click.stop.prevent="unfollowing(user.followingId)"
@@ -135,7 +134,6 @@ export default {
       try {
         const response = await userAPI.getUserInfo(getUserId());
         const { data } = response;
-        // console.log("userData", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -165,6 +163,7 @@ export default {
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;
         });
+        // if 有null值需蓋過去的方法
         // this.users = this.users.map((user) => {
         //   if (user.following === null || user.followingId === null) {
         //     return {
