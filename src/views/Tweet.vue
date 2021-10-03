@@ -13,13 +13,10 @@
 </template>
 
 <style lang="scss" scoped>
-.reply {
-  width: 1440px;
-  height: 1200px;
-  .popular {
-    position: absolute;
-    top: 0;
-  }
+.popular {
+  position: absolute;
+  top: 0px;
+  left: 75%;
 }
 </style>
 

@@ -18,12 +18,10 @@
 </template>
 
 <style lang="scss" scoped>
-.main {
-  width: 1440px;
-  .popular {
-    position: absolute;
-    top: 0;
-  }
+.popular {
+  position: absolute;
+  top: 0px;
+  left: 75%;
 }
 </style>
 
