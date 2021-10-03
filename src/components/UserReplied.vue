@@ -1,10 +1,16 @@
 <template>
   <div class="a-tweet-container">
     <div class="a-tweet" v-for="replied in replieds" :key="replied.TweetId">
-      <img :src="user.avatar" class="avatar" />
+      <img
+        :src="user.avatar"
+        @click.stop.prevent="othersProfile(replied.UserId)"
+        class="avatar"
+      />
       <div class="content">
         <div class="name-account">
-          <div class="name">{{ user.name }}</div>
+          <div class="name" @click.stop.prevent="othersProfile(replied.UserId)">
+            {{ user.name }}
+          </div>
           <div class="account">
             @{{ user.account }}・{{ replied.createdAt | fromNow }}
           </div>
@@ -147,6 +153,13 @@ export default {
     },
     toOneTweet(replied) {
       this.$router.push({ name: "tweet", params: { id: replied.TweetId } });
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
   },
   created() {

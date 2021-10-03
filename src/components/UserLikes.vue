@@ -246,8 +246,11 @@ export default {
       }
     },
     othersProfile(id) {
-      console.log("id", id);
-      this.$router.push({ name: "other-profile", params: { id } });
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
     toOneTweet(like) {
       this.$router.push({ name: "tweet", params: { id: like.TweetId } });

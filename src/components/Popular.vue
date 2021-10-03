@@ -2,18 +2,16 @@
   <div class="container">
     <h1>Popular</h1>
     <div v-for="user in users" :key="user.followingId" class="popular-users">
-      <router-link
-        :to="{ name: 'other-profile', params: { id: user.followingId } }"
-      >
-        <img :src="user.following.avatar" alt="" />
-      </router-link>
+      <img
+        :src="user.following.avatar"
+        @click.stop.prevent="othersProfile(user.followingId)"
+        alt=""
+      />
       <div class="name-account">
-        <router-link
-          :to="{ name: 'other-profile', params: { id: user.followingId } }"
-        >
-          <div class="name">{{ user.following.name }}</div>
-          <div class="account">@ {{ user.following.account }}</div>
-        </router-link>
+        <div class="name" @click.stop.prevent="othersProfile(user.followingId)">
+          {{ user.following.name }}
+        </div>
+        <div class="account">@ {{ user.following.account }}</div>
       </div>
       <div
         v-if="userFollowings.includes(user.followingId)"
@@ -218,6 +216,13 @@ export default {
           icon: "warning",
           title: "無法取消追隨",
         });
+      }
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
       }
     },
   },

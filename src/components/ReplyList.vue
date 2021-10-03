@@ -2,11 +2,17 @@
   <div class="container scrollbar">
     <div class="tweet-card" v-for="reply in tweetData.replies" :key="reply.id">
       <div class="thumbnail-container">
-        <img :src="reply.user.avatar" alt="" />
+        <img
+          :src="reply.user.avatar"
+          @click.stop.prevent="othersProfile(reply.UserId)"
+          alt=""
+        />
       </div>
       <div class="right-content">
         <div class="title-wrapper">
-          <div class="name">{{ reply.user.name }}</div>
+          <div class="name" @click.stop.prevent="othersProfile(reply.UserId)">
+            {{ reply.user.name }}
+          </div>
           <div class="account">{{ reply.user.account }}</div>
           <div class="dot"></div>
           <div class="createdAt">
@@ -135,6 +141,16 @@ export default {
     tweetData: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    othersProfile(id) {
+      const getUserId = () => localStorage.getItem("user");
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
   },
 };

@@ -130,8 +130,12 @@ export default {
       }
     },
     othersProfile(id) {
-      console.log("id", id);
-      this.$router.push({ name: "other-profile", params: { id } });
+      const getUserId = () => localStorage.getItem("user");
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
     toOneTweet(replied) {
       this.$router.push({ name: "tweet", params: { id: replied.TweetId } });
