@@ -45,7 +45,7 @@
               like.tweet.likes.find((like) => like.UserId === currentUserId)
             "
           >
-            <div class="likes-icon" @click.stop.prevent="unlike(like.TweetId)">
+            <div class="likes-icon" @click="unlike(like.TweetId)">
               <svg
                 width="24"
                 height="24"
@@ -62,7 +62,7 @@
             <div class="likes-num">{{ like.tweet.replies.length }}</div>
           </div>
           <div class="dislikes" v-else>
-            <div class="likes-icon" @click.stop.prevent="like(like.TweetId)">
+            <div class="likes-icon" @click="doLike(like.TweetId)">
               <svg
                 width="15"
                 height="15"
@@ -177,17 +177,15 @@ export default {
   data() {
     return {
       likes: [],
-      currentUserId: getUserId(),
+      currentUserId: Number(getUserId()),
     };
   },
   mixins: [fromNowFilter],
   methods: {
     async unlike(tweetId) {
       try {
-        console.log("unlike tweet id:", tweetId);
         const response = await tweets.postUnlike(tweetId, getUserId());
         const { data } = response;
-        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -202,12 +200,10 @@ export default {
         });
       }
     },
-    async like(tweetId) {
+    async doLike(tweetId) {
       try {
-        console.log("like tweet id:", tweetId);
         const response = await tweets.postLike(tweetId, getUserId());
         const { data } = response;
-        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -227,9 +223,6 @@ export default {
         const userid = Number(this.$route.params.id);
         const response = await userAPI.getLikes(userid);
 
-        console.log("user's likes");
-        console.log(response);
-
         // 取得 API 請求後的資料
         const { data } = response;
 
@@ -238,9 +231,6 @@ export default {
         }
 
         this.likes = data;
-        this.likes = this.likes.map((item) => {
-          return { ...item, isLike: true };
-        });
       } catch (error) {
         console.log("error", error);
         Toast.fire({

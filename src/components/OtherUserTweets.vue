@@ -36,7 +36,6 @@
             </div>
             <div class="replies-num">{{ tweet.replies.length }}</div>
           </div>
-          <!-- TODO 愛心功能 -->
           <div class="likes">
             <div class="likes-icon">
               <!-- 喜歡 -->
@@ -168,7 +167,7 @@ export default {
   data() {
     return {
       tweets: [],
-      currentUserId: getUserId(),
+      currentUserId: Number(getUserId()),
     };
   },
   mixins: [fromNowFilter],
@@ -196,16 +195,14 @@ export default {
     },
     async unlike(tweetId) {
       try {
-        console.log("unlike tweet id:", tweetId);
         const response = await tweets.postUnlike(tweetId, getUserId());
         const { data } = response;
-        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.fetchApiLikes();
+        this.fetchApiTweets(this.initialUser.id);
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -216,16 +213,14 @@ export default {
     },
     async like(tweetId) {
       try {
-        console.log("like tweet id:", tweetId);
         const response = await tweets.postLike(tweetId, getUserId());
         const { data } = response;
-        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.fetchApiLikes();
+        this.fetchApiTweets(this.initialUser.id);
       } catch (error) {
         console.log(error);
         Toast.fire({
