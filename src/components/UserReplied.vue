@@ -1,11 +1,16 @@
 <template>
   <div class="a-tweet-container">
-    <!-- TODO 點擊任一回覆後，跳轉到特定推文頁面 -->
     <div class="a-tweet" v-for="replied in replieds" :key="replied.TweetId">
-      <img :src="user.avatar" class="avatar" />
+      <img
+        :src="user.avatar"
+        @click.stop.prevent="othersProfile(replied.UserId)"
+        class="avatar"
+      />
       <div class="content">
         <div class="name-account">
-          <div class="name">{{ user.name }}</div>
+          <div class="name" @click.stop.prevent="othersProfile(replied.UserId)">
+            {{ user.name }}
+          </div>
           <div class="account">
             @{{ user.account }}・{{ replied.createdAt | fromNow }}
           </div>
@@ -14,7 +19,9 @@
           回覆
           <div class="at-account">@{{ replied.tweet.user.account }}</div>
         </div>
-        <div class="description">{{ replied.comment }}</div>
+        <div class="description" @click="toOneTweet(replied)">
+          {{ replied.comment }}
+        </div>
       </div>
     </div>
   </div>
@@ -81,8 +88,6 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-replied-tweets-v3.json";
-import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
@@ -99,18 +104,10 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = userData;
-      this.replieds = data;
-    },
     // API
     async fetchApiData() {
       try {
         const response = await userAPI.getUser(getUserId());
-
-        console.log("users");
-        console.log(response);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -132,9 +129,6 @@ export default {
       try {
         const response = await userAPI.getReplieds(getUserId());
 
-        console.log("user's replieds");
-        console.log(response);
-
         // 取得 API 請求後的資料
         const { data } = response;
 
@@ -151,9 +145,18 @@ export default {
         });
       }
     },
+    toOneTweet(replied) {
+      this.$router.push({ name: "tweet", params: { id: replied.TweetId } });
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
+    },
   },
   created() {
-    // this.fetchJSON();
     this.fetchApiData();
     this.fetchApiReplieds();
   },

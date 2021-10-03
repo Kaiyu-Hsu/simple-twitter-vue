@@ -2,18 +2,16 @@
   <div class="container">
     <h1>Popular</h1>
     <div v-for="user in users" :key="user.followingId" class="popular-users">
-      <router-link
-        :to="{ name: 'other-profile', params: { id: user.followingId } }"
-      >
-        <img :src="user.following.avatar" alt="" />
-      </router-link>
+      <img
+        :src="user.following.avatar"
+        @click.stop.prevent="othersProfile(user.followingId)"
+        alt=""
+      />
       <div class="name-account">
-        <router-link
-          :to="{ name: 'other-profile', params: { id: user.followingId } }"
-        >
-          <div class="name">{{ user.following.name }}</div>
-          <div class="account">@ {{ user.following.account }}</div>
-        </router-link>
+        <div class="name" @click.stop.prevent="othersProfile(user.followingId)">
+          {{ user.following.name }}
+        </div>
+        <div class="account">@ {{ user.following.account }}</div>
       </div>
       <div
         v-if="userFollowings.includes(user.followingId)"
@@ -152,7 +150,6 @@ export default {
       try {
         const response = await userAPI.getPopular(getUserId());
         const { data } = response;
-        console.log("top10", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -163,17 +160,6 @@ export default {
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;
         });
-        // if 有null值需蓋過去的方法
-        // this.users = this.users.map((user) => {
-        //   if (user.following === null || user.followingId === null) {
-        //     return {
-        //       ...user,
-        //       following: {},
-        //       followingId: "",
-        //     };
-        //   }
-        //   return user;
-        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -186,7 +172,6 @@ export default {
       try {
         const response = await followerships.following(followerId);
         const { data } = response;
-        console.log("following", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -205,7 +190,6 @@ export default {
       try {
         const response = await followerships.unfollowing(followerId);
         const { data } = response;
-        console.log("unfollowing", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -218,6 +202,13 @@ export default {
           icon: "warning",
           title: "無法取消追隨",
         });
+      }
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
       }
     },
   },

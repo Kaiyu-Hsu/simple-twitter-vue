@@ -1,10 +1,16 @@
 <template>
   <div class="a-tweet-container">
     <div class="a-tweet" v-for="tweet in tweets" :key="tweet.id">
-      <img :src="initialUser.avatar" class="avatar" />
+      <img
+        :src="initialUser.avatar"
+        @click.stop.prevent="othersProfile(tweet.UserId)"
+        class="avatar"
+      />
       <div class="content">
         <div class="name-account">
-          <div class="name">{{ initialUser.name }}</div>
+          <div class="name" @click.stop.prevent="othersProfile(tweet.UserId)">
+            {{ initialUser.name }}
+          </div>
           <div class="account">
             @{{ initialUser.account }}・{{ tweet.createdAt | fromNow }}
           </div>
@@ -13,7 +19,7 @@
           {{ tweet.description }}
         </div>
         <div class="replies-likes">
-          <div class="replies" @click.stop.prevent="openReplyModal(tweet.id)">
+          <div class="replies" @click.stop.prevent="toOneTweet(tweet)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -34,7 +40,9 @@
             <div class="likes-icon">
               <!-- 喜歡 -->
               <svg
-                v-if="tweet.likes.find((like) => like.id === initialUser.id)"
+                v-if="
+                  tweet.likes.find((like) => like.UserId === initialUser.id)
+                "
                 width="15"
                 height="15"
                 viewBox="0 0 22 20"
@@ -186,13 +194,10 @@ export default {
         });
       }
     },
-    // TODO 愛心的功能 沒有一個判定的依據
     async like(tweetId) {
       try {
-        console.log("like tweet id:", tweetId);
         const response = await tweets.postLike(tweetId, getUserId());
         const { data } = response;
-        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -209,10 +214,8 @@ export default {
     },
     async unlike(tweetId) {
       try {
-        console.log("unlike tweet id:", tweetId);
         const response = await tweets.postUnlike(tweetId, getUserId());
         const { data } = response;
-        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -225,6 +228,16 @@ export default {
           icon: "error",
           title: "無法移除最愛",
         });
+      }
+    },
+    toOneTweet(tweet) {
+      this.$router.push({ name: "tweet", params: { id: tweet.id } });
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
       }
     },
   },

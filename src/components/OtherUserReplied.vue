@@ -1,6 +1,5 @@
 <template>
   <div class="a-tweet-container">
-    <!-- TODO 點擊任一回覆後，跳轉到特定推文頁面 -->
     <div class="a-tweet" v-for="replied in replieds" :key="replied.TweetId">
       <img
         :src="initialUser.avatar"
@@ -18,7 +17,9 @@
           回覆
           <div class="at-account">@{{ replied.tweet.user.account }}</div>
         </div>
-        <div class="description">{{ replied.comment }}</div>
+        <div class="description" @click="toOneTweet(replied)">
+          {{ replied.comment }}
+        </div>
       </div>
     </div>
   </div>
@@ -109,9 +110,6 @@ export default {
         const userid = Number(this.$route.params.id);
         const response = await userAPI.getReplieds(userid);
 
-        console.log("user's replieds");
-        console.log(response);
-
         // 取得 API 請求後的資料
         const { data } = response;
 
@@ -120,15 +118,6 @@ export default {
         }
 
         this.replieds = data;
-        // this.replieds = this.replieds.map((replied) => {
-        //   if (replied.tweet.user === null || replied.followingId === null) {
-        //     return {
-        //       ...replied,
-        //       this.tweet.user: {},
-        //     };
-        //   }
-        //   return replied;
-        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -138,8 +127,15 @@ export default {
       }
     },
     othersProfile(id) {
-      console.log("id", id);
-      this.$router.push({ name: "other-profile", params: { id } });
+      const getUserId = () => localStorage.getItem("user");
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
+    },
+    toOneTweet(replied) {
+      this.$router.push({ name: "tweet", params: { id: replied.TweetId } });
     },
   },
   created() {

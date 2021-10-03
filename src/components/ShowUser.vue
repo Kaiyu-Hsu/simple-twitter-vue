@@ -99,6 +99,7 @@ header {
   font-style: normal;
   .background-cover {
     .cover {
+      background-color: gray;
       width: 100%;
       height: 200px;
       z-index: -1;
@@ -110,6 +111,7 @@ header {
     justify-content: space-between;
     max-height: 78px;
     .avatar {
+      background-color: gray;
       border: 4px solid #ffffff;
       position: relative;
       bottom: 64px;

@@ -225,6 +225,8 @@ import userAPI from "../api/userProfile";
 import followerships from "./../api/followerships";
 import { keepUnauthorizedOut } from "./../utils/helpers";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   name: "UserFollowers",
   components: {
@@ -244,7 +246,28 @@ export default {
     // user file
     async fetchUser() {
       try {
-        const getUserId = () => localStorage.getItem("user");
+        // TODO 增加判斷 ID是自己還是其他人
+        // if (this.$route.params.id) {
+        //   const userid = Number(this.$route.params.id);
+        //   const response = await userAPI.getOtherUser(userid);
+        //   const { data } = response;
+
+        //   if (response.statusText !== "OK") {
+        //     throw new Error(data.message);
+        //   }
+
+        //   this.user = data;
+        // } else {
+        //   const response = await userAPI.getUser(getUserId());
+        //   const { data } = response;
+
+        //   if (response.statusText !== "OK") {
+        //     throw new Error(data.message);
+        //   }
+
+        //   this.user = data;
+        // }
+
         const response = await userAPI.getUser(getUserId());
 
         // 取得 API 請求後的資料
@@ -268,7 +291,6 @@ export default {
     // tweets num
     async fetchApiTweets() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getTweets(getUserId());
 
         // 取得 API 請求後的資料
@@ -292,7 +314,6 @@ export default {
     // followers
     async fetchFollowers() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getFollowers(getUserId());
         const { data } = response;
 
@@ -300,7 +321,6 @@ export default {
           throw new Error(data.message);
         }
 
-        // console.log(data);
         this.followers = data;
       } catch (error) {
         console.log("error", error);
@@ -313,7 +333,6 @@ export default {
     // followings list
     async fetchFollowings() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getFollowings(getUserId());
         const { data } = response;
 
@@ -321,7 +340,6 @@ export default {
           throw new Error(data.message);
         }
 
-        // console.log(data);
         this.followings = data;
         // 只把 followingId 取出成 Array
         this.followings = this.followings.map((following) => {
@@ -345,7 +363,6 @@ export default {
           throw new Error(data.message);
         }
 
-        console.log("following", data);
         this.fetchFollowers();
         this.fetchFollowings();
       } catch (error) {
@@ -365,7 +382,6 @@ export default {
           throw new Error(data.message);
         }
 
-        console.log("unfollowing", response);
         this.fetchFollowers();
         this.fetchFollowings();
       } catch (error) {

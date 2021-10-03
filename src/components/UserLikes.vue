@@ -21,7 +21,7 @@
         </div>
         <div class="description">{{ like.tweet.description }}</div>
         <div class="replies-likes">
-          <div class="replies">
+          <div class="replies" @click="toOneTweet(like)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -41,7 +41,9 @@
 
           <div
             class="likes"
-            v-if="like.tweet.likes.find((like) => like.id === initialUser.id)"
+            v-if="
+              like.tweet.likes.find((like) => like.UserId === initialUser.id)
+            "
           >
             <div class="likes-icon" @click.stop.prevent="unlike(like.TweetId)">
               <svg
@@ -179,19 +181,16 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    // TODO 愛心的功能 沒有一個判定的依據
     async unlike(tweetId) {
       try {
-        console.log("unlike tweet id:", tweetId);
         const response = await tweets.postUnlike(tweetId, getUserId());
         const { data } = response;
-        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -202,16 +201,14 @@ export default {
     },
     async like(tweetId) {
       try {
-        console.log("like tweet id:", tweetId);
         const response = await tweets.postLike(tweetId, getUserId());
         const { data } = response;
-        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -222,11 +219,7 @@ export default {
     },
     async fetchApiLikes() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getLikes(getUserId());
-
-        console.log("user's likes");
-        console.log(response);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -245,8 +238,14 @@ export default {
       }
     },
     othersProfile(id) {
-      console.log("id", id);
-      this.$router.push({ name: "other-profile", params: { id } });
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
+    },
+    toOneTweet(like) {
+      this.$router.push({ name: "tweet", params: { id: like.TweetId } });
     },
   },
   created() {

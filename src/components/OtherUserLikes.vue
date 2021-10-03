@@ -21,7 +21,7 @@
         </div>
         <div class="description">{{ like.tweet.description }}</div>
         <div class="replies-likes">
-          <div class="replies">
+          <div class="replies" @click="toOneTweet(like)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -38,9 +38,14 @@
             </div>
             <div class="replies-num">{{ like.tweet.likes.length }}</div>
           </div>
-
-          <div class="likes" v-if="like.isLike">
-            <div class="likes-icon" @click.stop.prevent="disLike(like.TweetId)">
+          <!-- TODO 愛心功能 -->
+          <div
+            class="likes"
+            v-if="
+              like.tweet.likes.find((like) => like.UserId === currentUserId)
+            "
+          >
+            <div class="likes-icon" @click.stop.prevent="unlike(like.TweetId)">
               <svg
                 width="24"
                 height="24"
@@ -57,10 +62,7 @@
             <div class="likes-num">{{ like.tweet.replies.length }}</div>
           </div>
           <div class="dislikes" v-else>
-            <div
-              class="likes-icon"
-              @click.stop.prevent="likeThis(like.TweetId)"
-            >
+            <div class="likes-icon" @click.stop.prevent="like(like.TweetId)">
               <svg
                 width="15"
                 height="15"
@@ -75,7 +77,7 @@
               </svg>
             </div>
             <div class="dislikes-num" style="#657786">
-              {{ like.tweet.replies.length - 1 }}
+              {{ like.tweet.replies.length }}
             </div>
           </div>
         </div>
@@ -165,7 +167,7 @@ import { tweets } from "./../api/tweets";
 const getUserId = () => localStorage.getItem("user");
 
 export default {
-  name: "UserLikes",
+  name: "OtherUserLikes",
   props: {
     initialUser: {
       type: Object,
@@ -175,11 +177,11 @@ export default {
   data() {
     return {
       likes: [],
+      currentUserId: getUserId(),
     };
   },
   mixins: [fromNowFilter],
   methods: {
-    // TODO 愛心的功能 沒有一個判定的依據
     async unlike(tweetId) {
       try {
         console.log("unlike tweet id:", tweetId);
@@ -191,7 +193,7 @@ export default {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -211,7 +213,7 @@ export default {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -248,21 +250,18 @@ export default {
       }
     },
     othersProfile(id) {
-      console.log("id", id);
-      this.$router.push({ name: "other-profile", params: { id } });
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
+    },
+    toOneTweet(like) {
+      this.$router.push({ name: "tweet", params: { id: like.TweetId } });
     },
   },
   created() {
     this.fetchApiLikes();
   },
-  // watch: {
-  //   likes: {
-  //     handler: function () {
-  //       console.log("listen");
-  //     },
-  //     deep: true,
-  //     immediate: true,
-  //   },
-  // },
 };
 </script>
