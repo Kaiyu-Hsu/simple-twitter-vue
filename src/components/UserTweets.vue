@@ -34,7 +34,9 @@
             <div class="likes-icon">
               <!-- 喜歡 -->
               <svg
-                v-if="tweet.likes.find((like) => like.id === initialUser.id)"
+                v-if="
+                  tweet.likes.find((like) => like.UserId === initialUser.id)
+                "
                 width="15"
                 height="15"
                 viewBox="0 0 22 20"
@@ -186,7 +188,6 @@ export default {
         });
       }
     },
-    // TODO 愛心的功能 沒有一個判定的依據
     async like(tweetId) {
       try {
         console.log("like tweet id:", tweetId);
