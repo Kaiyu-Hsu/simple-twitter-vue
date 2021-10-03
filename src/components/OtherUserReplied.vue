@@ -110,9 +110,6 @@ export default {
         const userid = Number(this.$route.params.id);
         const response = await userAPI.getReplieds(userid);
 
-        console.log("user's replieds");
-        console.log(response);
-
         // 取得 API 請求後的資料
         const { data } = response;
 

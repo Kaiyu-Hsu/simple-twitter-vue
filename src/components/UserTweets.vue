@@ -196,10 +196,8 @@ export default {
     },
     async like(tweetId) {
       try {
-        console.log("like tweet id:", tweetId);
         const response = await tweets.postLike(tweetId, getUserId());
         const { data } = response;
-        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -216,10 +214,8 @@ export default {
     },
     async unlike(tweetId) {
       try {
-        console.log("unlike tweet id:", tweetId);
         const response = await tweets.postUnlike(tweetId, getUserId());
         const { data } = response;
-        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);

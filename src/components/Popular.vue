@@ -150,7 +150,6 @@ export default {
       try {
         const response = await userAPI.getPopular(getUserId());
         const { data } = response;
-        console.log("top10", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -161,17 +160,6 @@ export default {
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;
         });
-        // if 有null值需蓋過去的方法
-        // this.users = this.users.map((user) => {
-        //   if (user.following === null || user.followingId === null) {
-        //     return {
-        //       ...user,
-        //       following: {},
-        //       followingId: "",
-        //     };
-        //   }
-        //   return user;
-        // });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -184,7 +172,6 @@ export default {
       try {
         const response = await followerships.following(followerId);
         const { data } = response;
-        console.log("following", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -203,7 +190,6 @@ export default {
       try {
         const response = await followerships.unfollowing(followerId);
         const { data } = response;
-        console.log("unfollowing", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);

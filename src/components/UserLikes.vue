@@ -183,10 +183,8 @@ export default {
   methods: {
     async unlike(tweetId) {
       try {
-        console.log("unlike tweet id:", tweetId);
         const response = await tweets.postUnlike(tweetId, getUserId());
         const { data } = response;
-        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -203,10 +201,8 @@ export default {
     },
     async like(tweetId) {
       try {
-        console.log("like tweet id:", tweetId);
         const response = await tweets.postLike(tweetId, getUserId());
         const { data } = response;
-        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
@@ -223,11 +219,7 @@ export default {
     },
     async fetchApiLikes() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getLikes(getUserId());
-
-        console.log("user's likes");
-        console.log(response);
 
         // 取得 API 請求後的資料
         const { data } = response;

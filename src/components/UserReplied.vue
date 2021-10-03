@@ -109,9 +109,6 @@ export default {
       try {
         const response = await userAPI.getUser(getUserId());
 
-        console.log("users");
-        console.log(response);
-
         // 取得 API 請求後的資料
         const { data } = response;
 
@@ -131,9 +128,6 @@ export default {
     async fetchApiReplieds() {
       try {
         const response = await userAPI.getReplieds(getUserId());
-
-        console.log("user's replieds");
-        console.log(response);
 
         // 取得 API 請求後的資料
         const { data } = response;
