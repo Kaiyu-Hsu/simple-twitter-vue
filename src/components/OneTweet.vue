@@ -19,7 +19,11 @@
     <div class="tweet-card">
       <div class="card-head">
         <div class="thumbnail-container">
-          <img :src="userData.avatar" alt="" />
+          <img
+            :src="userData.avatar"
+            alt=""
+            @click="othersProfile(tweetData.UserId)"
+          />
         </div>
         <div>
           <div class="name">{{ tweetData.user.name }}</div>
@@ -221,6 +225,8 @@ import ReplyModal from "./../components/ReplyModal.vue";
 import { fromNowFilter } from "./../utils/mixins";
 import { tweets } from "./../api/tweets";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   components: {
     ReplyModal,
@@ -250,6 +256,13 @@ export default {
     closeModal() {
       this.isModalVisible = false;
       this.$emit("close-modal");
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
     async changeLike() {
       // TODO 要把資料送到後端更新

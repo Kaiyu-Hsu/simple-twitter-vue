@@ -13,14 +13,17 @@
       @new-reply="getTweets"
     />
     <!-- Popular.vue -->
-    <Popular />
+    <Popular class="popular" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .main {
   width: 1440px;
-  height: 1200px;
+  .popular {
+    position: absolute;
+    top: 0;
+  }
 }
 </style>
 

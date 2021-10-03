@@ -1,7 +1,7 @@
 <template>
   <div class="show-user">
     <header>
-      <div class="icon-back">
+      <div class="icon-back" @click="$router.go(-1)">
         <svg
           width="17"
           height="14"

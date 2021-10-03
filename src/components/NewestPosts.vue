@@ -232,7 +232,7 @@ export default {
     ReplyModal,
   },
   data() {
-    return {      
+    return {
       isModalVisible: false,
       oneTweet: {},
     };

@@ -16,7 +16,6 @@
         v-model="newPostContent"
       ></textarea>
       <div class="button-area">
-        <span class="word-count">{{ contentLength }}</span>
         <button type="button" @click.stop.prevent="newTweet">推文</button>
       </div>
     </div>

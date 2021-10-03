@@ -8,7 +8,7 @@
       @change-like="fetchTweet"
     />
     <ReplyList :tweet-data="tweetData" />
-    <Popular />
+    <Popular class="popular" />
   </div>
 </template>
 
@@ -16,6 +16,10 @@
 .reply {
   width: 1440px;
   height: 1200px;
+  .popular {
+    position: absolute;
+    top: 0;
+  }
 }
 </style>
 
