@@ -212,12 +212,22 @@ import { Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
 import followershipsAPI from "./../api/followerships";
 
+const getUserId = () => localStorage.getItem("user");
+
 export default {
   name: "UserFollowings",
   components: {
     Popular,
     Navbar,
   },
+  // props: {
+  //   otherUser: {
+  //     type: Object,
+  //   },
+  //   otherTweetsNum: {
+  //     type: String,
+  //   },
+  // },
   data() {
     return {
       user: {},
@@ -230,10 +240,29 @@ export default {
     // user file
     async fetchUser() {
       try {
-        const getUserId = () => localStorage.getItem("user");
+        // TODO 增加判斷 ID是自己還是其他人
+        // if (this.$route.params.id) {
+        //   const userid = Number(this.$route.params.id);
+        //   const response = await userAPI.getOtherUser(userid);
+        //   const { data } = response;
+
+        //   if (response.statusText !== "OK") {
+        //     throw new Error(data.message);
+        //   }
+
+        //   this.user = data;
+        // } else {
+        //   const response = await userAPI.getUser(getUserId());
+        //   const { data } = response;
+
+        //   if (response.statusText !== "OK") {
+        //     throw new Error(data.message);
+        //   }
+
+        //   this.user = data;
+        // }
         const response = await userAPI.getUser(getUserId());
 
-        // 取得 API 請求後的資料
         const { data } = response;
 
         if (response.statusText !== "OK") {
@@ -254,7 +283,6 @@ export default {
     // tweets num
     async fetchApiTweets() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getTweets(getUserId());
 
         // 取得 API 請求後的資料
@@ -278,7 +306,6 @@ export default {
     // followings
     async fetchFollowings() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getFollowings(getUserId());
         const { data } = response;
 
@@ -286,7 +313,6 @@ export default {
           throw new Error(data.message);
         }
 
-        // console.log(data);
         this.followings = data;
       } catch (error) {
         console.log("error", error);
@@ -301,8 +327,6 @@ export default {
       try {
         const response = await followershipsAPI.unfollowing(id);
         const { data } = response;
-        console.log("unfollowing", response);
-        console.log("followerId", id);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
