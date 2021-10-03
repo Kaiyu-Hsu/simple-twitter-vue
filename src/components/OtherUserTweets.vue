@@ -30,6 +30,7 @@
             </div>
             <div class="replies-num">{{ tweet.replies.length }}</div>
           </div>
+          <!-- TODO 愛心功能 -->
           <div class="likes">
             <div class="likes-icon">
               <!-- 喜歡 -->
@@ -167,9 +168,8 @@ export default {
   mixins: [fromNowFilter],
   methods: {
     // API
-    async fetchApiTweets() {
+    async fetchApiTweets(userid) {
       try {
-        const userid = Number(this.$route.params.id);
         const response = await userAPI.getTweets(userid);
 
         // 取得 API 請求後的資料
@@ -233,7 +233,13 @@ export default {
     },
   },
   created() {
-    this.fetchApiTweets();
+    const userid = Number(this.$route.params.id);
+    this.fetchApiTweets(userid);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const id = to.params.id;
+    this.fetchApiTweets(id);
+    next();
   },
 };
 </script>

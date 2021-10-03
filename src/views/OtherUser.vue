@@ -121,17 +121,17 @@
         <div class="followings-followers">
           <div class="followings">
             <div class="num">
-              <!-- <router-link to="/user-followings"> -->
-              {{ followingsNum }}位
-              <!-- </router-link> -->
+              <router-link to="/user-followings">
+                {{ followingsNum }}位
+              </router-link>
             </div>
             跟隨中
           </div>
           <div class="followers">
             <div class="num">
-              <!-- <router-link to="/user-followers"> -->
-              {{ followersNum }}位
-              <!-- </router-link> -->
+              <router-link to="/user-followers">
+                {{ followersNum }}位
+              </router-link>
             </div>
             跟隨者
           </div>
@@ -340,10 +340,8 @@ export default {
     };
   },
   methods: {
-    async fetchUser() {
+    async fetchUser(userid) {
       try {
-        const userid = Number(this.$route.params.id);
-        console.log(userid);
         const response = await userAPI.getOtherUser(userid);
 
         // 取得 API 請求後的資料
@@ -366,9 +364,8 @@ export default {
       }
     },
     // tweets num
-    async fetchApiTweets() {
+    async fetchApiTweets(userid) {
       try {
-        const userid = Number(this.$route.params.id);
         const response = await userAPI.getTweets(userid);
 
         // 取得 API 請求後的資料
@@ -388,9 +385,8 @@ export default {
       }
     },
     // followingsNum
-    async fetchFollowings() {
+    async fetchFollowings(userid) {
       try {
-        const userid = Number(this.$route.params.id);
         const response = await userAPI.getFollowings(userid);
 
         // 取得 API 請求後的資料
@@ -410,9 +406,8 @@ export default {
       }
     },
     // followersNum
-    async fetchFollowers() {
+    async fetchFollowers(userid) {
       try {
-        const userid = Number(this.$route.params.id);
         const response = await userAPI.getFollowers(userid);
 
         // 取得 API 請求後的資料
@@ -443,10 +438,19 @@ export default {
     },
   },
   created() {
-    this.fetchUser();
-    this.fetchApiTweets();
-    this.fetchFollowings();
-    this.fetchFollowers();
+    const userid = Number(this.$route.params.id);
+    this.fetchUser(userid);
+    this.fetchApiTweets(userid);
+    this.fetchFollowings(userid);
+    this.fetchFollowers(userid);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const id = to.params.id;
+    this.fetchUser(id);
+    this.fetchApiTweets(id);
+    this.fetchFollowings(id);
+    this.fetchFollowers(id);
+    next();
   },
 };
 </script>
