@@ -109,7 +109,9 @@
 </style>
 
 <script>
-import followers from "./../../public/api-tweets-id-top10-new.json";
+import userAPI from "../api/userProfile";
+
+const getUserId = () => localStorage.getItem("user");
 
 export default {
   data() {
@@ -118,13 +120,17 @@ export default {
     };
   },
   methods: {
-    fetchJSON() {
-      this.users = followers.topTwitters.map((user) => {
-        return {
-          ...user,
-          isFollowed: true,
-        };
-      });
+    async fetchFollowers() {
+      try {
+        const response = await userAPI.getFollowers(getUserId());
+
+        if (response.statusText !== "OK") {
+          throw new Error(response);
+        }
+        this.users = [...response.data];
+      } catch (error) {
+        console.log("error", error.response || error);
+      }
     },
     toggleFollowing(userId) {
       this.users = this.users.map((user) => {
@@ -144,7 +150,7 @@ export default {
     },
   },
   created() {
-    this.fetchJSON();
+    this.fetchFollowers();
   },
 };
 </script>
