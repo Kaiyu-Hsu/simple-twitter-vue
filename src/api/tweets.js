@@ -1,25 +1,18 @@
 import { apiHelper } from "../utils/helpers";
+const token = localStorage.getItem("token");
 
 export const tweets = {
   getTweets() {
-    const token = localStorage.getItem("token");
-
-    // 這裡 return 的會是一個 Promise
     return apiHelper.get("api/tweets", {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
   getReply(id) {
-    const token = localStorage.getItem("token");
-
-    // 這裡 return 的會是一個 Promise
     return apiHelper.get(`api/tweets/${id}/replies`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
   postTweets(description) {
-    const token = localStorage.getItem("token");
-
     return apiHelper.post(
       "api/tweets",
       {
@@ -31,13 +24,11 @@ export const tweets = {
     );
   },
   postReply(id) {
-    const token = localStorage.getItem("token");
     return apiHelper.post(`api/tweets/${id}/replies`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
   postLike(tweetId, userId) {
-    const token = localStorage.getItem("token");
     return apiHelper.post(
       `api/tweets/${tweetId}/like`,
       { userId },
@@ -47,7 +38,6 @@ export const tweets = {
     );
   },
   postUnlike(tweetId, userId) {
-    const token = localStorage.getItem("token");
     return apiHelper.post(
       `api/tweets/${tweetId}/unlike`,
       { userId },
