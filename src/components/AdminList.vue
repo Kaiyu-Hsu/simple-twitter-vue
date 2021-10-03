@@ -78,6 +78,7 @@
       position: absolute;
       top: 15px;
       left: 96%;
+      cursor: pointer;
     }
   }
 }

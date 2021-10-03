@@ -2,7 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 //ruby route
-// const baseURL = "https://ac-simple-twitter-api.herokuapp.com";
+// const baseURL = "https://ac-tweeeeter.herokuapp.com/";
 
 //rex route
 const baseURL = "https://actwitter.herokuapp.com";

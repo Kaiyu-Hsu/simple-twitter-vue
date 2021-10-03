@@ -19,7 +19,7 @@ export const tweet = {
     return apiHelper.post(
       `api/tweets/${id}/replies`,
       { comment },
-      { headers: { Authorization: `Bearer ${getToken()}` }, params: { id } }
+      { headers: { Authorization: `Bearer ${getToken()}` } }
     );
   },
 };

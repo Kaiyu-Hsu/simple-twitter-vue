@@ -334,6 +334,9 @@ export default {
       this.oringinalIntro = this.initialUser.introduction;
       this.oringinalCover = this.initialUser.cover;
       this.oringinalAvatar = this.initialUser.avatar;
+      if (this.oringinalIntro === null) {
+        this.user.introduction = "";
+      }
     },
     btnClose() {
       this.user.name = this.oringinalName;

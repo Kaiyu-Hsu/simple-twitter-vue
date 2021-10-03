@@ -162,15 +162,15 @@ export default {
         const response = await tweets.postTweets(this.newPostContent);
         const { data } = response;
 
-        console.log(
-          "🚀 ~ file: CreatePosts.vue ~ line 154 ~ newTweet ~ response",
-          response
-        );
-
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-
+        Toast.fire({
+          icon: "success",
+          position: "top",
+          title: "成功發送推文",
+        });
+        this.newPostContent = "";
         this.$emit("new-post");
       } catch (error) {
         console.log("Error", error);

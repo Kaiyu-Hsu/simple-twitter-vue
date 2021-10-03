@@ -203,10 +203,6 @@ export default {
         data.password = password;
         data.checkPassword = checkPassword;
       }
-      console.log(
-        "🚀 ~ file: Setting.vue ~ line 192 ~ putEditUser ~ data",
-        data
-      );
 
       try {
         const response = await user.putEditUser(getUserId(), data);
@@ -214,6 +210,12 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
+
+        Toast.fire({
+          icon: "success",
+          position: "top",
+          title: "資料更改成功",
+        });
 
         this.getEditUser();
       } catch (error) {
