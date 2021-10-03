@@ -1,18 +1,20 @@
 <template>
   <div class="a-tweet-container">
     <div class="a-tweet" v-for="like in likes" :key="like.TweetId">
-      <router-link
-        :to="{ name: 'other-profile', params: { id: like.TweetId } }"
-      >
-        <img :src="like.tweet.user.avatar" class="avatar" alt="?" />
-      </router-link>
+      <img
+        :src="like.tweet.user.avatar"
+        @click.stop.prevent="othersProfile(like.tweet.user.id)"
+        class="avatar"
+        alt="?"
+      />
       <div class="content">
         <div class="name-account">
-          <router-link
-            :to="{ name: 'other-profile', params: { id: like.TweetId } }"
+          <div
+            class="name"
+            @click.stop.prevent="othersProfile(like.tweet.user.id)"
           >
-            <div class="name">{{ like.tweet.user.name }}</div>
-          </router-link>
+            {{ like.tweet.user.name }}
+          </div>
           <div class="account">
             @{{ like.tweet.user.account }}・{{ like.createdAt | fromNow }}
           </div>
@@ -34,11 +36,14 @@
                 />
               </svg>
             </div>
-            <div class="replies-num">{{ like.tweet.likes.length }}</div>
+            <div class="replies-num">{{ like.tweet.replies.length }}</div>
           </div>
 
-          <div class="likes" v-if="like.isLike">
-            <div class="likes-icon" @click.stop.prevent="disLike(like.TweetId)">
+          <div
+            class="likes"
+            v-if="like.tweet.likes.find((like) => like.id === initialUser.id)"
+          >
+            <div class="likes-icon" @click.stop.prevent="unlike(like.TweetId)">
               <svg
                 width="24"
                 height="24"
@@ -52,13 +57,10 @@
                 />
               </svg>
             </div>
-            <div class="likes-num">{{ like.tweet.replies.length }}</div>
+            <div class="likes-num">{{ like.tweet.likes.length }}</div>
           </div>
           <div class="dislikes" v-else>
-            <div
-              class="likes-icon"
-              @click.stop.prevent="likeThis(like.TweetId)"
-            >
+            <div class="likes-icon" @click.stop.prevent="like(like.TweetId)">
               <svg
                 width="15"
                 height="15"
@@ -73,7 +75,7 @@
               </svg>
             </div>
             <div class="dislikes-num" style="#657786">
-              {{ like.tweet.replies.length - 1 }}
+              {{ like.tweet.likes.length }}
             </div>
           </div>
         </div>
@@ -158,6 +160,9 @@
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
+import { tweets } from "./../api/tweets";
+
+const getUserId = () => localStorage.getItem("user");
 
 export default {
   name: "UserLikes",
@@ -170,39 +175,51 @@ export default {
   data() {
     return {
       likes: [],
-      user: {},
-      // isLike: true,
     };
   },
   mixins: [fromNowFilter],
   methods: {
-    // TODO post('/api/tweets/:id/unlike')
-    disLike(userId) {
-      console.log("disLike", userId);
-      this.likes = this.likes.map((like) => {
-        if (like.TweetId === userId) {
-          return {
-            ...like,
-            isLike: false,
-          };
-        }
-        return like;
-      });
-    },
-    // TODO post('/api/tweets/:id/like')
-    likeThis(userId) {
-      console.log("like", userId);
-      this.likes = this.likes.map((like) => {
-        if (like.TweetId === userId) {
-          return {
-            ...like,
-            isLike: true,
-          };
-        }
-        return like;
-      });
-    },
+    // TODO 愛心的功能 沒有一個判定的依據
+    async unlike(tweetId) {
+      try {
+        console.log("unlike tweet id:", tweetId);
+        const response = await tweets.postUnlike(tweetId, getUserId());
+        const { data } = response;
+        console.log("unlike:", response);
 
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.fetchApiTweets();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法移除最愛",
+        });
+      }
+    },
+    async like(tweetId) {
+      try {
+        console.log("like tweet id:", tweetId);
+        const response = await tweets.postLike(tweetId, getUserId());
+        const { data } = response;
+        console.log("like:", response);
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.fetchApiTweets();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法加入最愛",
+        });
+      }
+    },
     async fetchApiLikes() {
       try {
         const getUserId = () => localStorage.getItem("user");
@@ -219,9 +236,6 @@ export default {
         }
 
         this.likes = data;
-        this.likes = this.likes.map((item) => {
-          return { ...item, isLike: true };
-        });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -230,22 +244,13 @@ export default {
         });
       }
     },
-    unlikeTweet(id) {
-      // 取消"喜歡"某一則推文
-      this.likes = this.likes.filter((like) => like.TweetId !== id);
+    othersProfile(id) {
+      console.log("id", id);
+      this.$router.push({ name: "other-profile", params: { id } });
     },
   },
   created() {
     this.fetchApiLikes();
   },
-  // watch: {
-  //   likes: {
-  //     handler: function () {
-  //       console.log("listen");
-  //     },
-  //     deep: true,
-  //     immediate: true,
-  //   },
-  // },
 };
 </script>

@@ -2,7 +2,7 @@
   <div class="users-list">
     <header>使用者列表</header>
     <div class="container">
-      <div class="user-card" v-for="user in users" :key="user.id">
+      <div class="user-card" v-for="user in users" :key="user.index">
         <img class="cover" :src="user.cover" alt="" />
         <div class="name-avatar">
           <img class="avatar" :src="user.avatar" />
@@ -42,9 +42,9 @@
           <div class="love-num">{{ user.likes.length }}</div>
         </div>
         <div class="follow">
-          <div class="follow-num">{{ user.followings.length }}個</div>
+          <div class="follow-num">{{ user.Followings.length }}個</div>
           <div class="followings">跟隨中</div>
-          <div class="follow-num">{{ user.followers.length }}個</div>
+          <div class="follow-num">{{ user.Followers.length }}個</div>
           <div class="followers">跟隨者</div>
         </div>
       </div>
@@ -179,7 +179,6 @@ export default {
           throw new Error(data.message);
         }
 
-        // TODO have null value
         this.users = data;
       } catch (error) {
         console.log("error", error);
