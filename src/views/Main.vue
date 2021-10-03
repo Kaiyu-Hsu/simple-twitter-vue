@@ -10,22 +10,16 @@
       :initial-tweets-reply="tweetsReply"
       :initial-user="userData"
     />
-    <div class="popular">
-      <!-- Popular.vue -->
-      <Popular />
-    </div>
+    <!-- Popular.vue -->
+    <Popular class="popular" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.main {
-  width: 1440px;
-  height: 1200px;
-  .popular {
-    position: absolute;
-    top: 0px;
-    left: 65%;
-  }
+.popular {
+  position: absolute;
+  top: 0px;
+  left: 75%;
 }
 </style>
 

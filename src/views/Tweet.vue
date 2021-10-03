@@ -7,14 +7,15 @@
       @close-modal="fetchTweet"
     />
     <ReplyList :tweet-data="tweetData" />
-    <Popular />
+    <Popular class="popular" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.reply {
-  width: 1440px;
-  height: 1200px;
+.popular {
+  position: absolute;
+  top: 0px;
+  left: 75%;
 }
 </style>
 
