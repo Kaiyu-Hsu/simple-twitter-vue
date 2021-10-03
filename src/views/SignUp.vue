@@ -226,8 +226,10 @@ export default {
           email: this.email,
           password: this.password,
           checkPassword: this.checkPassword,
-          avatar: "",
-          cover: "",
+          avatar: "https://cdn-icons-png.flaticon.com/512/5066/5066665.png",
+          cover:
+            "https://image.freepik.com/free-photo/beautiful-tropical-beach-sea-ocean-with-coconut-palm-tree-around-white-cloud-blue-sky-vacation-travel-background_74190-14753.jpg",
+          introduction: "",
         };
 
         if (
