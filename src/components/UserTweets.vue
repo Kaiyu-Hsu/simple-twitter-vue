@@ -13,7 +13,7 @@
           {{ tweet.description }}
         </div>
         <div class="replies-likes">
-          <div class="replies" @click.stop.prevent="openReplyModal(tweet.id)">
+          <div class="replies" @click.stop.prevent="toOneTweet(tweet)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -227,6 +227,9 @@ export default {
           title: "無法移除最愛",
         });
       }
+    },
+    toOneTweet(tweet) {
+      this.$router.push({ name: "tweet", params: { id: tweet.id } });
     },
   },
   created() {

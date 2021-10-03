@@ -1,6 +1,5 @@
 <template>
   <div class="a-tweet-container">
-    <!-- TODO 點擊任一回覆後，跳轉到特定推文頁面 -->
     <div class="a-tweet" v-for="replied in replieds" :key="replied.TweetId">
       <img :src="user.avatar" class="avatar" />
       <div class="content">
@@ -14,7 +13,9 @@
           回覆
           <div class="at-account">@{{ replied.tweet.user.account }}</div>
         </div>
-        <div class="description">{{ replied.comment }}</div>
+        <div class="description" @click="toOneTweet(replied)">
+          {{ replied.comment }}
+        </div>
       </div>
     </div>
   </div>
@@ -81,8 +82,6 @@
 </style>
 
 <script>
-import data from "./../../public/api-users-id-replied-tweets-v3.json";
-import userData from "./../../public/api-users-id-userInfo-new.json";
 import { fromNowFilter } from "./../utils/mixins"; // 時間簡化套件
 import { Toast } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
@@ -99,11 +98,6 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    //載入種子資料
-    fetchJSON() {
-      this.user = userData;
-      this.replieds = data;
-    },
     // API
     async fetchApiData() {
       try {
@@ -151,9 +145,11 @@ export default {
         });
       }
     },
+    toOneTweet(replied) {
+      this.$router.push({ name: "tweet", params: { id: replied.TweetId } });
+    },
   },
   created() {
-    // this.fetchJSON();
     this.fetchApiData();
     this.fetchApiReplieds();
   },

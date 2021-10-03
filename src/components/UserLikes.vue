@@ -21,7 +21,7 @@
         </div>
         <div class="description">{{ like.tweet.description }}</div>
         <div class="replies-likes">
-          <div class="replies">
+          <div class="replies" @click="toOneTweet(like)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -248,6 +248,9 @@ export default {
     othersProfile(id) {
       console.log("id", id);
       this.$router.push({ name: "other-profile", params: { id } });
+    },
+    toOneTweet(like) {
+      this.$router.push({ name: "tweet", params: { id: like.TweetId } });
     },
   },
   created() {
