@@ -189,6 +189,7 @@
       .cover-container {
         position: relative;
         .cover {
+          background-color: gray;
           width: 100%;
           height: 200px;
           opacity: 0.6; // 透明值
@@ -208,6 +209,7 @@
         position: relative;
         max-height: 60px;
         .avatar {
+          background-color: gray;
           position: relative;
           bottom: 60px;
           left: 15px;

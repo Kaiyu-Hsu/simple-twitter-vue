@@ -21,7 +21,7 @@
         </div>
         <div class="description">{{ like.tweet.description }}</div>
         <div class="replies-likes">
-          <div class="replies">
+          <div class="replies" @click="toOneTweet(like)">
             <div class="replies-icon">
               <svg
                 width="15"
@@ -38,10 +38,11 @@
             </div>
             <div class="replies-num">{{ like.tweet.replies.length }}</div>
           </div>
-
           <div
             class="likes"
-            v-if="like.tweet.likes.find((like) => like.id === initialUser.id)"
+            v-if="
+              like.tweet.likes.find((like) => like.UserId === initialUser.id)
+            "
           >
             <div class="likes-icon" @click.stop.prevent="unlike(like.TweetId)">
               <svg
@@ -58,25 +59,6 @@
               </svg>
             </div>
             <div class="likes-num">{{ like.tweet.likes.length }}</div>
-          </div>
-          <div class="dislikes" v-else>
-            <div class="likes-icon" @click.stop.prevent="like(like.TweetId)">
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.5 13.5236H7.49125C5.87687 13.4936 1.21875 9.28489 1.21875 5.29864C1.21875 3.38364 2.79687 1.70239 4.59562 1.70239C6.02687 1.70239 6.98937 2.68989 7.49937 3.40864C8.00812 2.69114 8.97062 1.70239 10.4025 1.70239C12.2025 1.70239 13.78 3.38364 13.78 5.29927C13.78 9.28427 9.12125 13.493 7.50687 13.5224H7.5V13.5236ZM4.59625 2.64052C3.29625 2.64052 2.15687 3.88302 2.15687 5.29989C2.15687 8.88739 6.55312 12.5474 7.50062 12.5861C8.44937 12.5474 12.8444 8.88802 12.8444 5.29989C12.8444 3.88302 11.705 2.64052 10.405 2.64052C8.825 2.64052 7.9425 4.47552 7.935 4.49364C7.79125 4.84489 7.2125 4.84489 7.06812 4.49364C7.05937 4.47489 6.1775 2.64052 4.59687 2.64052H4.59625Z"
-                  fill="#657786"
-                />
-              </svg>
-            </div>
-            <div class="dislikes-num" style="#657786">
-              {{ like.tweet.likes.length }}
-            </div>
           </div>
         </div>
       </div>
@@ -179,19 +161,16 @@ export default {
   },
   mixins: [fromNowFilter],
   methods: {
-    // TODO 愛心的功能 沒有一個判定的依據
     async unlike(tweetId) {
       try {
-        console.log("unlike tweet id:", tweetId);
         const response = await tweets.postUnlike(tweetId, getUserId());
         const { data } = response;
-        console.log("unlike:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -202,16 +181,14 @@ export default {
     },
     async like(tweetId) {
       try {
-        console.log("like tweet id:", tweetId);
         const response = await tweets.postLike(tweetId, getUserId());
         const { data } = response;
-        console.log("like:", response);
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.fetchApiTweets();
+        this.fetchApiLikes();
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -222,11 +199,7 @@ export default {
     },
     async fetchApiLikes() {
       try {
-        const getUserId = () => localStorage.getItem("user");
         const response = await userAPI.getLikes(getUserId());
-
-        console.log("user's likes");
-        console.log(response);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -245,8 +218,14 @@ export default {
       }
     },
     othersProfile(id) {
-      console.log("id", id);
-      this.$router.push({ name: "other-profile", params: { id } });
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
+    },
+    toOneTweet(like) {
+      this.$router.push({ name: "tweet", params: { id: like.TweetId } });
     },
   },
   created() {
