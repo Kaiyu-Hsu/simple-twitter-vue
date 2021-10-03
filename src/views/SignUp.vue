@@ -257,8 +257,6 @@ export default {
 
         // 取得 API 請求後的資料
         const { data } = response;
-        console.log("signUp", response);
-        console.log("signUpData", signUpData);
 
         if (data !== "Accept") {
           throw new Error(data.message);
