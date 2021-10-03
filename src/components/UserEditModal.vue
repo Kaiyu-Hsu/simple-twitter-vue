@@ -26,7 +26,7 @@
             <input
               type="file"
               id="cover"
-              name="files"
+              name="cover"
               @change="changeCover"
               style="display: none"
               ref="coverInput"
@@ -71,7 +71,7 @@
           <input
             type="file"
             id="avatar"
-            name="files"
+            name="avatar"
             @change="changeAvatar"
             style="display: none"
             ref="avatarInput"
