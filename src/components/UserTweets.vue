@@ -231,14 +231,5 @@ export default {
   created() {
     this.fetchApiTweets();
   },
-  // TODO 當 tweets 拿到新值則重新渲染此畫面，時間排序
-  // watch: {
-  //   tweets: {
-  //     handler: function () {
-  //       this.fetchApiTweets();
-  //     },
-  //     immediate: true,
-  //   },
-  // },
 };
 </script>
