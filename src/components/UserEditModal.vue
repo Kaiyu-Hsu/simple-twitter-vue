@@ -26,7 +26,7 @@
             <input
               type="file"
               id="cover"
-              name="cover"
+              name="files"
               @change="changeCover"
               style="display: none"
               ref="coverInput"
@@ -71,7 +71,7 @@
           <input
             type="file"
             id="avatar"
-            name="avatar"
+            name="files"
             @change="changeAvatar"
             style="display: none"
             ref="avatarInput"
@@ -336,6 +336,9 @@ export default {
       this.oringinalIntro = this.initialUser.introduction;
       this.oringinalCover = this.initialUser.cover;
       this.oringinalAvatar = this.initialUser.avatar;
+      if (this.oringinalIntro === null) {
+        this.user.introduction = "";
+      }
     },
     btnClose() {
       this.user.name = this.oringinalName;
@@ -394,7 +397,7 @@ export default {
           this.$emit("close");
         }
 
-        const response = await userAPI.updataForm(this.user.id, { formData });
+        const response = await userAPI.updateForm(this.user.id, { formData });
 
         console.log("update profile", response);
 

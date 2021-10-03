@@ -312,12 +312,12 @@ export default {
           this.tweetContent.id,
           this.replyContent
         );
-        console.log(
-          "🚀 ~ file: ReplyModal.vue ~ line 300 ~ postReply ~ response",
-          response
-        );
+        if (response.statusText !== "OK") {
+          throw new Error(response);
+        }
 
         this.$emit("close-modal");
+        this.$emit("new-reply");
       } catch (error) {
         console.log("error", error);
         Toast.fire({

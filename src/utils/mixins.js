@@ -5,10 +5,13 @@ export const fromNowFilter = {
     fromNow(datetime) {
       return datetime ? moment(datetime).fromNow() : "-";
     },
+    detailedTime(datetime) {
+      return moment(datetime).format("a hh:mm YYYY年M月D日");
+    },
   },
 };
 
-// TODO 顯示中文時間
+// 顯示中文時間
 export const TWLocale = {
   setLocale: moment.locale("zh-tw", {
     months:

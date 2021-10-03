@@ -31,10 +31,10 @@
         </div>
 
         <footer class="modal-footer">
-          <!-- TODO 須調整 word count 的位置 -->
+          <!-- TODO 須調整 word count 的位置
           <span class="word-count"
             >{{ contentLength }} 須調整 word count 的位置</span
-          >
+          > -->
           <button type="button" class="btn-tweet" @click="newTweet">
             推文
           </button>

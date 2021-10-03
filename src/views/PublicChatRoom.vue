@@ -11,12 +11,6 @@
           <span class="account">@{{ attendee.account }}</span>
         </li>
       </ul>
-      <div class="test-btn">
-        <button @click.prevent.stop="getIn">上線</button>
-        <button @click.stop.prevent="getOut">離線</button>
-        <button @click.stop.prevent="msgIn">對我發訊息</button>
-        <button @click.stop.prevent="msgOut">我發訊息</button>
-      </div>
     </aside>
     <!-- TODO 及時聊天視窗 -->
     <main class="room">
@@ -223,9 +217,7 @@ import Navbar from "./../components/Navbar";
 import { io } from "socket.io-client";
 import { TWLocale } from "./../utils/mixins";
 import user from "./../api/user";
-import { keepUnauthorizedOut } from '../utils/helpers';
-
-let c = 0; // testing
+import { keepUnauthorizedOut } from "../utils/helpers";
 
 export default {
   name: "PublicChatRoom",
@@ -261,74 +253,6 @@ export default {
     };
   },
   methods: {
-    getIn() {
-      // testing
-      this.msgs.push({ text: `${this.userId}又進來啦!`, type: "connection" });
-    },
-    getOut() {
-      // testing
-      this.msgs.push({
-        text: `${this.userId}又出去啦! 打我啊笨蛋`,
-        type: "connection",
-      });
-    },
-    msgIn() {
-      //testing
-      if (c > 5) {
-        this.msgs.push({
-          text: `再多的言語也無法挽回離開的心`,
-          type: "connection",
-          time: `${TWLocale.showTime}`,
-        });
-      } else if (c <= 2) {
-        this.msgs.push({
-          text: "你聽我說",
-          type: "msg-in",
-          time: `${TWLocale.showTime}`,
-        });
-        c++;
-      } else if (c <= 4) {
-        this.msgs.push({
-          text: "拜託!我有苦衷",
-          type: "msg-in",
-          time: `${TWLocale.showTime}`,
-        });
-      } else {
-        this.msgs.push({
-          text: "求你了😭 別走",
-          type: "msg-in",
-          time: `${TWLocale.showTime}`,
-        });
-        c++;
-      }
-    },
-    msgOut() {
-      // testing
-      if (c > 7) {
-        return;
-      } else if (c <= 2) {
-        this.msgs.push({
-          text: "我跟你說",
-          type: "msg-out",
-          time: `${TWLocale.showTime}`,
-        });
-        c++;
-      } else if (c <= 4) {
-        this.msgs.push({
-          text: "我不想再聽你解釋了!😤",
-          type: "msg-out",
-          time: `${TWLocale.showTime}`,
-        });
-        c++;
-      } else {
-        this.msgs.push({
-          text: "😤😤😤",
-          type: "msg-out",
-          time: `${TWLocale.showTime}`,
-        });
-        c++;
-      }
-    },
     async fetchUser(id) {
       try {
         const response = await user.getUserInfo(id);
@@ -336,8 +260,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(response.statusText);
         }
-        console.log("Fetch User");
-        console.dir(response);
+
         this.userData = { ...response.data };
       } catch (error) {
         console.log("error", error);
@@ -350,7 +273,7 @@ export default {
       this.socket.emit("read-notice", userId);
       // 觸發加入公開聊天室
       this.socket.emit("join-public-room", userId);
-      console.log(`user${userId} socket just started!`);
+      console.log(`user ${userId} socket just started!`);
     },
 
     sendMessage() {
@@ -370,45 +293,45 @@ export default {
     listenToServer() {
       // 接收通知 new
       this.socket.on("notices", (notice) => {
-        console.log(notice);
+        console.log("notice", notice);
       });
 
       this.socket.on("read-notice", (notice) => {
-        console.log(notice);
+        console.log("notice", notice);
       });
 
       //監聽接收公開聊天室的紀錄
       this.socket.on("public-chat-record", (publicChatRecord) => {
-        console.log(publicChatRecord);
+        console.log("publicChatRecord", publicChatRecord);
       });
 
       // 監聽接收線上使用者列表及所有使用者資料
       this.socket.on("online-list", (inRoomUsers) => {
-        console.log(inRoomUsers);
+        console.log("inRoomUsers", inRoomUsers);
       });
 
       // 監聽公開聊天室公告廣播
       this.socket.on("public-online-notice", (userId) => {
-        console.log(userId);
+        console.log("userId", userId);
       });
 
       // 監聽公開聊天室使用者下線訊息
       this.socket.on("public-offline-notice", (userId) => {
-        console.log(userId);
+        console.log("userId", userId);
       });
 
       // 監聽公開聊天室聊天訊息
       this.socket.on("public-msg", ({ userId, message }) => {
-        console.log(userId, message);
+        console.log("userId, message", userId, message);
       });
       console.log(`socket just started listening!`);
     },
   },
   created() {
-    keepUnauthorizedOut(this)
-    this.fetchUser(localStorage.getItem("user"));
+    keepUnauthorizedOut(this);
+    this.fetchUser(this.userId);
     this.socketStart(this.userId);
-    this.listenToServer();    
+    this.listenToServer();
   },
 };
 </script>
