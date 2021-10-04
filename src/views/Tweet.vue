@@ -68,6 +68,9 @@ export default {
           (obj) => obj.UserId === this.userData.id
         );
         if (getLikers) {
+          this.tweetData.likes = this.tweetData.likes.filter(
+            (obj) => obj.id !== getLikers.id
+          );
           this.tweetData.likes.push(getLikers);
         }
         // TODO 替代方案結束行
