@@ -217,7 +217,7 @@ import Navbar from "./../components/Navbar";
 import { io } from "socket.io-client";
 import { TWLocale } from "./../utils/mixins";
 import user from "./../api/user";
-import { keepUnauthorizedOut } from "../utils/helpers";
+import { keepUnauthorizedOut, Toast } from "../utils/helpers";
 
 export default {
   name: "PublicChatRoom",
@@ -229,7 +229,7 @@ export default {
       userId: localStorage.getItem("user"),
       userData: {},
       msgs: [
-        { text: "I came", type: "connection", time: `${TWLocale.showTime}` }, // TODO 顯示中文時間
+        { text: "I came", type: "connection", time: `${TWLocale.showTime}` },
         { text: "I saw", type: "msg-in", time: `${TWLocale.showTime}` },
         { text: "Icecream", type: "msg-out", time: `${TWLocale.showTime}` },
       ],
@@ -240,12 +240,7 @@ export default {
             "https://loremflickr.com/320/240/restaurant,food/?random=8.858769683928713&lock=89.77442629509149",
           name: "Taro",
           account: "JOJO",
-        },
-        {
-          avatar:
-            "https://loremflickr.com/320/240/restaurant,food/?random=8.858769683928713&lock=89.77442629509149",
-          name: "Taro",
-          account: "JOJO",
+          id: -1,
         },
       ],
       // 連線至socket server
@@ -297,7 +292,7 @@ export default {
       });
 
       this.socket.on("read-notice", (notice) => {
-        console.log("notice", notice);
+        console.log("read-notice", notice);
       });
 
       //監聽接收公開聊天室的紀錄
@@ -308,23 +303,45 @@ export default {
       // 監聽接收線上使用者列表及所有使用者資料
       this.socket.on("online-list", (inRoomUsers) => {
         console.log("inRoomUsers", inRoomUsers);
+        this.attendees = [...inRoomUsers];
       });
 
       // 監聽公開聊天室公告廣播
       this.socket.on("public-online-notice", (userId) => {
-        console.log("userId", userId);
+        console.log(userId, "joined room");
+        const newAttendee = this.attendees.find((user) => user.id === userId);
+        this.msgs.push({
+          text: `${newAttendee.name}加入聊天`,
+          type: "connection",
+          time: `${TWLocale.showTime}`,
+        });
       });
 
       // 監聽公開聊天室使用者下線訊息
       this.socket.on("public-offline-notice", (userId) => {
-        console.log("userId", userId);
+        console.log(userId, "left room");
+        const newAttendee = this.attendees.find((user) => user.id === userId);
+        this.attendees = this.attendees.filter((user) => user.id !== userId);
+        this.msgs.push({
+          text: `${newAttendee.name}離開聊天室`,
+          type: "connection",
+          time: `${TWLocale.showTime}`,
+        });
       });
 
       // 監聽公開聊天室聊天訊息
       this.socket.on("public-msg", ({ userId, message }) => {
         console.log("userId, message", userId, message);
+        this.msgs.push({
+          text: `${message}`,
+          type: "msg-in",
+          time: `${TWLocale.showTime}`,
+        });
       });
       console.log(`socket just started listening!`);
+    },
+    socketEnd() {
+      this.socket.disconnect();
     },
   },
   created() {
@@ -332,6 +349,13 @@ export default {
     this.fetchUser(this.userId);
     this.socketStart(this.userId);
     this.listenToServer();
+  },
+  beforeDestroy() {
+    this.socket.disconnect(); // 離開聊天室頁面則停止嘗試 reconnect
+    Toast.fire({
+      position: "top",
+      title: "離開公開聊天室",
+    });
   },
 };
 </script>
