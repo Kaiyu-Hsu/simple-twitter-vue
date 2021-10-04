@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import NotFound from "../views/NotFound.vue";
-import Main from "../views/Main.vue";
 import SignIn from "../views/SignIn.vue";
 import SignUp from "../views/SignUp.vue";
 
@@ -30,7 +29,7 @@ const routes = [
   {
     path: "/main",
     name: "main",
-    component: Main,
+    component: () => import("./../views/Main.vue"),
   },
   // 通知
   {
