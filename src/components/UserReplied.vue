@@ -62,6 +62,7 @@
       display: flex;
       .name {
         margin: auto 5px auto 0px;
+        cursor: pointer;
       }
       .account {
         font-weight: 500;
@@ -82,6 +83,7 @@
       min-height: 66px;
       font-weight: 500;
       margin: 3px 0px 15px 0px;
+      cursor: pointer;
     }
   }
 }

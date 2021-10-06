@@ -33,7 +33,8 @@
 </template>
 
 <style lang="scss" scoped>
-svg, img {
+svg,
+img {
   cursor: initial;
 }
 

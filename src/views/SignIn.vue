@@ -55,8 +55,9 @@
             v-model="email"
             @focus="focusInput"
             required
+            autofocus
           />
-          <hr :class="{ 'now-focus': nowFocus === 'account' }" />
+          <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
