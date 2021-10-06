@@ -224,6 +224,8 @@ export default {
 
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token.token);
+        // 給予 role 代號，判斷頁面觀看權限
+        localStorage.setItem("role", "10550");
 
         // 成功登入後轉址到首頁
         this.$router.push("/admin");

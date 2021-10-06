@@ -105,7 +105,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script>
 import Navbar from "./../components/Navbar";
-import { apiHelper, keepUnauthorizedOut } from "./../utils/helpers";
+import {
+  apiHelper,
+  keepUnauthorizedOut,
+  roleAccessControl,
+} from "./../utils/helpers";
 // import axios from "axios";
 
 const getToken = () => localStorage.getItem("token");
@@ -161,6 +165,7 @@ export default {
   },
   created() {
     keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.fetchData();
   },
 };

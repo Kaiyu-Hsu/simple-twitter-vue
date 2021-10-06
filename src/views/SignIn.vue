@@ -255,9 +255,11 @@ export default {
           throw new Error(data.message);
         }
 
-        // 將 token userId 存放在 localStorage 內
+        // 將 token, userId 存放在 localStorage 內
         localStorage.setItem("token", data.token.token);
         localStorage.setItem("user", data.user.id);
+        // 給予 role 代號，判斷頁面觀看權限
+        localStorage.setItem("role", "8347");
 
         // 成功登入後轉址到首頁
         this.$router.push("/main");
@@ -281,6 +283,7 @@ export default {
   created() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
   },
 };
 </script>

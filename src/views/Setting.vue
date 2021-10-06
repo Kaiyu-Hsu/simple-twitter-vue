@@ -137,7 +137,11 @@
 
 <script>
 import Navbar from "./../components/Navbar";
-import { keepUnauthorizedOut, Toast } from "./../utils/helpers";
+import {
+  keepUnauthorizedOut,
+  roleAccessControl,
+  Toast,
+} from "./../utils/helpers";
 import user from "./../api/user";
 
 const getUserId = () => localStorage.getItem("user");
@@ -230,6 +234,7 @@ export default {
   },
   created() {
     keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.getEditUser();
   },
 };

@@ -217,7 +217,11 @@ import Navbar from "./../components/Navbar";
 import { io } from "socket.io-client";
 import { TWLocale } from "./../utils/mixins";
 import user from "./../api/user";
-import { keepUnauthorizedOut, Toast } from "../utils/helpers";
+import {
+  keepUnauthorizedOut,
+  roleAccessControl,
+  Toast,
+} from "../utils/helpers";
 
 export default {
   name: "PublicChatRoom",
@@ -344,8 +348,21 @@ export default {
       this.socket.disconnect();
     },
   },
+  watch: {
+    attendees() {
+      const newAttendee = this.attendees.find(
+        (user) => user.id === this.newComerId
+      );
+      this.msgs.push({
+        text: `${newAttendee.name}加入聊天`,
+        type: "connection",
+        time: `${TWLocale.showTime}`,
+      });
+    },
+  },
   created() {
     keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.fetchUser(this.userId);
     this.socketStart(this.userId);
     this.listenToServer();

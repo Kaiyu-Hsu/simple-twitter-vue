@@ -19,7 +19,7 @@
 </style>
 
 <script>
-import { keepUnauthorizedOut } from "../utils/helpers";
+import { keepUnauthorizedOut, roleAccessControl } from "../utils/helpers";
 import AdminNavbar from "./../components/AdminNavbar.vue";
 
 export default {
@@ -29,6 +29,7 @@ export default {
   },
   created() {
     keepUnauthorizedOut(this);
+    roleAccessControl(this, "10550");
   },
 };
 </script>

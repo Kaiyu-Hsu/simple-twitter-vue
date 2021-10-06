@@ -208,7 +208,11 @@
 <script>
 import Popular from "../components/Popular.vue";
 import Navbar from "../components/Navbar.vue";
-import { Toast } from "../utils/helpers";
+import {
+  keepUnauthorizedOut,
+  roleAccessControl,
+  Toast,
+} from "../utils/helpers";
 import userAPI from "../api/userProfile";
 import followershipsAPI from "./../api/followerships";
 
@@ -350,6 +354,8 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.fetchUser();
     this.fetchApiTweets();
     this.fetchFollowings();
