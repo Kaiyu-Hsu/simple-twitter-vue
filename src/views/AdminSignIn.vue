@@ -48,6 +48,8 @@
             title="不接受空白鍵"
             v-model="email"
             @focus="focusInput"
+            autofocus
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
@@ -60,6 +62,7 @@
             title="不接受空白鍵"
             v-model="password"
             @focus="focusInput"
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
@@ -194,7 +197,6 @@ export default {
     focusInput(e) {
       this.nowFocus = e.target.name;
     },
-    // TODO 接api  async / await寫法
     async handleSubmit() {
       try {
         if (!this.email || !this.password) {

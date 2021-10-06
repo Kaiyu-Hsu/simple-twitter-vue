@@ -46,6 +46,8 @@
             name="account"
             v-model="account"
             @focus="focusInput"
+            autofocus
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'account' }" />
         </div>
@@ -61,6 +63,7 @@
             name="email"
             v-model="email"
             @focus="focusInput"
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
@@ -71,6 +74,7 @@
             name="password"
             v-model="password"
             @focus="focusInput"
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
@@ -81,6 +85,7 @@
             name="checkPassword"
             v-model="checkPassword"
             @focus="focusInput"
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'checkPassword' }" />
         </div>
