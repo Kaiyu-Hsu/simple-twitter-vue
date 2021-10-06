@@ -267,13 +267,26 @@ export default {
       } catch (error) {
         // 將密碼欄位清空
         this.password = "";
-
         // 顯示錯誤提示
-        Toast.fire({
-          icon: "warning",
-          position: "top",
-          title: "請確認您輸入了正確的email和密碼",
-        });
+        if (error.response.data.message === "no such user found") {
+          Toast.fire({
+            icon: "warning",
+            position: "top",
+            title: "無此帳號",
+          });
+        } else if (error.response.data.message === "passwords did not match") {
+          Toast.fire({
+            icon: "warning",
+            position: "top",
+            title: "密碼錯誤",
+          });
+        } else {
+          Toast.fire({
+            icon: "warning",
+            position: "top",
+            title: "抱歉，目前無法登入，請稍後再試",
+          });
+        }
 
         // 因為登入失敗，所以要把按鈕狀態還原
         this.isProcessing = false;
