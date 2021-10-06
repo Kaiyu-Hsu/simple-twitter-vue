@@ -33,6 +33,10 @@
 </template>
 
 <style lang="scss" scoped>
+svg, img {
+  cursor: initial;
+}
+
 .tweets-list {
   font-family: "Noto Sans TC", sans-serif;
   font-style: normal;

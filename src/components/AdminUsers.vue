@@ -53,6 +53,11 @@
 </template>
 
 <style lang="scss" scoped>
+img,
+svg {
+  cursor: initial;
+}
+
 .users-list {
   font-family: "Noto Sans TC", sans-serif;
   font-style: normal;

@@ -15,16 +15,14 @@
           {{ tweet.description }}
         </p>
         <div class="icon-wrapper">
-          <div
-            class="reply-icon-wrapper"
-            @click.stop.prevent="showModal(tweet.id)"
-          >
+          <div class="reply-icon-wrapper">
             <svg
               width="13"
               height="13"
               viewBox="0 0 13 13"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              @click.stop.prevent="showModal(tweet.id)"
             >
               <path
                 d="M7.77881 0.40127L5.18631 0.39502H5.18506C2.45131 0.39502 0.310059 2.53689 0.310059 5.27127C0.310059 7.83252 2.30131 9.77502 4.97568 9.87752V12.27C4.97568 12.3375 5.00318 12.4488 5.05068 12.5219C5.13943 12.6625 5.29068 12.7388 5.44568 12.7388C5.53193 12.7388 5.61881 12.715 5.69693 12.665C5.86193 12.56 9.74256 10.0775 10.7519 9.22377C11.9407 8.21752 12.6519 6.74252 12.6538 5.27877V5.26814C12.6501 2.53877 10.5101 0.401269 7.77881 0.400644V0.40127ZM10.1457 8.50877C9.43693 9.10877 7.10693 10.6369 5.91318 11.4106V9.41877C5.91318 9.16002 5.70381 8.95002 5.44443 8.95002H5.19693C2.90943 8.95002 1.24818 7.40252 1.24818 5.27127C1.24818 3.06252 2.97818 1.33252 5.18568 1.33252L7.77756 1.33877H7.77881C9.98631 1.33877 11.7163 3.06752 11.7176 5.27377C11.7157 6.46752 11.1288 7.67627 10.1463 8.50877H10.1457Z"
@@ -33,10 +31,7 @@
             </svg>
             <span>{{ tweet.replies.length }}</span>
           </div>
-          <div
-            class="like-icon-wrapper"
-            @click.stop.prevent="changeLike(tweet)"
-          >
+          <div class="like-icon-wrapper">
             <!-- 普通的愛心 -->
             <svg
               width="13"
@@ -44,6 +39,7 @@
               viewBox="0 0 13 13"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              @click.stop.prevent="changeLike(tweet)"
               v-if="!ifLiked(tweet)"
             >
               <path
@@ -58,6 +54,7 @@
               viewBox="0 0 22 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              @click.stop.prevent="changeLike(tweet)"
               v-else
             >
               <path
@@ -97,12 +94,9 @@
       position: relative;
       width: 50px;
       margin-left: 15px;
-      &:hover {
-        cursor: pointer;
-      }
+
       img {
         position: absolute;
-        z-index: -1;
         top: 10px;
         border-radius: 50%;
         width: 50px;
@@ -114,9 +108,7 @@
       flex: 1;
       .title-wrapper {
         display: flex;
-        &:hover {
-          cursor: pointer;
-        }
+        cursor: pointer;
 
         .name {
           font-family: Noto Sans TC;
@@ -156,15 +148,11 @@
       }
       .description {
         margin: 6px 15px 14px 0px;
-        &:hover {
-          cursor: pointer;
-        }
+        cursor: pointer;
       }
       .icon-wrapper {
         display: flex;
-        &:hover {
-          cursor: pointer;
-        }
+
         .reply-icon-wrapper {
           margin-right: 51.22px;
           span {

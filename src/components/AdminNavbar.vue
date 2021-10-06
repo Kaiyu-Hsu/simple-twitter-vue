@@ -117,6 +117,11 @@
 </template>
 
 <style lang="scss" scoped>
+img,
+svg {
+  cursor: initial;
+}
+
 .admin-nav {
   width: 20%;
   height: 100%;
@@ -155,6 +160,9 @@
     flex-direction: column;
     justify-content: space-around;
     margin-top: 40px;
+    svg {
+      cursor: pointer;
+    }
     .log-out {
       position: absolute;
       top: 90%;

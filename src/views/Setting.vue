@@ -129,6 +129,7 @@
       font-size: 18px;
       color: #ffffff;
       line-height: 26px;
+      cursor: pointer;
     }
   }
 }

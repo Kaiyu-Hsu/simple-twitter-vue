@@ -265,11 +265,10 @@ export default {
       }
     },
     async changeLike() {
-      // TODO 要把資料送到後端更新
       // 愛心亮起的狀態，使用者點擊愛心以取消"喜歡"
       if (
         this.tweetData.likes.some(
-          (likeRecord) => likeRecord.id === this.userData.id
+          (likeRecord) => likeRecord.UserId === this.userData.id
         )
       ) {
         try {

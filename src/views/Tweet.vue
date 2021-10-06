@@ -30,7 +30,6 @@ import { keepUnauthorizedOut } from "../utils/helpers";
 
 // TODO reponse like 陣列拿不到 userId 的暫時替代方案
 import userAPI from "./../api/userProfile";
-const getUserId = () => localStorage.getItem("user");
 // TODO 替代方案結束行
 
 export default {
@@ -53,7 +52,7 @@ export default {
         const response = await tweet.getTweet(id);
 
         // TODO reponse like 陣列拿不到 userId 的暫時替代方案
-        const getLikers = await userAPI.getTweets(getUserId());
+        const getAllTweets = await userAPI.getTweets(response.data.UserId);
         // TODO 替代方案結束行
 
         if (response.statusText !== "OK") {
@@ -62,12 +61,18 @@ export default {
 
         this.tweetData = { ...response.data };
         // TODO reponse like 陣列拿不到 userId 的暫時替代方案
-        const getOneTweet = getLikers.data.find(
+        const searchSameTweet = getAllTweets.data.find(
           (obj) => obj.id === this.tweetData.id
         );
-        this.tweetData.likes.push(
-          getOneTweet.likes.find((obj) => obj.UserId === this.userData.id)
+        const getLikers = searchSameTweet.likes.find(
+          (obj) => obj.UserId === this.userData.id
         );
+        if (getLikers) {
+          this.tweetData.likes = this.tweetData.likes.filter(
+            (obj) => obj.id !== getLikers.id
+          );
+          this.tweetData.likes.push(getLikers);
+        }
         // TODO 替代方案結束行
       } catch (error) {
         console.log("error", error);

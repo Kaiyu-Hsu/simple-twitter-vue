@@ -208,6 +208,10 @@
   height: 100%;
   background-color: white;
 
+  img {
+    cursor: initial;
+  }
+
   header {
     height: 55px;
     display: flex;
