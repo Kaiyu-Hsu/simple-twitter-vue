@@ -156,6 +156,10 @@ export default {
         }
 
         this.users = data.topTwitters;
+        // user 不會在 popular list 看見自己的帳號
+        this.users = this.users.filter(
+          (user) => user.followingId !== Number(getUserId())
+        );
         this.userFollowings = data.userFollowingList;
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;
