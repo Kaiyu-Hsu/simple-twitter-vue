@@ -272,6 +272,11 @@ export default {
       this.$router.push({ name: "tweet", params: { id: tweet.id } });
     },
     toOneUser(tweet) {
+      if (tweet.UserId === this.initialUser.id) {
+        return this.$router.push({
+          name: "profile",
+        });
+      }
       this.$router.push({
         name: "other-profile",
         params: { id: tweet.UserId },
