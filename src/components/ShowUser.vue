@@ -278,12 +278,14 @@ export default {
     this.fetchFollowers();
   },
   mounted() {
-    // listen to the event of event bus 
-    this.$bus.$on("change-follow-state", () => this.fetchFollowings());
+    // listen to the event of event bus
+    this.$bus.$on("change-following-state", () => {
+      this.fetchFollowings();
+    });
   },
   beforeDestroy() {
     // remove event bus listener when component destroyed to prevent performance problem
-    this.$bus.$off("change-follow-state")
-  }
+    this.$bus.$off("change-following-state");
+  },
 };
 </script>

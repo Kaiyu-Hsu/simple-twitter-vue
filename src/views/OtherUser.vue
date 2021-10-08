@@ -466,7 +466,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-
+        this.$bus.$emit("follow");
         this.fetchPopular();
         this.fetchFollowings(followerId);
         this.fetchFollowers(followerId);
@@ -487,6 +487,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("unfollow");
         this.fetchPopular();
         this.fetchFollowings(followerId);
         this.fetchFollowers(followerId);
@@ -543,6 +544,15 @@ export default {
     this.fetchFollowers(userid);
     this.fetchPopular();
   },
+  mounted() {
+    this.$bus.$on("change-follower-state", () => {
+      this.fetchFollowers(Number(this.$route.params.id));
+    });
+    this.$bus.$on("change-following-state", () => {
+      this.fetchPopular();
+      this.fetchUser();
+    });
+  },
   beforeRouteUpdate(to, from, next) {
     const id = to.params.id;
     this.fetchUser(id);
@@ -550,6 +560,10 @@ export default {
     this.fetchFollowings(id);
     this.fetchFollowers(id);
     next();
+  },
+  beforeDestroy() {
+    this.$bus.$off("change-follower-state");
+    this.$bus.$off("change-following-state")
   },
 };
 </script>
