@@ -16,6 +16,9 @@
         v-model="newPostContent"
       ></textarea>
       <div class="button-area">
+        <div class="word-count" v-show="newPostContent">
+          {{ newPostContent.length }} / 140
+        </div>
         <button type="button" @click.stop.prevent="newTweet">推文</button>
       </div>
     </div>
@@ -47,6 +50,7 @@
   .textarea-wrapper {
     display: flex;
     border-top: 1px solid #e6ecf0;
+    height: 120px;
     .thumbnail-container {
       position: relative;
       width: 50px;
@@ -57,6 +61,7 @@
         border-radius: 50%;
         width: 50px;
         height: 50px;
+        cursor: initial;
       }
     }
     textarea {
@@ -89,12 +94,20 @@
     }
     .button-area {
       display: flex;
+      flex-direction: column;
+      justify-content: end;
+      text-align: center;
+      .word-count {        
+        width: 100%;
+        margin-bottom: 3px;
+        font-size: 10px;
+        color: rgb(51, 51, 51);
+      }
       button {
+        border: none;
         width: 66px;
         height: 38px;
         border-radius: 100px;
-        border: none;
-        margin-top: 71px;
         margin-bottom: 10px;
         background: #ff6600;
         font-family: Noto Sans TC;
@@ -137,7 +150,6 @@ export default {
     return {
       user: {},
       newPostContent: "",
-      contentLength: "",
     };
   },
   methods: {
@@ -149,7 +161,7 @@ export default {
           icon: "warning",
           title: "在輸入欄勇敢說出你的想法吧!",
         });
-      } else if (this.contentLength > 140) {
+      } else if (this.newPostContent.length > 140) {
         return Toast.fire({
           position: "top",
           icon: "warning",
@@ -179,9 +191,6 @@ export default {
   watch: {
     initialUser(newValue) {
       this.user = { ...this.user, ...newValue };
-    },
-    newPostContent() {
-      this.contentLength = this.newPostContent.length;
     },
   },
 };
