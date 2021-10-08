@@ -97,7 +97,7 @@
       flex-direction: column;
       justify-content: end;
       text-align: center;
-      .word-count {        
+      .word-count {
         width: 100%;
         margin-bottom: 3px;
         font-size: 10px;

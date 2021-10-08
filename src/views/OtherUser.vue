@@ -563,7 +563,7 @@ export default {
   },
   beforeDestroy() {
     this.$bus.$off("change-follower-state");
-    this.$bus.$off("change-following-state")
+    this.$bus.$off("change-following-state");
   },
 };
 </script>
