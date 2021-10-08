@@ -72,6 +72,7 @@ img {
   color: #657786;
 }
 
+.name,
 .following-btn,
 .unfollowing-btn {
   cursor: pointer;

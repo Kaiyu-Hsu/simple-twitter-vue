@@ -105,6 +105,9 @@ header {
       z-index: -1;
     }
   }
+  img {
+    cursor: initial;
+  }
 
   .avatar-btn {
     display: flex;
