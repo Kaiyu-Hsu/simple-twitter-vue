@@ -72,6 +72,7 @@ img {
   color: #657786;
 }
 
+.name,
 .following-btn,
 .unfollowing-btn {
   cursor: pointer;
@@ -156,6 +157,10 @@ export default {
         }
 
         this.users = data.topTwitters;
+        // user 不會在 popular list 看見自己的帳號
+        this.users = this.users.filter(
+          (user) => user.followingId !== Number(getUserId())
+        );
         this.userFollowings = data.userFollowingList;
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;
@@ -177,7 +182,7 @@ export default {
           throw new Error(data.message);
         }
 
-        this.$bus.$emit("change-follow-state"); // event bus
+        this.$bus.$emit("change-following-state"); // event bus
         this.fetchPopular();
       } catch (error) {
         console.log("error", error);
@@ -195,7 +200,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-        this.$bus.$emit("change-follow-state"); // event bus
+        this.$bus.$emit("change-following-state"); // event bus
         this.fetchPopular();
       } catch (error) {
         console.log("error", error);
@@ -216,6 +221,14 @@ export default {
   created() {
     this.fetchUserData();
     this.fetchPopular();
+  },
+  mounted() {
+    this.$bus.$on("follow", () => this.fetchPopular());
+    this.$bus.$on("unfollow", () => this.fetchPopular());
+  },
+  beforeDestroy() {
+    this.$bus.$off("follow");
+    this.$bus.$off("unfollow");
   },
 };
 </script>

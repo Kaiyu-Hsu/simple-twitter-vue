@@ -55,8 +55,9 @@
             v-model="email"
             @focus="focusInput"
             required
+            autofocus
           />
-          <hr :class="{ 'now-focus': nowFocus === 'account' }" />
+          <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
         <div class="input-wrapper">
           <span>密碼</span>
@@ -255,22 +256,37 @@ export default {
           throw new Error(data.message);
         }
 
-        // 將 token userId 存放在 localStorage 內
+        // 將 token, userId 存放在 localStorage 內
         localStorage.setItem("token", data.token.token);
         localStorage.setItem("user", data.user.id);
+        // 給予 role 代號，判斷頁面觀看權限
+        localStorage.setItem("role", "8347");
 
         // 成功登入後轉址到首頁
         this.$router.push("/main");
       } catch (error) {
         // 將密碼欄位清空
         this.password = "";
-
         // 顯示錯誤提示
-        Toast.fire({
-          icon: "warning",
-          position: "top",
-          title: "請確認您輸入了正確的email和密碼",
-        });
+        if (error.response.data.message === "no such user found") {
+          Toast.fire({
+            icon: "warning",
+            position: "top",
+            title: "無此帳號",
+          });
+        } else if (error.response.data.message === "passwords did not match") {
+          Toast.fire({
+            icon: "warning",
+            position: "top",
+            title: "密碼錯誤",
+          });
+        } else {
+          Toast.fire({
+            icon: "warning",
+            position: "top",
+            title: "抱歉，目前無法登入，請稍後再試",
+          });
+        }
 
         // 因為登入失敗，所以要把按鈕狀態還原
         this.isProcessing = false;
@@ -281,6 +297,7 @@ export default {
   created() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
   },
 };
 </script>

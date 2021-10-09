@@ -26,7 +26,7 @@ import ReplyList from "../components/ReplyList.vue";
 import Navbar from "../components/Navbar.vue";
 import Popular from "../components/Popular.vue";
 import { tweet } from "./../api/tweet";
-import { keepUnauthorizedOut } from "../utils/helpers";
+import { keepUnauthorizedOut, roleAccessControl } from "../utils/helpers";
 
 // TODO reponse like 陣列拿不到 userId 的暫時替代方案
 import userAPI from "./../api/userProfile";
@@ -94,6 +94,7 @@ export default {
   },
   created() {
     keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.fetchTweet();
     this.fetchCurrentUser();
   },

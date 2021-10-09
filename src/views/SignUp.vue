@@ -46,6 +46,8 @@
             name="account"
             v-model="account"
             @focus="focusInput"
+            autofocus
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'account' }" />
         </div>
@@ -61,6 +63,7 @@
             name="email"
             v-model="email"
             @focus="focusInput"
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'email' }" />
         </div>
@@ -71,6 +74,7 @@
             name="password"
             v-model="password"
             @focus="focusInput"
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'password' }" />
         </div>
@@ -81,6 +85,7 @@
             name="checkPassword"
             v-model="checkPassword"
             @focus="focusInput"
+            required
           />
           <hr :class="{ 'now-focus': nowFocus === 'checkPassword' }" />
         </div>
@@ -254,6 +259,8 @@ export default {
           });
           return;
         }
+        // 避免多次發送 request
+        this.isProcessing = true;
 
         const response = await authorization.signUp(signUpData);
 
@@ -263,16 +270,33 @@ export default {
         if (data !== "Accept") {
           throw new Error(data.message);
         }
+        // 使按鈕回復可點擊狀態
+        this.isProcessing = false;
 
+        Toast.fire({
+          icon: "success",
+          position: "top",
+          title: "註冊成功!",
+        });
         // 成功註冊後轉址到登入頁
         this.$router.push("/");
       } catch (error) {
         // 將密碼確認欄位清空
         this.checkPassword = "";
-        Toast.fire({
-          icon: "warning",
-          title: "註冊失敗，請稍後再試",
-        });
+        // 使按鈕回復可點擊狀態
+        this.isProcessing = false;
+        // 告知使用者註冊失敗的原因
+        error.response.data.includes("account")
+          ? Toast.fire({
+              icon: "warning",
+              title: `${error.response.data.replace("account", "帳號")}`,
+              position: "top",
+            })
+          : Toast.fire({
+              icon: "warning",
+              title: `${error.response.data}`,
+              position: "top",
+            });
         console.log("error", error.response || error);
       }
     },

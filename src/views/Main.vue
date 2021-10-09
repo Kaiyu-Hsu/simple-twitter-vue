@@ -30,7 +30,7 @@ import Popular from "./../components/Popular";
 import Navbar from "./../components/Navbar";
 import CreatePosts from "./../components/CreatePosts";
 import NewestPosts from "./../components/NewestPosts";
-import { keepUnauthorizedOut } from "./../utils/helpers";
+import { keepUnauthorizedOut, roleAccessControl } from "./../utils/helpers";
 import { tweets } from "./../api/tweets";
 import user from "./../api/user";
 
@@ -83,6 +83,7 @@ export default {
   },
   created() {
     keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.getTweets();
     this.fetchUser();
   },

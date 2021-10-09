@@ -386,6 +386,7 @@ export default {
     newPost() {
       // 通知重新渲染畫面
       this.$emit("new-post");
+      this.$bus.$emit("new-post");
     },
     logOut() {
       authorizationAPI.logOut();

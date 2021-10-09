@@ -1,15 +1,15 @@
 import { apiHelper } from "../utils/helpers";
-const token = localStorage.getItem("token");
+const token = () => localStorage.getItem("token");
 
 export const tweets = {
   getTweets() {
     return apiHelper.get("api/tweets", {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token()}` },
     });
   },
   getReply(id) {
     return apiHelper.get(`api/tweets/${id}/replies`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token()}` },
     });
   },
   postTweets(description) {
@@ -19,13 +19,13 @@ export const tweets = {
         description, // req.body.description
       },
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token()}` },
       }
     );
   },
   postReply(id) {
     return apiHelper.post(`api/tweets/${id}/replies`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token()}` },
     });
   },
   postLike(tweetId, userId) {
@@ -33,7 +33,7 @@ export const tweets = {
       `api/tweets/${tweetId}/like`,
       { userId },
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token()}` },
       }
     );
   },
@@ -42,7 +42,7 @@ export const tweets = {
       `api/tweets/${tweetId}/unlike`,
       { userId },
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token()}` },
       }
     );
   },

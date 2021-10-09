@@ -2,10 +2,10 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 //ruby route
-// const baseURL = "https://ac-tweeeeter.herokuapp.com/";
+const baseURL = "https://ac-tweeeeter.herokuapp.com/";
 
 //rex route
-const baseURL = "https://actwitter.herokuapp.com";
+// const baseURL = "https://actwitter.herokuapp.com";
 
 export const apiHelper = axios.create({
   baseURL,
@@ -27,7 +27,22 @@ export function keepUnauthorizedOut(VueComponet) {
       title: "請先登入",
     });
     VueComponet.$router.push("/");
+    throw new Error("Please sign in first");
+  }
+}
+
+export function roleAccessControl(VueComponet, role) {
+  const getRole = localStorage.getItem("role");
+
+  if (!getRole) {
+    VueComponet.$router.push("/");
     throw "Please sign in first";
+  }
+
+  if (getRole !== role) {
+    // "10550" stands for admin, "8347" stands for user
+    VueComponet.$router.back();
+    throw "No access";
   }
 }
 

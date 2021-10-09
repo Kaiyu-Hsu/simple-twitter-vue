@@ -344,7 +344,11 @@
 <script>
 import Popular from "./../components/Popular.vue";
 import Navbar from "./../components/Navbar.vue";
-import { Toast } from "./../utils/helpers";
+import {
+  keepUnauthorizedOut,
+  roleAccessControl,
+  Toast,
+} from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 import popularAPI from "./../api/user";
 import followerships from "./../api/followerships";
@@ -462,7 +466,7 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
-
+        this.$bus.$emit("follow");
         this.fetchPopular();
         this.fetchFollowings(followerId);
         this.fetchFollowers(followerId);
@@ -483,6 +487,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("unfollow");
         this.fetchPopular();
         this.fetchFollowings(followerId);
         this.fetchFollowers(followerId);
@@ -531,11 +536,22 @@ export default {
   },
   created() {
     const userid = Number(this.$route.params.id);
+    keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.fetchUser(userid);
     this.fetchApiTweets(userid);
     this.fetchFollowings(userid);
     this.fetchFollowers(userid);
     this.fetchPopular();
+  },
+  mounted() {
+    this.$bus.$on("change-follower-state", () => {
+      this.fetchFollowers(Number(this.$route.params.id));
+    });
+    this.$bus.$on("change-following-state", () => {
+      this.fetchPopular();
+      this.fetchUser();
+    });
   },
   beforeRouteUpdate(to, from, next) {
     const id = to.params.id;
@@ -544,6 +560,10 @@ export default {
     this.fetchFollowings(id);
     this.fetchFollowers(id);
     next();
+  },
+  beforeDestroy() {
+    this.$bus.$off("change-follower-state");
+    this.$bus.$off("change-following-state");
   },
 };
 </script>

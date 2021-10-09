@@ -33,7 +33,8 @@
 </template>
 
 <style lang="scss" scoped>
-svg, img {
+svg,
+img {
   cursor: initial;
 }
 
@@ -90,7 +91,11 @@ svg, img {
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
-import { Toast } from "./../utils/helpers";
+import {
+  Toast,
+  keepUnauthorizedOut,
+  roleAccessControl,
+} from "./../utils/helpers";
 import admin from "./../api/admin";
 
 export default {
@@ -151,6 +156,8 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this);
+    roleAccessControl(this, "10550");
     this.fetchApiData();
   },
 };
