@@ -72,7 +72,6 @@
                   ? "目前還沒有自我介紹"
                   : follower.follower.introduction
               }}
-              <!-- 目前還沒有自我介紹 -->
             </div>
           </div>
         </div>
@@ -245,28 +244,6 @@ export default {
     // user file
     async fetchUser() {
       try {
-        // TODO 增加判斷 ID是自己還是其他人
-        // if (this.$route.params.id) {
-        //   const userid = Number(this.$route.params.id);
-        //   const response = await userAPI.getOtherUser(userid);
-        //   const { data } = response;
-
-        //   if (response.statusText !== "OK") {
-        //     throw new Error(data.message);
-        //   }
-
-        //   this.user = data;
-        // } else {
-        //   const response = await userAPI.getUser(getUserId());
-        //   const { data } = response;
-
-        //   if (response.statusText !== "OK") {
-        //     throw new Error(data.message);
-        //   }
-
-        //   this.user = data;
-        // }
-
         const response = await userAPI.getUser(getUserId());
 
         // 取得 API 請求後的資料
