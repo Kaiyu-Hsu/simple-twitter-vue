@@ -375,7 +375,7 @@ export default {
     },
     // change route
     toFollowings() {
-      this.$router.push({ name: "other-user-followings" });
+      this.$router.push({ name: "other-user-followings", id: this.user.id });
     },
   },
   created() {
