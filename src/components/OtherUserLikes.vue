@@ -59,7 +59,7 @@
                 />
               </svg>
             </div>
-            <div class="likes-num">{{ like.tweet.replies.length }}</div>
+            <div class="likes-num">{{ like.tweet.likes.length }}</div>
           </div>
           <div class="dislikes" v-else>
             <div class="likes-icon" @click="doLike(like.TweetId)">
@@ -77,7 +77,7 @@
               </svg>
             </div>
             <div class="dislikes-num" style="#657786">
-              {{ like.tweet.replies.length }}
+              {{ like.tweet.likes.length }}
             </div>
           </div>
         </div>
