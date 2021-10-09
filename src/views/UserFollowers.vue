@@ -32,7 +32,6 @@
         >
           跟隨者
         </div>
-        <!-- :class="{ active: $route.name === 'user-followings' }" -->
         <div class="followings" @click.stop.prevent="toFollowings">
           正在跟隨
         </div>
@@ -68,12 +67,12 @@
               </div>
             </div>
             <div class="content">
-              <!-- {{
-                follower.follower.introduction === 0
+              {{
+                follower.follower.introduction.length === 0
                   ? "目前還沒有自我介紹"
                   : follower.follower.introduction
-              }} -->
-              目前還沒有自我介紹
+              }}
+              <!-- 目前還沒有自我介紹 -->
             </div>
           </div>
         </div>
