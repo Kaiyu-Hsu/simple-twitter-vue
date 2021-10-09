@@ -86,9 +86,9 @@
   border-right: 1px solid #e5e5e5;
   position: absolute;
   left: 27%;
-  bottom: 0px;
+  top: 0px;
   width: 42%;
-  height: 100%;
+  // height: 100%;
   header {
     height: 55px;
     display: flex;
