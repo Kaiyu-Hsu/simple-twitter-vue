@@ -160,7 +160,11 @@ svg {
 
 <script>
 import admin from "./../api/admin";
-import { Toast } from "./../utils/helpers";
+import {
+  Toast,
+  keepUnauthorizedOut,
+  roleAccessControl,
+} from "./../utils/helpers";
 
 export default {
   name: "AdminUsers",
@@ -195,6 +199,8 @@ export default {
     },
   },
   created() {
+    keepUnauthorizedOut(this);
+    roleAccessControl(this, "10550");
     this.fetchApiData();
   },
 };

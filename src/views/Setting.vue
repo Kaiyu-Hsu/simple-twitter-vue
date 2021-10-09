@@ -137,7 +137,11 @@
 
 <script>
 import Navbar from "./../components/Navbar";
-import { keepUnauthorizedOut, Toast } from "./../utils/helpers";
+import {
+  keepUnauthorizedOut,
+  roleAccessControl,
+  Toast,
+} from "./../utils/helpers";
 import user from "./../api/user";
 
 const getUserId = () => localStorage.getItem("user");
@@ -186,23 +190,28 @@ export default {
         name: this.name,
         email: this.email,
       };
-      const password = this.password.replace(/\s/g, "");
-      const checkPassword = this.checkPassword.replace(/\s/g, "");
 
-      if (password !== checkPassword) {
+      // 檢查是否包含 whitespace
+      if (this.password.includes(" ")) {
+        return Toast.fire({
+          icon: "warning",
+          position: "top",
+          title: "不接受空白鍵",
+        });
+      }
+
+      // 檢查兩次密碼是否相同
+      if (this.password !== this.checkPassword) {
         return Toast.fire({
           icon: "warning",
           title: "密碼 與 密碼確認 請輸入相同組合",
         });
       }
-
       // 避免送出空的 password
-      if (password.length !== 0 && checkPassword.length !== 0) {
-        // TODO 密碼字元檢查
-
-        // 有輸入新密碼時才在 data 裡面加入 password property
-        data.password = password;
-        data.checkPassword = checkPassword;
+      if (this.password.length !== 0 && this.checkPassword.length !== 0) {
+        // 有輸入新密碼且符合標準時才在 data 裡面加入 password property
+        data.password = this.password;
+        data.checkPassword = this.checkPassword;
       }
 
       try {
@@ -230,6 +239,7 @@ export default {
   },
   created() {
     keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
     this.getEditUser();
   },
 };

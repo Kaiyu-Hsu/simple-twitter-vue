@@ -244,5 +244,13 @@ export default {
   created() {
     this.fetchApiTweets();
   },
+  mounted() {
+    // listen to the event of event bus
+    this.$bus.$on("new-post", () => this.fetchApiTweets());
+  },
+  beforeDestroy() {
+    // remove event bus listener when component destroyed to prevent performance problem
+    this.$bus.$off("new-post");
+  },
 };
 </script>

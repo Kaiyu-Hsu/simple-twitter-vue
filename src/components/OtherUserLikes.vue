@@ -121,6 +121,7 @@
       display: flex;
       .name {
         margin: auto 5px auto 0px;
+        cursor: pointer;
       }
       .account {
         font-weight: 500;

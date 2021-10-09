@@ -31,10 +31,9 @@
         </div>
 
         <footer class="modal-footer">
-          <!-- TODO 須調整 word count 的位置
-          <span class="word-count"
-            >{{ contentLength }} 須調整 word count 的位置</span
-          > -->
+          <span class="word-count" v-show="newPostContent"
+            >{{ newPostContent.length }} / 140</span
+          >
           <button type="button" class="btn-tweet" @click="newTweet">
             推文
           </button>
@@ -89,8 +88,10 @@
   padding-right: 15px;
 
   .word-count {
-    padding-top: 6px;
-    margin-right: 3px;
+    line-height: 2.5;
+    margin-right: 6px;
+    font-size: 10px;
+    color: rgb(51, 51, 51);
   }
 }
 
@@ -165,7 +166,6 @@ export default {
   data() {
     return {
       newPostContent: "",
-      contentLength: "",
     };
   },
   methods: {
@@ -177,7 +177,7 @@ export default {
           icon: "warning",
           title: "在輸入欄勇敢說出你的想法吧!",
         });
-      } else if (this.contentLength > 140) {
+      } else if (this.newPostContent.length > 140) {
         return Toast.fire({
           position: "top",
           icon: "warning",
@@ -202,12 +202,6 @@ export default {
     },
     btnClose() {
       this.$emit("close");
-    },
-  },
-  watch: {
-    newPostContent() {
-      // 即時顯示當前的 word count
-      this.contentLength = this.newPostContent.length;
     },
   },
 };
