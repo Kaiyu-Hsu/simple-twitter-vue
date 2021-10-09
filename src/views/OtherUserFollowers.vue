@@ -21,28 +21,23 @@
         </router-link>
         <div class="name-tweets">
           <div class="name">{{ user.name }}</div>
-          <div class="tweets">{{ tweetsNum }}推文</div>
+          <div class="tweets">{{ user.tweetsNum }}推文</div>
         </div>
       </header>
       <!-- UserSelfTabs -->
       <div class="user-self-tabs">
         <div
           class="followers"
-          :class="{ active: $route.name === 'user-followers' }"
+          :class="{ active: $route.name === 'other-user-followers' }"
         >
           跟隨者
         </div>
-        <!-- :class="{ active: $route.name === 'user-followings' }" -->
         <div class="followings" @click.stop.prevent="toFollowings">
           正在跟隨
         </div>
       </div>
       <div class="followers-card">
-        <div
-          class="a-card"
-          v-for="follower in followers"
-          :key="follower.followerId"
-        >
+        <div class="a-card" v-for="follower in followers" :key="follower.id">
           <img class="avatar" :src="follower.follower.avatar" />
           <div class="left">
             <div class="top">
@@ -52,7 +47,7 @@
               </div>
               <div class="btn">
                 <div
-                  v-if="followings.includes(follower.followerId)"
+                  v-if="currentUser.followings.includes(follower.followerId)"
                   class="following-btn"
                   @click="unfollowing(follower.followerId)"
                 >
@@ -68,12 +63,11 @@
               </div>
             </div>
             <div class="content">
-              <!-- {{
-                follower.follower.introduction === 0
+              {{
+                follower.follower.introduction.length === 0
                   ? "目前還沒有自我介紹"
                   : follower.follower.introduction
-              }} -->
-              目前還沒有自我介紹
+              }}
             </div>
           </div>
         </div>
@@ -220,12 +214,177 @@
 <script>
 import Popular from "../components/Popular.vue";
 import Navbar from "../components/Navbar.vue";
+import {
+  keepUnauthorizedOut,
+  roleAccessControl,
+  Toast,
+} from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
+import followerships from "./../api/followerships";
+
+const getUserId = () => localStorage.getItem("user");
 
 export default {
   name: "OtherUserFollowers",
   components: {
     Popular,
     Navbar,
+  },
+  data() {
+    return {
+      currentUser: {
+        id: Number(getUserId()),
+        followings: [],
+      },
+      user: {
+        id: this.$route.params.id,
+        name: "",
+        tweetsNum: "",
+      },
+      followers: [],
+      isLoading: true,
+    };
+  },
+  methods: {
+    async fetchUser() {
+      try {
+        const response = await userAPI.getOtherUser(this.user.id);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.user.name = data.name;
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    // tweets num
+    async fetchApiTweets() {
+      try {
+        const response = await userAPI.getTweets(this.user.id);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.user.tweetsNum = data.length;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    // 取當前使用者 followings 做比對
+    async fetchFollowings() {
+      try {
+        const response = await userAPI.getFollowings(this.currentUser.id);
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.currentUser.followings = data;
+        // 只把 followingId 取出成 Array
+        this.currentUser.followings = this.currentUser.followings.map(
+          (following) => {
+            return following.followingId;
+          }
+        );
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async fetchFollowers() {
+      try {
+        const response = await userAPI.getFollowers(this.user.id);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.followers = data;
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    // btn
+    async following(followerId) {
+      try {
+        const response = await followerships.following(followerId);
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.fetchFollowers();
+        this.fetchFollowings();
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法追蹤",
+        });
+      }
+    },
+    async unfollowing(followerId) {
+      try {
+        const response = await followerships.unfollowing(followerId);
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.fetchFollowers();
+        this.fetchFollowings();
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法取消追蹤",
+        });
+      }
+    },
+    // change route
+    toFollowings() {
+      this.$router.push({ name: "other-user-followings" });
+    },
+  },
+  created() {
+    keepUnauthorizedOut(this);
+    roleAccessControl(this, "8347");
+    this.fetchUser();
+    this.fetchApiTweets();
+    this.fetchFollowings();
+    this.fetchFollowers();
   },
 };
 </script>
