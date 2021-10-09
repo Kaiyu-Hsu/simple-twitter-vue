@@ -189,6 +189,9 @@ export default {
         }
 
         this.users = data;
+        this.users = this.users.sort(function (a, b) {
+          return b.userTweets.length - a.userTweets.length;
+        });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
