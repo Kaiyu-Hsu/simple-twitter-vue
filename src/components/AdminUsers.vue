@@ -24,7 +24,7 @@
               />
             </svg>
           </div>
-          <div class="replied-num">{{ user.replies.length }}</div>
+          <div class="replied-num">{{ user.userTweets.length }}</div>
           <div class="love-icon">
             <svg
               width="25"
