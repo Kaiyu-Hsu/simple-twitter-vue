@@ -150,7 +150,12 @@
         <div class="followings-followers">
           <div class="followings">
             <div class="num">
-              <router-link to="/user-followings">
+              <router-link
+                :to="{
+                  name: 'other-user-followings',
+                  params: { id: userData.id },
+                }"
+              >
                 {{ followings.length }}位
               </router-link>
             </div>
@@ -158,7 +163,12 @@
           </div>
           <div class="followers">
             <div class="num">
-              <router-link to="/user-followers">
+              <router-link
+                :to="{
+                  name: 'other-user-followers',
+                  params: { id: userData.id },
+                }"
+              >
                 {{ followers.length }}位
               </router-link>
             </div>
