@@ -40,11 +40,20 @@
           v-for="following in followings"
           :key="following.followerId"
         >
-          <img class="avatar" :src="following.following.avatar" />
+          <img
+            class="avatar"
+            :src="following.following.avatar"
+            @click.stop.prevent="othersProfile(following.followerId)"
+          />
           <div class="left">
             <div class="top">
               <div class="name-account">
-                <div class="name">{{ following.following.name }}</div>
+                <div
+                  class="name"
+                  @click.stop.prevent="othersProfile(following.followerId)"
+                >
+                  {{ following.following.name }}
+                </div>
                 <div class="account">@{{ following.following.account }}</div>
               </div>
               <div class="btn">
@@ -225,14 +234,6 @@ export default {
     Popular,
     Navbar,
   },
-  // props: {
-  //   otherUser: {
-  //     type: Object,
-  //   },
-  //   otherTweetsNum: {
-  //     type: String,
-  //   },
-  // },
   data() {
     return {
       user: {},
@@ -245,27 +246,6 @@ export default {
     // user file
     async fetchUser() {
       try {
-        // TODO 增加判斷 ID是自己還是其他人
-        // if (this.$route.params.id) {
-        //   const userid = Number(this.$route.params.id);
-        //   const response = await userAPI.getOtherUser(userid);
-        //   const { data } = response;
-
-        //   if (response.statusText !== "OK") {
-        //     throw new Error(data.message);
-        //   }
-
-        //   this.user = data;
-        // } else {
-        //   const response = await userAPI.getUser(getUserId());
-        //   const { data } = response;
-
-        //   if (response.statusText !== "OK") {
-        //     throw new Error(data.message);
-        //   }
-
-        //   this.user = data;
-        // }
         const response = await userAPI.getUser(getUserId());
 
         const { data } = response;
@@ -352,6 +332,13 @@ export default {
     // change route
     toFollowers() {
       this.$router.push({ name: "user-followers" });
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
   },
   created() {

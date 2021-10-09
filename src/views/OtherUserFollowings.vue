@@ -40,11 +40,20 @@
           v-for="following in followings"
           :key="following.followingId"
         >
-          <img class="avatar" :src="following.following.avatar" />
+          <img
+            class="avatar"
+            :src="following.following.avatar"
+            @click.stop.prevent="othersProfile(following.followingId)"
+          />
           <div class="left">
             <div class="top">
               <div class="name-account">
-                <div class="name">{{ following.following.name }}</div>
+                <div
+                  class="name"
+                  @click.stop.prevent="othersProfile(following.followingId)"
+                >
+                  {{ following.following.name }}
+                </div>
                 <div class="account">@{{ following.following.account }}</div>
               </div>
               <div class="btn">
@@ -372,6 +381,13 @@ export default {
     // change route
     toFollowers() {
       this.$router.push({ name: "other-user-followers", id: this.user.id });
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
   },
   created() {
