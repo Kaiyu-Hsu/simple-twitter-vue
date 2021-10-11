@@ -150,7 +150,12 @@
         <div class="followings-followers">
           <div class="followings">
             <div class="num">
-              <router-link to="/user-followings">
+              <router-link
+                :to="{
+                  name: 'other-user-followings',
+                  params: { id: userData.id },
+                }"
+              >
                 {{ followings.length }}位
               </router-link>
             </div>
@@ -158,7 +163,12 @@
           </div>
           <div class="followers">
             <div class="num">
-              <router-link to="/user-followers">
+              <router-link
+                :to="{
+                  name: 'other-user-followers',
+                  params: { id: userData.id },
+                }"
+              >
                 {{ followers.length }}位
               </router-link>
             </div>
@@ -385,6 +395,8 @@ export default {
         }
 
         this.userData = data;
+        this.followings = data.Followings;
+        this.followers = data.Followers;
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -408,48 +420,6 @@ export default {
         }
 
         this.tweetsNum = data.length;
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
-    },
-    // followingsNum
-    async fetchFollowings(userid) {
-      try {
-        const response = await userAPI.getFollowings(userid);
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        this.followings = data;
-      } catch (error) {
-        console.log("error", error);
-        Toast.fire({
-          icon: "warning",
-          title: "無法載入資料",
-        });
-      }
-    },
-    // followersNum
-    async fetchFollowers(userid) {
-      try {
-        const response = await userAPI.getFollowers(userid);
-
-        // 取得 API 請求後的資料
-        const { data } = response;
-
-        if (response.statusText !== "OK") {
-          throw new Error(data.message);
-        }
-
-        this.followers = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -540,8 +510,6 @@ export default {
     roleAccessControl(this, "8347");
     this.fetchUser(userid);
     this.fetchApiTweets(userid);
-    this.fetchFollowings(userid);
-    this.fetchFollowers(userid);
     this.fetchPopular();
   },
   mounted() {
@@ -557,8 +525,6 @@ export default {
     const id = to.params.id;
     this.fetchUser(id);
     this.fetchApiTweets(id);
-    this.fetchFollowings(id);
-    this.fetchFollowers(id);
     next();
   },
   beforeDestroy() {

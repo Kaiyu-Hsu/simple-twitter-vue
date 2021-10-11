@@ -21,58 +21,66 @@
         </router-link>
         <div class="name-tweets">
           <div class="name">{{ user.name }}</div>
-          <div class="tweets">{{ tweetsNum }}推文</div>
+          <div class="tweets">{{ user.tweetsNum }}推文</div>
         </div>
       </header>
       <!-- UserSelfTabs -->
       <div class="user-self-tabs">
-        <div class="followers" @click.stop.prevent="toFollowers">跟隨者</div>
         <div
-          class="followings"
-          :class="{ active: $route.name === 'user-followings' }"
+          class="followers"
+          :class="{ active: $route.name === 'other-user-followers' }"
         >
+          跟隨者
+        </div>
+        <div class="followings" @click.stop.prevent="toFollowings">
           正在跟隨
         </div>
       </div>
       <div class="followers-card">
         <div
           class="a-card"
-          v-for="following in followings"
-          :key="following.followerId"
+          v-for="follower in followers"
+          :key="follower.followerId"
         >
           <img
             class="avatar"
-            :src="following.following.avatar"
-            @click.stop.prevent="othersProfile(following.followerId)"
+            :src="follower.follower.avatar"
+            @click.stop.prevent="othersProfile(follower.followerId)"
           />
           <div class="left">
             <div class="top">
               <div class="name-account">
                 <div
                   class="name"
-                  @click.stop.prevent="othersProfile(following.followerId)"
+                  @click.stop.prevent="othersProfile(follower.followerId)"
                 >
-                  {{ following.following.name }}
+                  {{ follower.follower.name }}
                 </div>
-                <div class="account">@{{ following.following.account }}</div>
+                <div class="account">@{{ follower.follower.account }}</div>
               </div>
               <div class="btn">
                 <div
+                  v-if="currentUser.followings.includes(follower.followerId)"
                   class="following-btn"
-                  @click.stop.prevent="unfollowing(following.followingId)"
+                  @click="unfollowing(follower.followerId)"
                 >
                   正在跟隨
+                </div>
+                <div
+                  v-else
+                  class="unfollowing-btn"
+                  @click="following(follower.followerId)"
+                >
+                  跟隨
                 </div>
               </div>
             </div>
             <div class="content">
-              <!-- 因為目前沒有 following.introduction ，所以渲染不出來-->
-              <!-- {{
-                following.following.introduction.length === 0
+              {{
+                follower.follower.introduction.length === 0
                   ? "目前還沒有自我介紹"
-                  : following.following.introduction
-              }} -->
-              目前還沒有自我介紹
+                  : follower.follower.introduction
+              }}
             </div>
           </div>
         </div>
@@ -88,9 +96,9 @@
   border-right: 1px solid #e5e5e5;
   position: absolute;
   left: 27%;
-  bottom: 0px;
+  top: 0px;
   width: 42%;
-  height: 100%;
+  // height: 100%;
   header {
     height: 55px;
     display: flex;
@@ -192,6 +200,7 @@
               align-items: center;
             }
             .unfollowing-btn {
+              padding: 0px 15px;
               border: 1px solid #ff6600;
               box-sizing: border-box;
               border-radius: 100px;
@@ -222,39 +231,46 @@ import {
   keepUnauthorizedOut,
   roleAccessControl,
   Toast,
-} from "../utils/helpers";
-import userAPI from "../api/userProfile";
-import followershipsAPI from "./../api/followerships";
+} from "./../utils/helpers";
+import userAPI from "./../api/userProfile";
+import followerships from "./../api/followerships";
 
 const getUserId = () => localStorage.getItem("user");
 
 export default {
-  name: "UserFollowings",
+  name: "OtherUserFollowers",
   components: {
     Popular,
     Navbar,
   },
   data() {
     return {
-      user: {},
-      tweetsNum: "",
-      followings: [],
+      currentUser: {
+        id: Number(getUserId()),
+        followings: [],
+      },
+      user: {
+        id: this.$route.params.id,
+        name: "",
+        tweetsNum: "",
+      },
+      followers: [],
       isLoading: true,
     };
   },
   methods: {
-    // user file
     async fetchUser() {
       try {
-        const response = await userAPI.getUser(getUserId());
+        const response = await userAPI.getOtherUser(this.user.id);
 
+        // 取得 API 請求後的資料
         const { data } = response;
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.user = data;
+        this.user.name = data.name;
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -268,7 +284,7 @@ export default {
     // tweets num
     async fetchApiTweets() {
       try {
-        const response = await userAPI.getTweets(getUserId());
+        const response = await userAPI.getTweets(this.user.id);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -277,10 +293,8 @@ export default {
           throw new Error(data.message);
         }
 
-        this.tweetsNum = data.length;
-        this.isLoading = false;
+        this.user.tweetsNum = data.length;
       } catch (error) {
-        this.isLoading = false;
         console.log("error", error);
         Toast.fire({
           icon: "warning",
@@ -288,17 +302,43 @@ export default {
         });
       }
     },
-    // followings
+    // 取當前使用者 followings 做比對
     async fetchFollowings() {
       try {
-        const response = await userAPI.getFollowings(getUserId());
+        const response = await userAPI.getFollowings(this.currentUser.id);
         const { data } = response;
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.followings = data;
+        this.currentUser.followings = data;
+        // 只把 followingId 取出成 Array
+        this.currentUser.followings = this.currentUser.followings.map(
+          (following) => {
+            return following.followingId;
+          }
+        );
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入資料",
+        });
+      }
+    },
+    async fetchFollowers() {
+      try {
+        const response = await userAPI.getFollowers(this.user.id);
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.followers = data;
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -308,18 +348,35 @@ export default {
       }
     },
     // btn
-    async unfollowing(id) {
+    async following(followerId) {
       try {
-        const response = await followershipsAPI.unfollowing(id);
+        const response = await followerships.following(followerId);
         const { data } = response;
 
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
 
-        this.followings = this.followings.filter(
-          (following) => following.followingId !== id
-        );
+        this.fetchFollowers();
+        this.fetchFollowings();
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法追蹤",
+        });
+      }
+    },
+    async unfollowing(followerId) {
+      try {
+        const response = await followerships.unfollowing(followerId);
+        const { data } = response;
+
+        if (response.statusText !== "OK") {
+          throw new Error(data.message);
+        }
+
+        this.fetchFollowers();
         this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
@@ -330,8 +387,8 @@ export default {
       }
     },
     // change route
-    toFollowers() {
-      this.$router.push({ name: "user-followers" });
+    toFollowings() {
+      this.$router.push({ name: "other-user-followings", id: this.user.id });
     },
     othersProfile(id) {
       if (id === Number(getUserId())) {
@@ -347,6 +404,7 @@ export default {
     this.fetchUser();
     this.fetchApiTweets();
     this.fetchFollowings();
+    this.fetchFollowers();
   },
 };
 </script>

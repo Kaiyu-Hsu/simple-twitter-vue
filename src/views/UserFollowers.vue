@@ -32,7 +32,6 @@
         >
           跟隨者
         </div>
-        <!-- :class="{ active: $route.name === 'user-followings' }" -->
         <div class="followings" @click.stop.prevent="toFollowings">
           正在跟隨
         </div>
@@ -43,11 +42,20 @@
           v-for="follower in followers"
           :key="follower.followerId"
         >
-          <img class="avatar" :src="follower.follower.avatar" />
+          <img
+            class="avatar"
+            :src="follower.follower.avatar"
+            @click.stop.prevent="othersProfile(follower.followerId)"
+          />
           <div class="left">
             <div class="top">
               <div class="name-account">
-                <div class="name">{{ follower.follower.name }}</div>
+                <div
+                  class="name"
+                  @click.stop.prevent="othersProfile(follower.followerId)"
+                >
+                  {{ follower.follower.name }}
+                </div>
                 <div class="account">@{{ follower.follower.account }}</div>
               </div>
               <div class="btn">
@@ -68,12 +76,11 @@
               </div>
             </div>
             <div class="content">
-              <!-- {{
-                follower.follower.introduction === 0
+              {{
+                follower.follower.introduction.length === 0
                   ? "目前還沒有自我介紹"
                   : follower.follower.introduction
-              }} -->
-              目前還沒有自我介紹
+              }}
             </div>
           </div>
         </div>
@@ -246,28 +253,6 @@ export default {
     // user file
     async fetchUser() {
       try {
-        // TODO 增加判斷 ID是自己還是其他人
-        // if (this.$route.params.id) {
-        //   const userid = Number(this.$route.params.id);
-        //   const response = await userAPI.getOtherUser(userid);
-        //   const { data } = response;
-
-        //   if (response.statusText !== "OK") {
-        //     throw new Error(data.message);
-        //   }
-
-        //   this.user = data;
-        // } else {
-        //   const response = await userAPI.getUser(getUserId());
-        //   const { data } = response;
-
-        //   if (response.statusText !== "OK") {
-        //     throw new Error(data.message);
-        //   }
-
-        //   this.user = data;
-        // }
-
         const response = await userAPI.getUser(getUserId());
 
         // 取得 API 請求後的資料
@@ -395,6 +380,13 @@ export default {
     // change route
     toFollowings() {
       this.$router.push({ name: "user-followings" });
+    },
+    othersProfile(id) {
+      if (id === Number(getUserId())) {
+        this.$router.push({ name: "profile" });
+      } else {
+        this.$router.push({ name: "other-profile", params: { id } });
+      }
     },
   },
   created() {

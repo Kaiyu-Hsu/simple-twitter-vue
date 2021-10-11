@@ -106,6 +106,17 @@ const routes = [
     name: "user-followings",
     component: () => import("../views/UserFollowings.vue"),
   },
+  // other user
+  {
+    path: "/user-followers/:id",
+    name: "other-user-followers",
+    component: () => import("../views/OtherUserFollowers.vue"),
+  },
+  {
+    path: "/user-followings/:id",
+    name: "other-user-followings",
+    component: () => import("../views/OtherUserFollowings.vue"),
+  },
   {
     path: "/tweets/:id",
     name: "tweet",

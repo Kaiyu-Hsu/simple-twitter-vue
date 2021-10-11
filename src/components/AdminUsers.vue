@@ -2,7 +2,7 @@
   <div class="users-list">
     <header>使用者列表</header>
     <div class="container">
-      <div class="user-card" v-for="user in users" :key="user.index">
+      <div class="user-card" v-for="user in users" :key="user.id">
         <img class="cover" :src="user.cover" alt="" />
         <div class="name-avatar">
           <img class="avatar" :src="user.avatar" />
@@ -24,7 +24,7 @@
               />
             </svg>
           </div>
-          <div class="replied-num">{{ user.replies.length }}</div>
+          <div class="replied-num">{{ user.tweetsCount }}</div>
           <div class="love-icon">
             <svg
               width="25"
@@ -39,12 +39,12 @@
               />
             </svg>
           </div>
-          <div class="love-num">{{ user.likes.length }}</div>
+          <div class="love-num">{{ user.likesCount }}</div>
         </div>
         <div class="follow">
-          <div class="follow-num">{{ user.Followings.length }}個</div>
+          <div class="follow-num">{{ user.followingsCount }}個</div>
           <div class="followings">跟隨中</div>
-          <div class="follow-num">{{ user.Followers.length }}個</div>
+          <div class="follow-num">{{ user.followersCount }}個</div>
           <div class="followers">跟隨者</div>
         </div>
       </div>
