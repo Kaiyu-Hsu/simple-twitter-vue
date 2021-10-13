@@ -69,6 +69,11 @@
                 <div
                   v-else
                   class="unfollowing-btn"
+                  :style="[
+                    currentUser.id === follower.followerId
+                      ? { display: 'none' }
+                      : { display: 'initial' },
+                  ]"
                   @click="following(follower.followerId)"
                 >
                   跟隨
