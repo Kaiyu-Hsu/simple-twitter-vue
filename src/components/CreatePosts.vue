@@ -155,7 +155,7 @@ export default {
           position: "top",
           width: "26rem",
           icon: "warning",
-          title: "在輸入欄勇敢說出你的想法吧!",
+          title: "內容不可空白",
         });
       } else if (this.newPostContent.length > 140) {
         return Toast.fire({

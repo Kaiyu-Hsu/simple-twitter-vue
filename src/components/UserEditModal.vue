@@ -404,6 +404,11 @@ export default {
         if (response.statusText !== "OK") {
           throw new Error(data.message);
         }
+        Toast.fire({
+          icon: "success",
+          position: "top",
+          title: "已更新資料",
+        });
       } catch (error) {
         console.log("error", error);
         Toast.fire({
