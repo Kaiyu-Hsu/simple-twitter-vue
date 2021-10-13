@@ -98,11 +98,8 @@
 .user-self {
   border-left: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
-  position: absolute;
-  left: 27%;
-  top: 0px;
-  width: 42%;
-  // height: 100%;
+  width: 600px;
+  margin: 0 0 0 calc(113px + 235px + 30px);
   header {
     height: 55px;
     display: flex;

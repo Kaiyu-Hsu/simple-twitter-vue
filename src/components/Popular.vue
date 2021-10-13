@@ -33,9 +33,9 @@
 
 <style scoped>
 .container {
-  position: relative;
+  position: absolute;
   top: 15px;
-  left: 75%;
+  left: 1008px;
   background: #f5f8fa;
   width: 350px;
   border-radius: 14px;

@@ -230,7 +230,6 @@
     #edit-form {
       margin-top: 20px;
       .input-wrapper {
-        // margin: 0% auto 30px auto;
         margin: 0 15px;
         width: 570px;
         position: relative;
@@ -273,8 +272,6 @@
           width: 550px;
           height: 125px;
           padding: 25px 10px 0px 10px;
-          //   padding-left: 10px;
-          //   padding-top: 25px;
           font-size: 19px;
           background: #f5f8fa;
           border-radius: 4px;

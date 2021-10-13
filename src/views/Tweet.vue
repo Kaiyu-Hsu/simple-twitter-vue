@@ -1,22 +1,23 @@
 <template>
   <div class="reply">
     <Navbar />
-    <OneTweet
-      :tweet-data="tweetData"
-      :user-data="userData"
-      @close-modal="fetchTweet"
-      @change-like="fetchTweet"
-    />
-    <ReplyList :tweet-data="tweetData" />
-    <Popular class="popular" />
+    <div class="mid-area">
+      <OneTweet
+        :tweet-data="tweetData"
+        :user-data="userData"
+        @close-modal="fetchTweet"
+        @change-like="fetchTweet"
+      />
+      <ReplyList :tweet-data="tweetData" />
+    </div>
+    <Popular />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.popular {
-  position: absolute;
-  top: 0px;
-  left: 75%;
+.mid-area {
+  width: 600px;
+  margin: 0 0 0 calc(113px + 235px + 30px);
 }
 </style>
 

@@ -23,11 +23,9 @@
 .profile {
   border-left: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
-  position: absolute;
-  left: 27%;
-  bottom: 0px;
-  width: 42%;
+  width: 600px;
   height: 100%;
+  margin: 0 0 0 calc(113px + 235px + 30px);
 }
 </style>
 

@@ -27,10 +27,6 @@
 
 <style lang="scss" scoped>
 .container {
-  width: 600px;
-  margin: 0% auto;
-  position: relative;
-  top: -8px;
   border: 1px solid #e6ecf0;
   border-bottom: 10px solid #e6ecf0;
   .title {

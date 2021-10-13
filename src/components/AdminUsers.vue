@@ -10,7 +10,7 @@
           <div class="account">@{{ user.account }}</div>
         </div>
         <div class="row-action">
-          <div class="replied-icon">
+          <div class="tweet-icon">
             <svg
               width="25"
               height="24"
@@ -24,7 +24,7 @@
               />
             </svg>
           </div>
-          <div class="replied-num">{{ user.tweetsCount }}</div>
+          <div class="tweet-num">{{ user.tweetsCount }}</div>
           <div class="love-icon">
             <svg
               width="25"
@@ -128,11 +128,11 @@ svg {
         top: 94px;
         font-weight: 500;
         font-size: 15px;
-        .replied-icon,
+        .tweet-icon,
         .love-icon {
           margin-right: 7px;
         }
-        .replied-num {
+        .tweet-num {
           margin-right: 17px;
         }
       }
