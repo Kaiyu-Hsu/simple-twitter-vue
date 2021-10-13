@@ -38,19 +38,19 @@
         <div
           class="a-card"
           v-for="following in followings"
-          :key="following.followerId"
+          :key="following.followingId"
         >
           <img
             class="avatar"
             :src="following.following.avatar"
-            @click.stop.prevent="othersProfile(following.followerId)"
+            @click.stop.prevent="othersProfile(following.followingId)"
           />
           <div class="left">
             <div class="top">
               <div class="name-account">
                 <div
                   class="name"
-                  @click.stop.prevent="othersProfile(following.followerId)"
+                  @click.stop.prevent="othersProfile(following.followingId)"
                 >
                   {{ following.following.name }}
                 </div>
@@ -222,6 +222,7 @@ import {
 } from "../utils/helpers";
 import userAPI from "../api/userProfile";
 import followershipsAPI from "./../api/followerships";
+import moment from "moment";
 
 const getUserId = () => localStorage.getItem("user");
 
@@ -295,7 +296,9 @@ export default {
           throw new Error(data.message);
         }
 
-        this.followings = data;
+        this.followings = data.sort(
+          (a, b) => moment(b.updatedAt) - moment(a.updatedAt)
+        );
       } catch (error) {
         console.log("error", error);
         Toast.fire({

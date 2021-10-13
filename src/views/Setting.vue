@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Navbar />
-    <div class="setting">
+    <div class="setting" v-if="!isLoading">
       <header>帳戶設定</header>
       <div class="form-container">
         <form action="" id="setting-form" @submit.stop.prevent="putEditUser">
@@ -159,6 +159,7 @@ export default {
       email: "",
       password: "",
       checkPassword: "",
+      isLoading: true,
     };
   },
   methods: {
@@ -170,12 +171,11 @@ export default {
           throw new Error(response.statusText);
         }
 
-        console.log("Edit User");
-        console.log(response);
         this.userData = { ...response.data };
         this.account = this.userData.account;
         this.name = this.userData.name;
         this.email = this.userData.email;
+        this.isLoading = false;
       } catch (error) {
         Toast.fire({
           icon: "warning",
@@ -226,7 +226,8 @@ export default {
           position: "top",
           title: "資料更改成功",
         });
-
+        this.password = "";
+        this.checkPassword = "";
         this.getEditUser();
       } catch (error) {
         Toast.fire({

@@ -433,7 +433,6 @@ export default {
           }
         },
         deep: true,
-        immediate: true,
       },
       {
         handler: function () {
@@ -445,7 +444,6 @@ export default {
           }
         },
         deep: true,
-        immediate: true,
       },
     ],
   },
