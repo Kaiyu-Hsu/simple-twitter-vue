@@ -317,6 +317,7 @@ export default {
         this.followings = this.followings.filter(
           (following) => following.followingId !== id
         );
+        this.$bus.$emit("unfollow");
         this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
@@ -344,6 +345,10 @@ export default {
     this.fetchUser();
     this.fetchApiTweets();
     this.fetchFollowings();
+    this.$bus.$on("change-following-state", () => this.fetchFollowings());
+  },
+  beforeDestroy() {
+    this.$bus.$off("change-following-state");
   },
 };
 </script>

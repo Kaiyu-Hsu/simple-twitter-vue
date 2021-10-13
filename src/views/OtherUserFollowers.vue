@@ -359,6 +359,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("follow");
         this.fetchFollowers();
         this.fetchFollowings();
       } catch (error) {
@@ -378,6 +379,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("unfollow");
         this.fetchFollowers();
         this.fetchFollowings();
       } catch (error) {
@@ -407,6 +409,13 @@ export default {
     this.fetchApiTweets();
     this.fetchFollowings();
     this.fetchFollowers();
+    this.$bus.$on("change-following-state", () => {
+      this.fetchFollowings();
+      this.fetchFollowers();
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off("change-following-state");
   },
 };
 </script>
