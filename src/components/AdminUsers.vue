@@ -179,8 +179,6 @@ export default {
       try {
         const response = await admin.getAllUsers();
 
-        console.log("users", response);
-
         // 取得 API 請求後的資料
         const { data } = response;
 
