@@ -228,6 +228,7 @@ import { roleAccessControl, Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
 import followerships from "./../api/followerships";
 import { keepUnauthorizedOut } from "./../utils/helpers";
+import moment from "moment";
 
 const getUserId = () => localStorage.getItem("user");
 
@@ -303,7 +304,9 @@ export default {
           throw new Error(data.message);
         }
 
-        this.followers = data;
+        this.followers = data.sort(
+          (a, b) => moment(b.updatedAt) - moment(a.updatedAt)
+        );
       } catch (error) {
         console.log("error", error);
         Toast.fire({
