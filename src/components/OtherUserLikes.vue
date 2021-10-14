@@ -38,7 +38,6 @@
             </div>
             <div class="replies-num">{{ like.tweet.likes.length }}</div>
           </div>
-          <!-- TODO 愛心功能 -->
           <div
             class="likes"
             v-if="

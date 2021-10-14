@@ -345,7 +345,6 @@ export default {
       this.$emit("close");
     },
     changeCover(e) {
-      console.log("更改圖片", e.target.files);
       const { files } = e.target;
       if (files.length === 0) {
         // 使用者沒有選擇上傳的檔案
@@ -357,7 +356,6 @@ export default {
       }
     },
     changeAvatar(e) {
-      console.log("更改頭像", e.target.files);
       const { files } = e.target;
       if (files.length === 0) {
         // 使用者沒有選擇上傳的檔案
@@ -370,16 +368,11 @@ export default {
     },
     cancelChangeImg() {
       this.user.cover = this.oringinalCover;
-      console.log("取消更改圖片", this.oringinalCover);
     },
     async handleSubmit(e) {
       try {
         const form = e.target;
         const formData = new FormData(form);
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
-        }
-        console.log(formData);
 
         if (
           this.user.name.trim().length === 0 ||
