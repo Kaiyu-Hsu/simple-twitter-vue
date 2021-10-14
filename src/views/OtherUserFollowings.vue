@@ -79,12 +79,11 @@
               </div>
             </div>
             <div class="content">
-              <!-- {{
-                follower.follower.introduction === 0
+              {{
+                following.following.introduction === 0
                   ? "目前還沒有自我介紹"
-                  : follower.follower.introduction
-              }} -->
-              目前還沒有自我介紹
+                  : following.following.introduction
+              }}
             </div>
           </div>
         </div>

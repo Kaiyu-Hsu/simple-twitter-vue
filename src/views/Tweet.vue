@@ -29,10 +29,6 @@ import Popular from "../components/Popular.vue";
 import { tweet } from "./../api/tweet";
 import { keepUnauthorizedOut, roleAccessControl } from "../utils/helpers";
 
-// TODO reponse like 陣列拿不到 userId 的暫時替代方案
-import userAPI from "./../api/userProfile";
-// TODO 替代方案結束行
-
 export default {
   components: {
     OneTweet,
@@ -52,29 +48,11 @@ export default {
       try {
         const response = await tweet.getTweet(id);
 
-        // TODO reponse like 陣列拿不到 userId 的暫時替代方案
-        const getAllTweets = await userAPI.getTweets(response.data.UserId);
-        // TODO 替代方案結束行
-
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
 
         this.tweetData = { ...response.data };
-        // TODO reponse like 陣列拿不到 userId 的暫時替代方案
-        const searchSameTweet = getAllTweets.data.find(
-          (obj) => obj.id === this.tweetData.id
-        );
-        const getLikers = searchSameTweet.likes.find(
-          (obj) => obj.UserId === this.userData.id
-        );
-        if (getLikers) {
-          this.tweetData.likes = this.tweetData.likes.filter(
-            (obj) => obj.id !== getLikers.id
-          );
-          this.tweetData.likes.push(getLikers);
-        }
-        // TODO 替代方案結束行
       } catch (error) {
         console.log("error", error);
       }

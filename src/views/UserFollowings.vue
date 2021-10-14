@@ -66,13 +66,11 @@
               </div>
             </div>
             <div class="content">
-              <!-- 因為目前沒有 following.introduction ，所以渲染不出來-->
-              <!-- {{
+              {{
                 following.following.introduction.length === 0
                   ? "目前還沒有自我介紹"
                   : following.following.introduction
-              }} -->
-              目前還沒有自我介紹
+              }}
             </div>
           </div>
         </div>
