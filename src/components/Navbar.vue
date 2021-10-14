@@ -287,7 +287,7 @@
   z-index: 2;
   left: 113px;
   top: 4px;
-  width: 235px;
+  width: 210px;
   height: 100%;
   font-family: "Noto Sans TC", sans-serif;
   font-size: 18px;

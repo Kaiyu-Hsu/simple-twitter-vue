@@ -38,19 +38,19 @@
         <div
           class="a-card"
           v-for="following in followings"
-          :key="following.followerId"
+          :key="following.followingId"
         >
           <img
             class="avatar"
             :src="following.following.avatar"
-            @click.stop.prevent="othersProfile(following.followerId)"
+            @click.stop.prevent="othersProfile(following.followingId)"
           />
           <div class="left">
             <div class="top">
               <div class="name-account">
                 <div
                   class="name"
-                  @click.stop.prevent="othersProfile(following.followerId)"
+                  @click.stop.prevent="othersProfile(following.followingId)"
                 >
                   {{ following.following.name }}
                 </div>
@@ -66,13 +66,11 @@
               </div>
             </div>
             <div class="content">
-              <!-- 因為目前沒有 following.introduction ，所以渲染不出來-->
-              <!-- {{
+              {{
                 following.following.introduction.length === 0
                   ? "目前還沒有自我介紹"
                   : following.following.introduction
-              }} -->
-              目前還沒有自我介紹
+              }}
             </div>
           </div>
         </div>
@@ -86,11 +84,8 @@
 .user-self {
   border-left: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
-  position: absolute;
-  left: 27%;
-  bottom: 0px;
-  width: 42%;
-  height: 100%;
+  width: 600px;
+  margin: 0 0 0 calc(113px + 235px + 30px);
   header {
     height: 55px;
     display: flex;
@@ -225,6 +220,7 @@ import {
 } from "../utils/helpers";
 import userAPI from "../api/userProfile";
 import followershipsAPI from "./../api/followerships";
+import moment from "moment";
 
 const getUserId = () => localStorage.getItem("user");
 
@@ -298,7 +294,9 @@ export default {
           throw new Error(data.message);
         }
 
-        this.followings = data;
+        this.followings = data.sort(
+          (a, b) => moment(b.updatedAt) - moment(a.updatedAt)
+        );
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -320,6 +318,7 @@ export default {
         this.followings = this.followings.filter(
           (following) => following.followingId !== id
         );
+        this.$bus.$emit("unfollow");
         this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
@@ -347,6 +346,10 @@ export default {
     this.fetchUser();
     this.fetchApiTweets();
     this.fetchFollowings();
+    this.$bus.$on("change-following-state", () => this.fetchFollowings());
+  },
+  beforeDestroy() {
+    this.$bus.$off("change-following-state");
   },
 };
 </script>

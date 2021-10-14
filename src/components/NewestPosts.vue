@@ -81,15 +81,15 @@
 
 <style lang="scss" scoped>
 .container {
-  width: 600px;
   max-height: 1021px;
-  margin: 0% auto;
-  margin-top: -8px;
   border: 1px solid #e6ecf0;
   overflow-y: scroll;
 
   .tweet-card {
     display: flex;
+    border: 1px solid #e6ecf0;
+    border-right: none;
+    border-left: none;
     .thumbnail-container {
       position: relative;
       width: 50px;
@@ -152,6 +152,7 @@
       }
       .icon-wrapper {
         display: flex;
+        margin-bottom: 14px;
 
         .reply-icon-wrapper {
           margin-right: 51.22px;

@@ -2,26 +2,27 @@
   <div class="main">
     <!-- Navbar.vue -->
     <Navbar @new-post="getTweets" />
-    <!-- CreatePosts.vue -->
-    <CreatePosts :initial-user="userData" @new-post="getTweets" />
-    <!-- NewestPosts.vue -->
-    <NewestPosts
-      :initial-tweets="tweets"
-      :initial-tweets-reply="tweetsReply"
-      :initial-user="userData"
-      @change-like="getTweets"
-      @new-reply="getTweets"
-    />
+    <div class="mid-area">
+      <!-- CreatePosts.vue -->
+      <CreatePosts :initial-user="userData" @new-post="getTweets" />
+      <!-- NewestPosts.vue -->
+      <NewestPosts
+        :initial-tweets="tweets"
+        :initial-tweets-reply="tweetsReply"
+        :initial-user="userData"
+        @change-like="getTweets"
+        @new-reply="getTweets"
+      />
+    </div>
     <!-- Popular.vue -->
-    <Popular class="popular" />
+    <Popular />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.popular {
-  position: absolute;
-  top: 0px;
-  left: 75%;
+.mid-area {
+  width: 600px;
+  margin: 0 0 0 calc(113px + 235px + 30px);
 }
 </style>
 

@@ -14,7 +14,6 @@
   height: 100%;
   position: absolute;
   left: 30%;
-  bottom: 0px;
 }
 </style>
 

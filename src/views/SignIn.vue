@@ -244,16 +244,19 @@ export default {
 
         // 取得 API 請求後的資料
         const { data } = response;
-        console.log(
-          "🚀 ~ file: SignIn.vue ~ line 244 ~ handleSubmit ~ response",
-          response
-        );
 
-        if (
-          response.statusText !== "OK" ||
-          response.data.user.role === "admin"
-        ) {
+        if (response.statusText !== "OK") {
           throw new Error(data.message);
+        }
+
+        if (response.data.user.role === "admin") {
+          this.isProcessing = false;
+          this.password = "";
+          return Toast.fire({
+            icon: "warning",
+            position: "top",
+            title: "請透過後台登入",
+          });
         }
 
         // 將 token, userId 存放在 localStorage 內

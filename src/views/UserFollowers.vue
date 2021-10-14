@@ -94,11 +94,8 @@
 .user-self {
   border-left: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
-  position: absolute;
-  left: 27%;
-  bottom: 0px;
-  width: 42%;
-  height: 100%;
+  width: 600px;
+  margin: 0 0 0 calc(113px + 235px + 30px);
   header {
     height: 55px;
     display: flex;
@@ -231,6 +228,7 @@ import { roleAccessControl, Toast } from "../utils/helpers";
 import userAPI from "../api/userProfile";
 import followerships from "./../api/followerships";
 import { keepUnauthorizedOut } from "./../utils/helpers";
+import moment from "moment";
 
 const getUserId = () => localStorage.getItem("user");
 
@@ -306,7 +304,9 @@ export default {
           throw new Error(data.message);
         }
 
-        this.followers = data;
+        this.followers = data.sort(
+          (a, b) => moment(b.updatedAt) - moment(a.updatedAt)
+        );
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -348,6 +348,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("follow");
         this.fetchFollowers();
         this.fetchFollowings();
       } catch (error) {
@@ -367,6 +368,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("unfollow");
         this.fetchFollowers();
         this.fetchFollowings();
       } catch (error) {
@@ -396,6 +398,13 @@ export default {
     this.fetchApiTweets();
     this.fetchFollowers();
     this.fetchFollowings();
+    this.$bus.$on("change-following-state", () => {
+      this.fetchFollowers();
+      this.fetchFollowings();
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off("change-following-state");
   },
 };
 </script>

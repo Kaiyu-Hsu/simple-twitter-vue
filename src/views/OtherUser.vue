@@ -211,11 +211,9 @@
 .show-user {
   border-left: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
-  position: absolute;
-  left: 27%;
-  bottom: 0px;
-  width: 42%;
+  width: 600px;
   height: 100%;
+  margin: 0 0 0 calc(113px + 235px + 30px);
   background-color: white;
 
   img {
@@ -373,6 +371,7 @@ export default {
   },
   data() {
     return {
+      userId: Number(this.$route.params.id),
       userData: {},
       tweetsNum: "",
       followings: [],
@@ -383,9 +382,9 @@ export default {
     };
   },
   methods: {
-    async fetchUser(userid) {
+    async fetchUser(userId) {
       try {
-        const response = await userAPI.getOtherUser(userid);
+        const response = await userAPI.getOtherUser(userId);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -408,9 +407,9 @@ export default {
       }
     },
     // tweets num
-    async fetchApiTweets(userid) {
+    async fetchApiTweets(userId) {
       try {
-        const response = await userAPI.getTweets(userid);
+        const response = await userAPI.getTweets(userId);
 
         // 取得 API 請求後的資料
         const { data } = response;
@@ -438,8 +437,7 @@ export default {
         }
         this.$bus.$emit("follow");
         this.fetchPopular();
-        this.fetchFollowings(followerId);
-        this.fetchFollowers(followerId);
+        this.fetchUser(followerId);
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -459,8 +457,7 @@ export default {
 
         this.$bus.$emit("unfollow");
         this.fetchPopular();
-        this.fetchFollowings(followerId);
-        this.fetchFollowers(followerId);
+        this.fetchUser(followerId);
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -505,20 +502,19 @@ export default {
     },
   },
   created() {
-    const userid = Number(this.$route.params.id);
     keepUnauthorizedOut(this);
     roleAccessControl(this, "8347");
-    this.fetchUser(userid);
-    this.fetchApiTweets(userid);
+    this.fetchUser(this.userId);
+    this.fetchApiTweets(this.userId);
     this.fetchPopular();
   },
   mounted() {
     this.$bus.$on("change-follower-state", () => {
-      this.fetchFollowers(Number(this.$route.params.id));
+      this.fetchUser(this.userId);
     });
     this.$bus.$on("change-following-state", () => {
       this.fetchPopular();
-      this.fetchUser();
+      this.fetchUser(this.userId);
     });
   },
   beforeRouteUpdate(to, from, next) {

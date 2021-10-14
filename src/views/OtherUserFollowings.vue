@@ -67,6 +67,11 @@
                 <div
                   v-else
                   class="unfollowing-btn"
+                  :style="[
+                    currentUser.id === following.followingId
+                      ? { display: 'none' }
+                      : { display: 'initial' },
+                  ]"
                   @click="Following(following.followingId)"
                 >
                   跟隨
@@ -74,12 +79,11 @@
               </div>
             </div>
             <div class="content">
-              <!-- {{
-                follower.follower.introduction === 0
+              {{
+                following.following.introduction === 0
                   ? "目前還沒有自我介紹"
-                  : follower.follower.introduction
-              }} -->
-              目前還沒有自我介紹
+                  : following.following.introduction
+              }}
             </div>
           </div>
         </div>
@@ -93,11 +97,8 @@
 .user-self {
   border-left: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
-  position: absolute;
-  left: 27%;
-  top: 0px;
-  width: 42%;
-  // height: 100%;
+  width: 600px;
+  margin: 0 0 0 calc(113px + 235px + 30px);
   header {
     height: 55px;
     display: flex;
@@ -232,6 +233,7 @@ import {
 } from "./../utils/helpers";
 import userAPI from "./../api/userProfile";
 import followerships from "./../api/followerships";
+import moment from "moment";
 
 const getUserId = () => localStorage.getItem("user");
 
@@ -309,7 +311,9 @@ export default {
           throw new Error(data.message);
         }
 
-        this.followings = data;
+        this.followings = data.sort(
+          (a, b) => moment(b.updatedAt) - moment(a.updatedAt)
+        );
       } catch (error) {
         console.log("error", error);
         Toast.fire({
@@ -351,6 +355,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("follow");
         this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
@@ -369,6 +374,7 @@ export default {
           throw new Error(data.message);
         }
 
+        this.$bus.$emit("unfollow");
         this.fetchFollowings();
       } catch (error) {
         console.log("error", error);
@@ -396,6 +402,10 @@ export default {
     this.fetchUser();
     this.fetchApiTweets();
     this.fetchFollowings();
+    this.$bus.$on("change-following-state", () => this.fetchFollowings());
+  },
+  beforeDestroy() {
+    this.$bus.$off("change-follwoing-state");
   },
 };
 </script>

@@ -303,7 +303,7 @@ export default {
         if (this.replyContent.trim().length === 0) {
           return Toast.fire({
             icon: "warning",
-            title: "放心地向對方表達心裡的想法吧!",
+            title: "內容不可空白",
             position: "top",
           });
         }

@@ -27,10 +27,6 @@
 
 <style lang="scss" scoped>
 .container {
-  width: 600px;
-  margin: 0% auto;
-  position: relative;
-  top: -8px;
   border: 1px solid #e6ecf0;
   border-bottom: 10px solid #e6ecf0;
   .title {
@@ -159,7 +155,7 @@ export default {
           position: "top",
           width: "26rem",
           icon: "warning",
-          title: "在輸入欄勇敢說出你的想法吧!",
+          title: "內容不可空白",
         });
       } else if (this.newPostContent.length > 140) {
         return Toast.fire({
