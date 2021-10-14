@@ -7,43 +7,54 @@
         <form action="" id="setting-form" @submit.stop.prevent="putEditUser">
           <div class="input-wrapper">
             <span>帳號</span>
-            <input type="text" v-model="account" />
-            <hr />
+            <input
+              type="text"
+              name="account"
+              v-model="account"
+              @focus="focusInput"
+            />
+            <hr :class="{ 'now-focus': nowFocus === 'account' }" />
           </div>
           <div class="input-wrapper">
             <span>名稱</span>
-            <input type="text" v-model="name" />
-            <hr />
+            <input type="text" name="name" v-model="name" @focus="focusInput" />
+            <hr :class="{ 'now-focus': nowFocus === 'name' }" />
           </div>
           <div class="input-wrapper">
             <span>Email</span>
             <input
               type="text"
+              name="email"
               pattern="\S+"
               title="不接受空白鍵"
               v-model="email"
+              @focus="focusInput"
             />
-            <hr />
+            <hr :class="{ 'now-focus': nowFocus === 'email' }" />
           </div>
           <div class="input-wrapper">
             <span>密碼</span>
             <input
               type="password"
+              name="password"
               pattern="\S+"
               title="不接受空白鍵"
               v-model="password"
+              @focus="focusInput"
             />
-            <hr />
+            <hr :class="{ 'now-focus': nowFocus === 'password' }" />
           </div>
           <div class="input-wrapper">
             <span>密碼確認</span>
             <input
               type="password"
+              name="checkPassword"
               pattern="\S+"
               title="不接受空白鍵"
               v-model="checkPassword"
+              @focus="focusInput"
             />
-            <hr />
+            <hr :class="{ 'now-focus': nowFocus === 'checkPassword' }" />
           </div>
         </form>
         <button type="submit" form="setting-form">儲存</button>
@@ -53,7 +64,6 @@
 </template>
 
 <style lang="scss" scoped>
-// TODO 微調樣式
 .setting {
   position: absolute;
   left: 378px;
@@ -113,6 +123,10 @@
           border-bottom: unset;
           border-radius: 0px 0px 4px 4px;
         }
+        // input focus 底下那條線的style
+        .now-focus {
+          background-color: #50b5ff;
+        }
       }
     }
     button {
@@ -160,9 +174,13 @@ export default {
       password: "",
       checkPassword: "",
       isLoading: true,
+      nowFocus: "",
     };
   },
   methods: {
+    focusInput(e) {
+      this.nowFocus = e.target.name;
+    },
     async getEditUser() {
       try {
         const response = await user.getUserInfo(getUserId());
