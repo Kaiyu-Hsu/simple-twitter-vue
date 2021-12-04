@@ -226,8 +226,13 @@ export default {
         });
       }
       // 避免送出空的 password
-      if (this.password.length !== 0 && this.checkPassword.length !== 0) {
+      if (this.password.length === 0 && this.checkPassword.length === 0) {
         // 有輸入新密碼且符合標準時才在 data 裡面加入 password property
+        return Toast.fire({
+          icon: "warning",
+          title: "密碼 與 密碼確認 有空白欄位",
+        });
+      } else {
         data.password = this.password;
         data.checkPassword = this.checkPassword;
       }
