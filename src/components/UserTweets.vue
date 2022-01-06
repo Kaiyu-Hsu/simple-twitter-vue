@@ -71,6 +71,7 @@
                 />
               </svg>
             </div>
+            <!-- TODO 喜歡的數字顏色變更 -->
             <div class="likes-num">
               {{ tweet.likes.length }}
             </div>
