@@ -211,9 +211,9 @@
 .show-user {
   border-left: 1px solid #e5e5e5;
   border-right: 1px solid #e5e5e5;
-  width: 600px;
+  width: 42%;
   height: 100%;
-  margin: 0 0 0 calc(113px + 235px + 30px);
+  margin-left: 27%;
   background-color: white;
 
   img {

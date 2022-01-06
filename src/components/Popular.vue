@@ -35,9 +35,10 @@
 .container {
   position: absolute;
   top: 15px;
-  left: 1008px;
+  left: 70%;
   background: #f5f8fa;
-  width: 350px;
+  min-width: 300px;
+  width: 24%;
   border-radius: 14px;
   font-family: "Noto Sans TC", sans-serif;
 }

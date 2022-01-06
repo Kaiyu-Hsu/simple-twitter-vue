@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="a-message" @click="join">
-        <img src="" />
+        <img src="http://img.yao51.com/jiankangtuku/qnkswqwpy.jpeg" />
         <div class="a-message-inner">
           <div class="name-account">
             <div class="name">Apple</div>
@@ -41,9 +41,9 @@
 <style lang="scss" scoped>
 .container {
   position: absolute;
-  left: 378px;
+  left: 0px;
   height: 100%;
-  bottom: 0px;
+  margin-left: 27%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
   font-family: Noto Sans TC;
@@ -65,9 +65,11 @@
 
     .a-message {
       display: flex;
+      padding: 10px;
       img {
         width: 50px;
         height: 50px;
+        margin-right: 10px;
         border-radius: 50%;
         background: #c4c4c4;
       }
@@ -91,6 +93,7 @@
           }
         }
         .content {
+          margin-top: 10px;
           font-weight: 500;
           font-size: 15px;
           color: #657786;

@@ -66,11 +66,10 @@
 <style lang="scss" scoped>
 .setting {
   position: absolute;
-  left: 378px;
+  left: 0px;
   height: 100%;
-  bottom: 0px;
   border-left: 1px solid #e6ecf0;
-  margin-left: 65px;
+  margin-left: 27%;
   padding-left: 16px;
 
   header {
@@ -88,7 +87,6 @@
     #setting-form {
       .input-wrapper {
         margin: 0% auto 30px auto;
-        width: 540px;
         position: relative;
 
         span {
@@ -133,8 +131,7 @@
       // 取消預設style,
       all: unset;
 
-      margin-top: 10px;
-      padding: 10px 252px;
+      padding: 10px 40px;
       background: #ff6600;
       border-radius: 50px;
       font-family: Noto Sans TC;

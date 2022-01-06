@@ -21,8 +21,8 @@
 
 <style lang="scss" scoped>
 .mid-area {
-  width: 600px;
-  margin: 0 0 0 calc(113px + 235px + 30px);
+  width: 42%;
+  margin-left: 27%;
 }
 </style>
 
