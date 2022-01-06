@@ -13,6 +13,7 @@
         </div>
         <div class="account">@ {{ user.following.account }}</div>
       </div>
+      <!-- TODO userFollowingList 用來切換是否跟隨 -->
       <div
         v-if="userFollowings.includes(user.followingId)"
         @click.stop.prevent="unfollowing(user.followingId)"
