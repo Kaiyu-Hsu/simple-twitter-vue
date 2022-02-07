@@ -13,7 +13,7 @@
         </div>
         <div class="account">@ {{ user.following.account }}</div>
       </div>
-      <!-- TODO userFollowingList 用來切換是否跟隨 -->
+      <!-- userFollowingList 用來切換是否跟隨 -->
       <div
         v-if="userFollowings.includes(user.followingId)"
         @click.stop.prevent="unfollowing(user.followingId)"
@@ -160,9 +160,9 @@ export default {
 
         this.users = data.topTwitters;
         // user 不會在 popular list 看見自己的帳號
-        this.users = this.users.filter(
-          (user) => user.followingId !== Number(getUserId())
-        );
+        // this.users = this.users.filter(
+        //   (user) => user.followingId !== Number(getUserId())
+        // );
         this.userFollowings = data.userFollowingList;
         this.userFollowings = this.userFollowings.map((following) => {
           return following.followingId;

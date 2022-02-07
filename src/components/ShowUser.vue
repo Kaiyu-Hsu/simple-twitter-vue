@@ -1,6 +1,7 @@
 <template>
   <div class="show-user">
     <header>
+      <!-- 在瀏覽器中前一步的紀錄 -->
       <div class="icon-back" @click="$router.go(-1)">
         <svg
           width="17"
